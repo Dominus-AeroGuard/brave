@@ -8,6 +8,7 @@ Backend Aero Guard
 
 ```bash
 $ npm install
+$ npm run migration
 ```
 
 ## Running the app
@@ -21,6 +22,12 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+```
+
+## Runing the app using Docker
+
+```bash
+$ npm run docker:up
 ```
 
 ## Test

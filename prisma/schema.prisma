@@ -1,0 +1,94 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  user_id    String   @id @default(uuid()) @db.VarChar(36)
+  created_at DateTime @default(now())
+
+  Application Application[]
+
+  @@map("user")
+}
+
+model Application {
+  application_id String   @id @default(uuid()) @db.VarChar(36)
+  user_id        String   @db.VarChar(36)
+  vehicle        String   @db.VarChar(100)
+  applied_at     DateTime @default(now())
+  created_by     String
+  created_at     DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [user_id])
+
+  ApplicationEvent ApplicationEvent[]
+  Prescription     Prescription[]
+
+  @@index([user_id, created_at(sort: Desc)])
+  @@map("application")
+}
+
+model ApplicationEvent {
+  application_event_id  String   @id @default(uuid()) @db.VarChar(36)
+  application_id        String   @db.VarChar(36)
+  application_status_id Int
+  created_by            String
+  created_at            DateTime @default(now())
+
+  application       Application       @relation(fields: [application_id], references: [application_id])
+  applicationStatus ApplicationStatus @relation(fields: [application_status_id], references: [application_status_id])
+
+  @@index([application_id, created_at(sort: Desc)])
+  @@map("application_event")
+}
+
+model ApplicationStatus {
+  application_status_id Int      @id @default(autoincrement())
+  description           String   @db.VarChar(100)
+  active                Boolean
+  created_at            DateTime @default(now())
+
+  ApplicationEvent ApplicationEvent[]
+  @@map("application_status")
+}
+
+model Prescription {
+  prescription_id String   @id @default(uuid()) @db.VarChar(36)
+  application_id  String   @db.VarChar(36)
+  created_by      String
+  created_at      DateTime @default(now())
+
+  application Application @relation(fields: [application_id], references: [application_id])
+
+  PrescriptionEvent PrescriptionEvent[]
+
+  @@index([application_id, created_at(sort: Desc)])
+  @@map("prescription")
+}
+
+model PrescriptionEvent {
+  prescription_event_id  String   @id @default(uuid()) @db.VarChar(36)
+  prescription_id        String
+  prescription_status_id Int
+  created_at             DateTime @default(now())
+  created_by             String
+
+  prescription       Prescription       @relation(fields: [prescription_id], references: [prescription_id])
+  prescriptionStatus PrescriptionStatus @relation(fields: [prescription_status_id], references: [prescription_status_id])
+
+  @@index([prescription_id, created_at(sort: Desc)])
+  @@map("prescription_event")
+}
+
+model PrescriptionStatus {
+  prescription_status_id Int    @id @default(autoincrement())
+  description            String
+
+  PrescriptionEvent PrescriptionEvent[]
+  @@map("prescription_status")
+}
