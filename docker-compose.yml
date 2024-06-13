@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db:
+    container_name: 'aeroguard-db'
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aeroguard
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+    container_name: 'aeroguard-app'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      DATABASE_URL: 'postgresql://postgres:postgres@aeroguard-db:5432/aeroguard'
+      NODE_ENV: development
+    entrypoint: ["/usr/src/app/scripts/entrypoint.sh"]
+volumes:
+  db_data:
