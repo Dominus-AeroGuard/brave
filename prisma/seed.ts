@@ -5,7 +5,7 @@ async function applicatioStatusSeed() {
   const applicationStatus = [
     {
       id: 1,
-      description: 'Pending',
+      description: 'Planning',
       active: true,
     },
     {

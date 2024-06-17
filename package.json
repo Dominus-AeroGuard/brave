@@ -11,7 +11,8 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "docker:up": "docker-compose up --build -d",
+    "docker:build:up": "docker-compose up --build -d",
+    "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "start": "nest start",
     "start:dev": "nest start --watch",
