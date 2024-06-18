@@ -8,87 +8,98 @@ generator client {
 }
 
 model User {
-  user_id    String   @id @default(uuid()) @db.VarChar(36)
-  created_at DateTime @default(now())
-
-  Application Application[]
+  user_id         BigInt        @id @db.BigInt
+  organization_id BigInt        @db.BigInt
+  created_at      DateTime      @default(now())
+  organization    Organization  @relation(fields: [organization_id], references: [organization_id])
+  applications    Application[]
 
   @@map("user")
 }
 
+model Organization {
+  organization_id BigInt        @id @db.BigInt
+  name            String        @db.VarChar(100)
+  created_at      DateTime      @default(now())
+  users           User[]
+  pilots          Pilot[]
+  applications    Application[]
+
+  @@map("company")
+}
+
+model Pilot {
+  pilot_id        BigInt             @id @db.BigInt
+  organization_id BigInt             @db.BigInt
+  name            String             @db.VarChar(100)
+  document        String             @db.VarChar(14)
+  lincense        String             @db.VarChar(20)
+  created_at      DateTime           @default(now())
+  organization    Organization       @relation(fields: [organization_id], references: [organization_id])
+  events          ApplicationEvent[]
+
+  @@map("pilot")
+}
+
 model Application {
-  application_id String   @id @default(uuid()) @db.VarChar(36)
-  user_id        String   @db.VarChar(36)
-  vehicle        String   @db.VarChar(100)
-  applied_at     DateTime @default(now())
-  created_by     String
-  created_at     DateTime @default(now())
-
-  user User @relation(fields: [user_id], references: [user_id])
-
-  ApplicationEvent ApplicationEvent[]
-  Prescription     Prescription[]
+  application_id  BigInt                @id @db.BigInt
+  user_id         BigInt                @db.BigInt
+  organization_id BigInt                @db.BigInt
+  vehicle         String                @db.VarChar(100)
+  created_by      String                @db.VarChar(100)
+  created_at      DateTime              @default(now())
+  user            User                  @relation(fields: [user_id], references: [user_id])
+  organization    Organization          @relation(fields: [organization_id], references: [organization_id])
+  events          ApplicationEvent[]
+  documents       ApplicationDocument[]
 
   @@index([user_id, created_at(sort: Desc)])
   @@map("application")
 }
 
 model ApplicationEvent {
-  application_event_id  String   @id @default(uuid()) @db.VarChar(36)
-  application_id        String   @db.VarChar(36)
+  application_event_id  BigInt            @id @db.BigInt
+  application_id        BigInt            @db.BigInt
   application_status_id Int
+  pilot_id              BigInt            @db.BigInt
   created_by            String
-  created_at            DateTime @default(now())
-
-  application       Application       @relation(fields: [application_id], references: [application_id])
-  applicationStatus ApplicationStatus @relation(fields: [application_status_id], references: [application_status_id])
+  created_at            DateTime          @default(now())
+  application           Application       @relation(fields: [application_id], references: [application_id])
+  status                ApplicationStatus @relation(fields: [application_status_id], references: [application_status_id])
+  pilot                 Pilot             @relation(fields: [pilot_id], references: [pilot_id])
 
   @@index([application_id, created_at(sort: Desc)])
   @@map("application_event")
 }
 
 model ApplicationStatus {
-  application_status_id Int      @id @default(autoincrement())
-  description           String   @db.VarChar(100)
+  application_status_id Int                @id @default(autoincrement())
+  description           String             @db.VarChar(100)
   active                Boolean
-  created_at            DateTime @default(now())
+  created_at            DateTime           @default(now())
+  events                ApplicationEvent[]
 
-  ApplicationEvent ApplicationEvent[]
   @@map("application_status")
 }
 
-model Prescription {
-  prescription_id String   @id @default(uuid()) @db.VarChar(36)
-  application_id  String   @db.VarChar(36)
-  created_by      String
-  created_at      DateTime @default(now())
+model ApplicationDocument {
+  application_document_id      Int                     @id @default(autoincrement())
+  application_id               BigInt                  @db.BigInt
+  application_document_type_id Int
+  data                         Json
+  path                         String                  @db.VarChar(1000)
+  application                  Application             @relation(fields: [application_id], references: [application_id])
+  type                         ApplicationDocumentType @relation(fields: [application_document_type_id], references: [application_status_id])
 
-  application Application @relation(fields: [application_id], references: [application_id])
-
-  PrescriptionEvent PrescriptionEvent[]
-
-  @@index([application_id, created_at(sort: Desc)])
-  @@map("prescription")
+  @@map("application_document")
 }
 
-model PrescriptionEvent {
-  prescription_event_id  String   @id @default(uuid()) @db.VarChar(36)
-  prescription_id        String
-  prescription_status_id Int
-  created_at             DateTime @default(now())
-  created_by             String
+model ApplicationDocumentType {
+  application_status_id Int                   @id @default(autoincrement())
+  description           String                @db.VarChar(100)
+  active                Boolean
+  created_at            DateTime              @default(now())
+  documents             ApplicationDocument[]
 
-  prescription       Prescription       @relation(fields: [prescription_id], references: [prescription_id])
-  prescriptionStatus PrescriptionStatus @relation(fields: [prescription_status_id], references: [prescription_status_id])
-
-  @@index([prescription_id, created_at(sort: Desc)])
-  @@map("prescription_event")
-}
-
-model PrescriptionStatus {
-  prescription_status_id Int    @id @default(autoincrement())
-  description            String
-
-  PrescriptionEvent PrescriptionEvent[]
-  @@map("prescription_status")
+  @@map("application_document_type")
 }
