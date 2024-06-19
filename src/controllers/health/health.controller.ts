@@ -5,6 +5,7 @@ import {
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
 import { PrismaClient } from '@prisma/client';
+import { AwsService } from 'src/infra/aws/aws.service';
 
 @Controller('health')
 export class HealthController {
@@ -12,6 +13,7 @@ export class HealthController {
     private health: HealthCheckService,
     private db: PrismaHealthIndicator,
     private prismaClient: PrismaClient,
+    private awsService: AwsService,
   ) {}
 
   @Get()
@@ -20,5 +22,10 @@ export class HealthController {
     return this.health.check([
       () => this.db.pingCheck('database', this.prismaClient),
     ]);
+  }
+
+  @Get('aws')
+  checkAws() {
+    return this.awsService.listBuckets();
   }
 }
