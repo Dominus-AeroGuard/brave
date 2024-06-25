@@ -6,8 +6,10 @@ import {
 } from '@nestjs/terminus';
 import { PrismaClient } from '@prisma/client';
 import { AwsService } from 'src/infra/aws/aws.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('health')
+@ApiTags('health')
 export class HealthController {
   constructor(
     private health: HealthCheckService,

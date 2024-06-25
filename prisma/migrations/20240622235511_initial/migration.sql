@@ -1,28 +1,28 @@
 -- CreateTable
 CREATE TABLE "user" (
-    "user_id" BIGINT NOT NULL,
-    "organization_id" BIGINT NOT NULL,
+    "user_id" SERIAL NOT NULL,
+    "organization_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("user_id")
 );
 
 -- CreateTable
-CREATE TABLE "company" (
-    "organization_id" BIGINT NOT NULL,
+CREATE TABLE "organization" (
+    "organization_id" SERIAL NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "company_pkey" PRIMARY KEY ("organization_id")
+    CONSTRAINT "organization_pkey" PRIMARY KEY ("organization_id")
 );
 
 -- CreateTable
 CREATE TABLE "pilot" (
-    "pilot_id" BIGINT NOT NULL,
-    "organization_id" BIGINT NOT NULL,
+    "pilot_id" SERIAL NOT NULL,
+    "organization_id" INTEGER NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "document" VARCHAR(14) NOT NULL,
-    "lincense" VARCHAR(20) NOT NULL,
+    "license" VARCHAR(20) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "pilot_pkey" PRIMARY KEY ("pilot_id")
@@ -30,10 +30,12 @@ CREATE TABLE "pilot" (
 
 -- CreateTable
 CREATE TABLE "application" (
-    "application_id" BIGINT NOT NULL,
-    "user_id" BIGINT NOT NULL,
-    "organization_id" BIGINT NOT NULL,
+    "application_id" BIGSERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "organization_id" INTEGER NOT NULL,
     "vehicle" VARCHAR(100) NOT NULL,
+    "start_date" TIMESTAMP(3) NOT NULL,
+    "end_date" TIMESTAMP(3) NOT NULL,
     "created_by" VARCHAR(100) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -42,10 +44,10 @@ CREATE TABLE "application" (
 
 -- CreateTable
 CREATE TABLE "application_event" (
-    "application_event_id" BIGINT NOT NULL,
+    "application_event_id" BIGSERIAL NOT NULL,
     "application_id" BIGINT NOT NULL,
     "application_status_id" INTEGER NOT NULL,
-    "pilot_id" BIGINT NOT NULL,
+    "pilot_id" INTEGER NOT NULL,
     "created_by" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -90,16 +92,16 @@ CREATE INDEX "application_user_id_created_at_idx" ON "application"("user_id", "c
 CREATE INDEX "application_event_application_id_created_at_idx" ON "application_event"("application_id", "created_at" DESC);
 
 -- AddForeignKey
-ALTER TABLE "user" ADD CONSTRAINT "user_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "company"("organization_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "user" ADD CONSTRAINT "user_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("organization_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "pilot" ADD CONSTRAINT "pilot_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "company"("organization_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "pilot" ADD CONSTRAINT "pilot_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("organization_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "application" ADD CONSTRAINT "application_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "application" ADD CONSTRAINT "application_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "company"("organization_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "application" ADD CONSTRAINT "application_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organization"("organization_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "application_event" ADD CONSTRAINT "application_event_application_id_fkey" FOREIGN KEY ("application_id") REFERENCES "application"("application_id") ON DELETE RESTRICT ON UPDATE CASCADE;

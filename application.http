@@ -1,0 +1,43 @@
+POST http://localhost:3000/v1/applications
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+
+{
+  "vehicle": "brave",
+  "startDate": "2024-06-26T20:11:01Z",
+  "endDate": "2024-06-26T23:30:00Z",
+  "pilot": {
+    "id": 1
+  }
+}
+
+###
+
+GET http://localhost:3000/v1/applications?page=2&pageSize=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+
+####
+
+GET http://localhost:3000/v1/applications/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+
+####
+
+PATCH  http://localhost:3000/v1/applications/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+
+{
+  "vehicle": "brave",
+  "startDate": "2024-06-25T20:11:01Z",
+  "endDate": "2024-06-25T23:30:00Z",
+  "pilot": {
+    "id": 1
+  },
+  "status": {
+    "id": 2
+  }
+}
+
