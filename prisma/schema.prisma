@@ -8,8 +8,8 @@ generator client {
 }
 
 model User {
-  user_id         BigInt        @id @db.BigInt
-  organization_id BigInt        @db.BigInt
+  user_id         Int           @id @default(autoincrement())
+  organization_id Int
   created_at      DateTime      @default(now())
   organization    Organization  @relation(fields: [organization_id], references: [organization_id])
   applications    Application[]
@@ -18,22 +18,22 @@ model User {
 }
 
 model Organization {
-  organization_id BigInt        @id @db.BigInt
+  organization_id Int           @id @default(autoincrement())
   name            String        @db.VarChar(100)
   created_at      DateTime      @default(now())
   users           User[]
   pilots          Pilot[]
   applications    Application[]
 
-  @@map("company")
+  @@map("organization")
 }
 
 model Pilot {
-  pilot_id        BigInt             @id @db.BigInt
-  organization_id BigInt             @db.BigInt
+  pilot_id        Int                @id @default(autoincrement())
+  organization_id Int
   name            String             @db.VarChar(100)
   document        String             @db.VarChar(14)
-  lincense        String             @db.VarChar(20)
+  license         String             @db.VarChar(20)
   created_at      DateTime           @default(now())
   organization    Organization       @relation(fields: [organization_id], references: [organization_id])
   events          ApplicationEvent[]
@@ -42,10 +42,12 @@ model Pilot {
 }
 
 model Application {
-  application_id  BigInt                @id @db.BigInt
-  user_id         BigInt                @db.BigInt
-  organization_id BigInt                @db.BigInt
+  application_id  BigInt                @id @default(autoincrement()) @db.BigInt
+  user_id         Int
+  organization_id Int
   vehicle         String                @db.VarChar(100)
+  start_date      DateTime
+  end_date        DateTime
   created_by      String                @db.VarChar(100)
   created_at      DateTime              @default(now())
   user            User                  @relation(fields: [user_id], references: [user_id])
@@ -58,10 +60,10 @@ model Application {
 }
 
 model ApplicationEvent {
-  application_event_id  BigInt            @id @db.BigInt
+  application_event_id  BigInt            @id @default(autoincrement()) @db.BigInt
   application_id        BigInt            @db.BigInt
   application_status_id Int
-  pilot_id              BigInt            @db.BigInt
+  pilot_id              Int
   created_by            String
   created_at            DateTime          @default(now())
   application           Application       @relation(fields: [application_id], references: [application_id])

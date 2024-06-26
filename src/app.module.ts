@@ -3,10 +3,39 @@ import { PrismaModule } from './infra/prisma/prisma.module';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthModule } from './controllers/health/health.module';
 import { AwsModule } from './infra/aws/aws.module';
+import { AuthModule } from './auth/auth.module';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { ApplicationModule } from './controllers/v1/application/application.module';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/auth.guard';
+import { SchemaValidationPipe } from './pipes/schema-validation.pipe';
+import { UseCasesModule } from './domain/use-cases/use-cases.module';
 
 @Module({
-  imports: [PrismaModule, TerminusModule, HealthModule, AwsModule],
+  imports: [
+    PrismaModule,
+    TerminusModule,
+    HealthModule,
+    AuthModule,
+    PassportModule,
+    AwsModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '60s' },
+    }),
+    ApplicationModule,
+    UseCasesModule,
+  ],
   controllers: [],
-  providers: [],
+  providers: [
+    JwtStrategy,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    {
+      provide: APP_PIPE,
+      useClass: SchemaValidationPipe,
+    },
+  ],
 })
 export class AppModule {}
