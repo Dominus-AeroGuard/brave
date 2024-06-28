@@ -15,6 +15,7 @@ model User {
   created_at      DateTime      @default(now())
   organization    Organization  @relation(fields: [organization_id], references: [organization_id])
   applications    Application[]
+  protected_area  ProtectedArea[]
 
   @@map("user")
 }
@@ -95,6 +96,7 @@ model ApplicationDocument {
   path                         String                  @db.VarChar(1000)
   application                  Application             @relation(fields: [application_id], references: [application_id])
   type                         ApplicationDocumentType @relation(fields: [application_document_type_id], references: [application_document_type_id])
+  application_areas            ApplicationArea[]
 
   @@map("application_document")
 }
@@ -107,4 +109,39 @@ model ApplicationDocumentType {
   documents                    ApplicationDocument[]
 
   @@map("application_document_type")
+}
+
+model ApplicationArea {
+  id                        Int                 @id @default(autoincrement())
+  geom                      Unsupported("public.geometry(polygonz, 4326)")
+  description               String              @db.VarChar(100)
+  application_document_id   Int
+  application_document      ApplicationDocument @relation(fields: [application_document_id], references: [application_document_id])          
+	created_at                DateTime            @default(now())
+  
+  @@index([geom], name: "application_area_idx", type: Gist)
+  @@map("application_area")
+}
+
+model ProtectedArea {
+  id                        Int                 @id @default(autoincrement())
+  geom                      Unsupported("public.geometry(polygonz, 4326)")
+  description               String              @db.VarChar(100)
+  user_id                   BigInt
+  user                      User                @relation(fields: [user_id], references: [user_id])          
+	created_at                DateTime            @default(now())
+  protected_area_type_id    Int
+  type                      ProtectedAreaType   @relation(fields: [protected_area_type_id], references: [protected_area_type_id])
+
+  @@index([geom], name: "protected_area_idx", type: Gist)
+	@@map("protected_area")
+}
+
+model ProtectedAreaType {
+  protected_area_type_id  Int                   @id @default(autoincrement())
+  description             String                @db.VarChar(100)
+  created_at              DateTime              @default(now())
+  protected_area          ProtectedArea[]
+
+  @@map("protected_area_type")
 }
