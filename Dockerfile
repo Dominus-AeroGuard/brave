@@ -13,6 +13,16 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Variáveis de ambiente (opcionalmente, podem ser definidas em tempo de execução ou em um arquivo .env)
+ENV NODE_ENV=development \
+    DATABASE_URL=postgresql://postgres:postgres@aeroguard-db:5432/aeroguard \
+    AWS_ACCESS_KEY=AKIAZQ3DQWUEQJAYLIFS \
+    AWS_SECRET=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 \
+    AWS_BUCKET_NAME_RA=aeroguard-ra \
+    AWS_BUCKET_NAME_RO=aeroguard-ro \
+    AWS_BUCKET_NAME_KML=aeroguard-kml \
+    AWS_REGION=us-east-1
+
 # Generate Prisma client
 RUN npx prisma generate
 
