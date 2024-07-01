@@ -21,7 +21,8 @@ ENV NODE_ENV=development \
     AWS_BUCKET_NAME_RA=aeroguard-ra \
     AWS_BUCKET_NAME_RO=aeroguard-ro \
     AWS_BUCKET_NAME_KML=aeroguard-kml \
-    AWS_REGION=us-east-1
+    AWS_REGION=us-east-1 \
+    JWT_SECRET=secret
 
 # Generate Prisma client
 RUN npx prisma generate
