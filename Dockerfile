@@ -15,7 +15,7 @@ COPY . .
 
 # Variáveis de ambiente (opcionalmente, podem ser definidas em tempo de execução ou em um arquivo .env)
 ENV NODE_ENV=development \
-    DATABASE_URL=postgresql://postgres:postgres@aeroguard-db:5432/aeroguard \
+    DATABASE_URL=postgresql://postgres:2xoO0RCZYxYVuhm0McnY@aeroguard.c3qi2qyu270f.us-east-1.rds.amazonaws.com:5432/aeroguard \
     AWS_ACCESS_KEY=AKIAZQ3DQWUEQJAYLIFS \
     AWS_SECRET=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 \
     AWS_BUCKET_NAME_RA=aeroguard-ra \
