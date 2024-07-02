@@ -88,20 +88,21 @@ model ApplicationDocument {
   application_document_id      Int                     @id @default(autoincrement())
   application_id               BigInt                  @db.BigInt
   application_document_type_id Int
+  original_name                String                  @db.VarChar(200)
   data                         Json
   path                         String                  @db.VarChar(1000)
   application                  Application             @relation(fields: [application_id], references: [application_id])
-  type                         ApplicationDocumentType @relation(fields: [application_document_type_id], references: [application_status_id])
+  type                         ApplicationDocumentType @relation(fields: [application_document_type_id], references: [application_document_type_id])
 
   @@map("application_document")
 }
 
 model ApplicationDocumentType {
-  application_status_id Int                   @id @default(autoincrement())
-  description           String                @db.VarChar(100)
-  active                Boolean
-  created_at            DateTime              @default(now())
-  documents             ApplicationDocument[]
+  application_document_type_id Int                   @id @default(autoincrement())
+  description                  String                @db.VarChar(100)
+  active                       Boolean
+  created_at                   DateTime              @default(now())
+  documents                    ApplicationDocument[]
 
   @@map("application_document_type")
 }

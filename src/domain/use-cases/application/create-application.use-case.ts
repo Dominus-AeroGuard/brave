@@ -1,6 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Application } from 'src/domain/entities';
-import { IApplicationRepository } from 'src/infra/prisma/repositories/application.repository';
+import { Application } from '../../../domain/entities';
+import { IApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
+
+export interface CreatApplicationRequest {
+  organization: {
+    id: number;
+  };
+  user: {
+    id: number;
+  };
+  vehicle: string;
+  startDate: string;
+  endDate: string;
+  pilot: {
+    id: number;
+  };
+}
 
 @Injectable()
 export class CreateApplicationUseCase {
@@ -9,22 +24,7 @@ export class CreateApplicationUseCase {
     private applicationRepository: IApplicationRepository,
   ) {}
 
-  execute(
-    data: Partial<{
-      organization: Partial<{
-        id: number;
-      }>;
-      user: Partial<{
-        id: number;
-      }>;
-      vehicle: string;
-      startDate: string;
-      endDate: string;
-      pilot: Partial<{
-        id: number;
-      }>;
-    }>,
-  ): Promise<Application> {
+  execute(data: CreatApplicationRequest): Promise<Application> {
     return this.applicationRepository.create(data);
   }
 }

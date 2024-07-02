@@ -13,12 +13,12 @@ import {
 } from '@nestjs/common';
 import { CreateApplicationRequest } from './models/create-application.model';
 import { UpdateApplicationRequest } from './models/update-application.model';
-import { JwtAuthGuard } from 'src/auth/auth.guard';
-import { SchemaValidationPipe } from 'src/pipes/schema-validation.pipe';
-import { CreateApplicationUseCase } from 'src/domain/use-cases/application/create-application.use-case';
-import { UpdateApplicationUseCase } from 'src/domain/use-cases/application/update-application.use-case';
-import { ApplicationRepository } from 'src/infra/prisma/repositories/application.repository';
-import { ListApplicationUseCase } from 'src/domain/use-cases/application/list-application.use-case';
+import { JwtAuthGuard } from '../../../auth/auth.guard';
+import { SchemaValidationPipe } from '../../../pipes/schema-validation.pipe';
+import { CreateApplicationUseCase } from '../../../domain/use-cases/application/create-application.use-case';
+import { UpdateApplicationUseCase } from '../../../domain/use-cases/application/update-application.use-case';
+import { ApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
+import { ListApplicationUseCase } from '../../../domain/use-cases/application/list-application.use-case';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('applications')

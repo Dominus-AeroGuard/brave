@@ -11,7 +11,8 @@ import { ApplicationModule } from './controllers/v1/application/application.modu
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { SchemaValidationPipe } from './pipes/schema-validation.pipe';
-import { UseCasesModule } from './domain/use-cases/use-cases.module';
+import { ApplicationDocumentsModule } from './controllers/v1/application-documents/application-documents.module';
+import { DomainModule } from './domain/domain.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { UseCasesModule } from './domain/use-cases/use-cases.module';
       signOptions: { expiresIn: '60s' },
     }),
     ApplicationModule,
-    UseCasesModule,
+    ApplicationDocumentsModule,
+    DomainModule,
   ],
   controllers: [],
   providers: [

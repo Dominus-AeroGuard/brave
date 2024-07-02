@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ApplicationController } from './application.controller';
-import { CreateApplicationUseCase } from 'src/domain/use-cases/application/create-application.use-case';
-import { UpdateApplicationUseCase } from 'src/domain/use-cases/application/update-application.use-case';
-import { ListApplicationUseCase } from 'src/domain/use-cases/application/list-application.use-case';
-import { ApplicationRepository } from 'src/infra/prisma/repositories/application.repository';
+import { CreateApplicationUseCase } from '../../../domain/use-cases/application/create-application.use-case';
+import { UpdateApplicationUseCase } from '../../../domain/use-cases/application/update-application.use-case';
+import { ListApplicationUseCase } from '../../../domain/use-cases/application/list-application.use-case';
+import { ApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
 
 describe('ApplicationController', () => {
   let controller: ApplicationController;
@@ -12,10 +12,30 @@ describe('ApplicationController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ApplicationController],
       providers: [
-        CreateApplicationUseCase,
-        UpdateApplicationUseCase,
-        ListApplicationUseCase,
-        ApplicationRepository,
+        {
+          provide: CreateApplicationUseCase,
+          useValue: {
+            execute: jest.fn(),
+          },
+        },
+        {
+          provide: UpdateApplicationUseCase,
+          useValue: {
+            execute: jest.fn(),
+          },
+        },
+        {
+          provide: ListApplicationUseCase,
+          useValue: {
+            execute: jest.fn(),
+          },
+        },
+        {
+          provide: ApplicationRepository,
+          useValue: {
+            findOne: jest.fn(),
+          },
+        },
       ],
     }).compile();
 

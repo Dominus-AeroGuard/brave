@@ -69,6 +69,7 @@ CREATE TABLE "application_document" (
     "application_document_id" SERIAL NOT NULL,
     "application_id" BIGINT NOT NULL,
     "application_document_type_id" INTEGER NOT NULL,
+    "original_name" VARCHAR(200) NOT NULL,
     "data" JSONB NOT NULL,
     "path" VARCHAR(1000) NOT NULL,
 
@@ -77,12 +78,12 @@ CREATE TABLE "application_document" (
 
 -- CreateTable
 CREATE TABLE "application_document_type" (
-    "application_status_id" SERIAL NOT NULL,
+    "application_document_type_id" SERIAL NOT NULL,
     "description" VARCHAR(100) NOT NULL,
     "active" BOOLEAN NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "application_document_type_pkey" PRIMARY KEY ("application_status_id")
+    CONSTRAINT "application_document_type_pkey" PRIMARY KEY ("application_document_type_id")
 );
 
 -- CreateIndex
@@ -116,4 +117,4 @@ ALTER TABLE "application_event" ADD CONSTRAINT "application_event_pilot_id_fkey"
 ALTER TABLE "application_document" ADD CONSTRAINT "application_document_application_id_fkey" FOREIGN KEY ("application_id") REFERENCES "application"("application_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "application_document" ADD CONSTRAINT "application_document_application_document_type_id_fkey" FOREIGN KEY ("application_document_type_id") REFERENCES "application_document_type"("application_status_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "application_document" ADD CONSTRAINT "application_document_application_document_type_id_fkey" FOREIGN KEY ("application_document_type_id") REFERENCES "application_document_type"("application_document_type_id") ON DELETE RESTRICT ON UPDATE CASCADE;
