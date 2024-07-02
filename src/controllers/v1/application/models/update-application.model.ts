@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { ApplicationStatus } from 'src/domain/enums/application-status.enum';
+import { ApplicationStatus } from '../../../../domain/enums/application-status.enum';
 
 export class UpdateApplicationPilot {
   @ApiProperty()
@@ -32,4 +32,9 @@ export class UpdateApplicationRequest {
   @ValidateNested()
   @Type(() => UpdateApplicationPilot)
   pilot: UpdateApplicationPilot;
+
+  @ApiProperty()
+  @ValidateNested()
+  @Type(() => UpdateApplicationStatus)
+  status: UpdateApplicationStatus;
 }

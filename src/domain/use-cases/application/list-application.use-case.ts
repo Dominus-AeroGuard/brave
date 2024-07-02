@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PaginableEntity } from 'src/controllers/dtos/paginable.dto';
-import { Application } from 'src/domain/entities';
-import { IApplicationRepository } from 'src/infra/prisma/repositories/application.repository';
+import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
+import { Application } from '../../../domain/entities';
+import { IApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
 
 @Injectable()
 export class ListApplicationUseCase {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../infra/prisma/prisma.service';
-import { Application as Application } from 'src/domain/entities';
+import { Application as Application } from '../../../domain/entities';
 import { DateTime } from 'luxon';
-import { ApplicationStatus } from 'src/domain/enums/application-status.enum';
+import { ApplicationStatus } from '../../../domain/enums/application-status.enum';
 
 export interface IApplicationRepository {
   create(

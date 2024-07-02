@@ -3,6 +3,7 @@ import {
   S3Client,
   PutObjectCommand,
   ListBucketsCommand,
+  PutObjectCommandOutput,
 } from '@aws-sdk/client-s3';
 
 @Injectable()
@@ -22,7 +23,11 @@ export class AwsService {
     });
   }
 
-  async uploadFile(file: Buffer, bucket: string, key: string) {
+  async uploadFile(
+    file: Buffer,
+    bucket: string,
+    key: string,
+  ): Promise<PutObjectCommandOutput> {
     const params = {
       Bucket: bucket,
       Key: key,
@@ -47,5 +52,9 @@ export class AwsService {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  buildPath(bucket: string, key: string): string {
+    return `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
   }
 }

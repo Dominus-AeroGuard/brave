@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 import {
   IsDateLessThan,
   MinDateCustom,
-} from 'src/utils/validators/class-validator.validators';
+} from '../../../../utils/validators/class-validator.validators';
 import { Type } from 'class-transformer';
 
 export class CreateApplicationPilot {
