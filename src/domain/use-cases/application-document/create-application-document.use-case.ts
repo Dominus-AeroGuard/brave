@@ -6,9 +6,13 @@ import { AwsService } from '../../../infra/aws/aws.service';
 import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
 
 export interface ApplicationDocumentRequest {
-  files: Array<Express.Multer.File>;
+  files: Array<
+    Partial<{
+      file: Express.Multer.File;
+      typeId: ApplicationDocumentType;
+    }>
+  >;
   applicationId: number;
-  typeId: ApplicationDocumentType;
 }
 
 @Injectable()
@@ -31,7 +35,7 @@ export class CreateApplicationDocumentUseCase {
       path: file.path,
       originalName: file.originalname,
       data: {},
-      typeId: request.typeId,
+      typeId: file.typeId,
       applicationId: request.applicationId,
     }));
 
@@ -45,18 +49,20 @@ export class CreateApplicationDocumentUseCase {
 
   private async saveFile(
     request: ApplicationDocumentRequest,
-  ): Promise<Array<Partial<{ originalname: string; path: string }>>> {
-    const bucket = this.applicationDocumentService.getBucketByDocumentType(
-      request.typeId,
-    );
-
+  ): Promise<
+    Array<Partial<{ originalname: string; path: string; typeId: number }>>
+  > {
     const promises = request.files.map(async (file) => {
-      const key = this.applicationDocumentService.generateFileName(file);
+      const key = this.applicationDocumentService.generateFileName(file.file);
+      const bucket = this.applicationDocumentService.getBucketByDocumentType(
+        file.typeId,
+      );
 
-      await this.awsService.uploadFile(file.buffer, bucket, key);
+      await this.awsService.uploadFile(file.file.buffer, bucket, key);
 
       return {
-        originalname: file.originalname,
+        originalname: file.file.originalname,
+        typeId: file.typeId,
         path: this.awsService.buildPath(bucket, key),
       };
     });
