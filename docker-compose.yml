@@ -1,7 +1,7 @@
 services:
   db:
     container_name: 'aeroguard-db'
-    image: postgres:13
+    image: postgis/postgis:13-3.4
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

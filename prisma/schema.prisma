@@ -1,31 +1,45 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider    = "postgresql"
+  url         = env("DATABASE_URL")
+  extensions  = [postgis]
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 model User {
-  user_id         Int           @id @default(autoincrement())
-  organization_id Int
-  created_at      DateTime      @default(now())
-  organization    Organization  @relation(fields: [organization_id], references: [organization_id])
-  applications    Application[]
+  user_id           Int           @id @default(autoincrement())
+  created_at        DateTime      @default(now())
+  applications      Application[]
+  organizations UserOrganization[]
 
   @@map("user")
 }
 
 model Organization {
-  organization_id Int           @id @default(autoincrement())
-  name            String        @db.VarChar(100)
-  created_at      DateTime      @default(now())
-  users           User[]
-  pilots          Pilot[]
-  applications    Application[]
+  organization_id   Int           @id @default(autoincrement())
+  name              String        @db.VarChar(100)
+  created_at        DateTime      @default(now())
+  pilots            Pilot[]
+  applications      Application[]
+  users UserOrganization[] 
+  protected_areas   ProtectedArea[]
+
 
   @@map("organization")
+}
+
+model UserOrganization {
+  user_id           Int 
+  organization_id   Int 
+  user              User     @relation(fields: [user_id], references: [user_id])
+  organization      Organization @relation(fields: [organization_id], references: [organization_id])
+  created_at        DateTime      @default(now())
+
+  @@id([user_id, organization_id])
+  @@map("user_organization")
 }
 
 model Pilot {
@@ -54,6 +68,7 @@ model Application {
   organization    Organization          @relation(fields: [organization_id], references: [organization_id])
   events          ApplicationEvent[]
   documents       ApplicationDocument[]
+  areas           ApplicationArea[]
 
   @@index([user_id, created_at(sort: Desc)])
   @@map("application")
@@ -93,7 +108,7 @@ model ApplicationDocument {
   path                         String                  @db.VarChar(1000)
   application                  Application             @relation(fields: [application_id], references: [application_id])
   type                         ApplicationDocumentType @relation(fields: [application_document_type_id], references: [application_document_type_id])
-
+  
   @@map("application_document")
 }
 
@@ -105,4 +120,40 @@ model ApplicationDocumentType {
   documents                    ApplicationDocument[]
 
   @@map("application_document_type")
+}
+
+model ApplicationArea {
+  id                        Int                 @id @default(autoincrement())
+  geom                      Unsupported("public.geometry(polygonz, 4326)")
+  description               String              @db.VarChar(100)
+  application_id            BigInt              @db.BigInt
+  application               Application         @relation(fields: [application_id], references: [application_id])          
+	created_at                DateTime            @default(now())
+  
+  @@index([geom], name: "application_area_idx", type: Gist)
+  @@map("application_area")
+}
+
+model ProtectedArea {
+  id                        Int                 @id @default(autoincrement())
+  geom                      Unsupported("public.geometry(polygonz, 4326)")
+  description               String              @db.VarChar(100)
+  protected_area_type_id    Int
+  type                      ProtectedAreaType   @relation(fields: [protected_area_type_id], references: [protected_area_type_id])
+  organization_id           Int
+  organization              Organization         @relation(fields: [organization_id], references: [organization_id])
+  created_by                String
+	created_at                DateTime            @default(now())
+
+  @@index([geom], name: "protected_area_idx", type: Gist)
+	@@map("protected_area")
+}
+
+model ProtectedAreaType {
+  protected_area_type_id  Int                   @id @default(autoincrement())
+  description             String                @db.VarChar(100)
+  created_at              DateTime              @default(now())
+  protected_area          ProtectedArea[]
+
+  @@map("protected_area_type")
 }
