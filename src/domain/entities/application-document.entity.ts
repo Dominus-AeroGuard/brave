@@ -1,11 +1,20 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { JsonValue } from '@prisma/client/runtime/library';
 
 export class ApplicationDocumentType {
-  constructor(
-    public id: number,
-    public description: string,
-    public active: boolean,
-  ) {
+  @ApiProperty({ description: 'ID do tipo de documento', example: 1 })
+  public id: number;
+
+  @ApiProperty({ description: 'Descrição do tipo de documento', example: 'RA' })
+  public description: string;
+
+  @ApiProperty({
+    description:
+      'Indica se o tipo de documento está ativo para novas inserções',
+  })
+  public active: boolean;
+
+  constructor(id: number, description: string, active: boolean) {
     this.id = id;
     this.description = description;
     this.active = active;
@@ -13,12 +22,35 @@ export class ApplicationDocumentType {
 }
 
 export class ApplicationDocument {
+  @ApiProperty({ description: 'ID do documento', example: 1 })
+  public id: number;
+
+  @ApiProperty({
+    description: 'Nome original do arquivo enviado pelo cliente',
+    example: 'file.pdf',
+  })
+  public originalName: string;
+
+  @ApiProperty({
+    description: 'Caminho do arquivo salvo no servidor',
+    example: '/path/to/file',
+  })
+  public path: string;
+
+  @ApiProperty({ description: 'Dados do arquivo extraidos pela OCR' })
+  public data: JsonValue;
+
+  @ApiProperty({
+    description: 'Tipo do documento',
+  })
+  public type: ApplicationDocumentType;
+
   constructor(
-    public id: number,
-    public originalName: string,
-    public path: string,
-    public data: JsonValue,
-    public type: ApplicationDocumentType,
+    id: number,
+    originalName: string,
+    path: string,
+    data: JsonValue,
+    type: ApplicationDocumentType,
   ) {
     this.id = id;
     this.originalName = originalName;

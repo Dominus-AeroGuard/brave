@@ -3,16 +3,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiO
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="typeId"
+Content-Disposition: form-data; name="files[0][typeId]"
 
 1
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="files"; filename="example.txt"
+Content-Disposition: form-data; name="files[1][typeId]"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="files[0][fileId]"; filename="example.txt"
 Content-Type: text/plain
 
 (data)
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="files"; filename="example_2.txt"
+Content-Disposition: form-data; name="files[1][fileId]"; filename="example.txt"
 Content-Type: text/plain
 
 (data)
@@ -30,7 +34,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiO
 
 ###
 
-PUT http://localhost:3000/v1/applications/2/documents/101
+PUT http://localhost:3000/v1/applications/4/documents/103
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 Content-Type: application/json
 
@@ -43,5 +47,5 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/v1/applications/2/documents/99
+DELETE http://localhost:3000/v1/applications/4/documents/103
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE

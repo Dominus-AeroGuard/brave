@@ -14,26 +14,40 @@ import {
 import { Type } from 'class-transformer';
 
 export class CreateApplicationPilot {
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+    description: 'Piloto que irá realizar a aplicação',
+  })
   @IsNotEmpty()
   @IsInt()
   id: number;
 }
 
 export class CreateApplicationRequest {
-  @ApiProperty()
+  @ApiProperty({
+    example: 'brave',
+    description: 'Nome do veículo que será utilizado na aplicação',
+  })
   @IsNotEmpty()
   @MinLength(3)
   vehicle: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: DateTime.now().plus({ hour: 2 }).toISO(),
+    description: 'Data de inicio da aplicação',
+    type: 'date-time',
+  })
   @IsISO8601({ strict: true, strictSeparator: true })
   @MinDateCustom(DateTime.now().plus({ hour: 2 }).toISO(), {
     message: 'startDate must be at least 2 hours from now',
   })
   startDate: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: DateTime.now().plus({ hour: 3 }).toISO(),
+    description: 'Data de fim da aplicação',
+    type: 'date-time',
+  })
   @IsISO8601()
   @IsDateLessThan('startDate', {
     message: 'endDate must be at least 1 hours from startDate',

@@ -19,11 +19,27 @@ import { CreateApplicationUseCase } from '../../../domain/use-cases/application/
 import { UpdateApplicationUseCase } from '../../../domain/use-cases/application/update-application.use-case';
 import { ApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
 import { ListApplicationUseCase } from '../../../domain/use-cases/application/list-application.use-case';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
+import { Application } from '../../../domain/entities';
+import { PaginableEntity } from '../../dtos/paginable.dto';
+import { ValidationRequestDto } from '../../dtos/validation-request.dto';
+import { ErrorRequestDto } from '../../dtos/error-request.dto';
 
 @ApiTags('applications')
 @Controller('v1/applications')
 @UseGuards(JwtAuthGuard)
+@ApiBadRequestResponse({ type: ValidationRequestDto })
+@ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class ApplicationController {
   constructor(
     @Inject(CreateApplicationUseCase)
@@ -37,6 +53,8 @@ export class ApplicationController {
   ) {}
 
   @Post()
+  @ApiCreatedResponse({ type: Application })
+  @ApiUnprocessableEntityResponse({ type: ErrorRequestDto })
   create(
     @Request() req,
     @Body(new SchemaValidationPipe()) application: CreateApplicationRequest,
@@ -49,7 +67,24 @@ export class ApplicationController {
   }
 
   @Get()
-  findAll(@Request() { user }, @Query() query: any) {
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'size', required: false, type: Number, example: 10 })
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      $ref: '#/components/schemas/PaginableEntity',
+      properties: {
+        data: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/Application' },
+        },
+      },
+    },
+  })
+  findAll(
+    @Request() { user },
+    @Query() query: any,
+  ): Promise<PaginableEntity<Application>> {
     return this.listApplication.execute({
       ...query,
       page: query.page ? parseInt(query.page) : undefined,
@@ -59,11 +94,15 @@ export class ApplicationController {
   }
 
   @Get(':id')
+  @ApiParam({ name: 'id', type: BigInt, example: 1 })
+  @ApiOkResponse({ type: Application })
   findOne(@Request() { user }, @Param('id') id: string) {
     return this.applicationRepository.findOne(user.organizationId, id);
   }
 
   @Patch(':id')
+  @ApiParam({ name: 'id', type: BigInt, example: 1 })
+  @ApiOkResponse({ type: Application })
   update(
     @Param('id') id: string,
     @Request() { user },
@@ -78,6 +117,8 @@ export class ApplicationController {
   }
 
   @Delete(':id')
+  @ApiParam({ name: 'id', type: BigInt, example: 1 })
+  @ApiNoContentResponse()
   remove(@Request() { user }, @Param('id') id: string) {
     return this.applicationRepository.remove(user.organizationId, id);
   }

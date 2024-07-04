@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ApplicationDocumentsController } from './application-documents.controller';
 import { CreateApplicationDocumentUseCase } from '../../../domain/use-cases/application-document/create-application-document.use-case';
 import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
+import { CreateApplicationDocumentRequest } from './models/create-application-document.model';
 
 describe('ApplicationDocumentsController', () => {
   let controller: ApplicationDocumentsController;
@@ -51,8 +52,8 @@ describe('ApplicationDocumentsController', () => {
       ] as unknown as Array<Express.Multer.File>;
       const applicationId = '123';
       const applicationDocument = {
-        typeId: '1',
-      };
+        files: [{ typeId: 1, file: files[0] }],
+      } as unknown as CreateApplicationDocumentRequest;
 
       jest.spyOn(useCase, 'execute').mockResolvedValueOnce([
         {
@@ -73,9 +74,8 @@ describe('ApplicationDocumentsController', () => {
 
       // Assert
       expect(useCase.execute).toHaveBeenCalledWith({
-        typeId: expect.any(Number),
-        applicationId: expect.any(Number),
-        files,
+        applicationId: 123,
+        files: expect.any(Object),
       });
     });
   });

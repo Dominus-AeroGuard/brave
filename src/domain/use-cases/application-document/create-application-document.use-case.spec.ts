@@ -54,25 +54,29 @@ describe('CreateApplicationDocumentUseCase', () => {
   describe('execute', () => {
     it('should create an application document and return it', async () => {
       // Arrange
-      const files: Array<Express.Multer.File> = [
+      const files: Array<
+        Partial<{ file: Express.Multer.File; typeId: number }>
+      > = [
         {
-          fieldname: 'file',
-          originalname: 'test-file.txt',
-          encoding: '7bit',
-          mimetype: 'text/plain',
-          size: 1024,
-          buffer: Buffer.from('Test file content'),
-          stream: new Readable(),
-          destination: '',
-          filename: '',
-          path: '',
+          file: {
+            fieldname: 'file',
+            originalname: 'test-file.txt',
+            encoding: '7bit',
+            mimetype: 'text/plain',
+            size: 1024,
+            buffer: Buffer.from('Test file content'),
+            stream: new Readable(),
+            destination: '',
+            filename: '',
+            path: '',
+          },
+          typeId: ApplicationDocumentType.RA,
         },
       ];
 
       const request: ApplicationDocumentRequest = {
         files,
         applicationId: 123,
-        typeId: ApplicationDocumentType.RA,
       };
 
       const repositorySpy = {
@@ -116,7 +120,7 @@ describe('CreateApplicationDocumentUseCase', () => {
       ).toHaveBeenCalledWith(ApplicationDocumentType.RA);
       expect(
         applicationDocumentServiceSpy.generateFileName,
-      ).toHaveBeenCalledWith(files[0]);
+      ).toHaveBeenCalledWith(files[0].file);
       expect(repositorySpy.create).toHaveBeenCalledWith([
         {
           path: filePath,
@@ -147,7 +151,6 @@ describe('CreateApplicationDocumentUseCase', () => {
       const request: ApplicationDocumentRequest = {
         files: undefined,
         applicationId: 123,
-        typeId: ApplicationDocumentType.RA,
       };
 
       // Act
