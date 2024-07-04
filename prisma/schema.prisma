@@ -10,25 +10,36 @@ generator client {
 }
 
 model User {
-  user_id         Int           @id @default(autoincrement())
-  organization_id Int
-  created_at      DateTime      @default(now())
-  organization    Organization  @relation(fields: [organization_id], references: [organization_id])
-  applications    Application[]
-  protected_area  ProtectedArea[]
+  user_id           Int           @id @default(autoincrement())
+  created_at        DateTime      @default(now())
+  applications      Application[]
+  user_organization UserOrganization[]
 
   @@map("user")
 }
 
 model Organization {
-  organization_id Int           @id @default(autoincrement())
-  name            String        @db.VarChar(100)
-  created_at      DateTime      @default(now())
-  users           User[]
-  pilots          Pilot[]
-  applications    Application[]
+  organization_id   Int           @id @default(autoincrement())
+  name              String        @db.VarChar(100)
+  created_at        DateTime      @default(now())
+  pilots            Pilot[]
+  applications      Application[]
+  user_organization UserOrganization[] 
+  protected_areas   ProtectedArea[]
+
 
   @@map("organization")
+}
+
+model UserOrganization {
+  user_id           Int 
+  organization_id   Int 
+  user              User     @relation(fields: [user_id], references: [user_id])
+  organization      Organization @relation(fields: [organization_id], references: [organization_id])
+  created_at        DateTime      @default(now())
+
+  @@id([user_id, organization_id])
+  @@map("user_organization")
 }
 
 model Pilot {
@@ -57,6 +68,7 @@ model Application {
   organization    Organization          @relation(fields: [organization_id], references: [organization_id])
   events          ApplicationEvent[]
   documents       ApplicationDocument[]
+  areas           ApplicationArea[]
 
   @@index([user_id, created_at(sort: Desc)])
   @@map("application")
@@ -96,8 +108,7 @@ model ApplicationDocument {
   path                         String                  @db.VarChar(1000)
   application                  Application             @relation(fields: [application_id], references: [application_id])
   type                         ApplicationDocumentType @relation(fields: [application_document_type_id], references: [application_document_type_id])
-  application_areas            ApplicationArea[]
-
+  
   @@map("application_document")
 }
 
@@ -115,8 +126,8 @@ model ApplicationArea {
   id                        Int                 @id @default(autoincrement())
   geom                      Unsupported("public.geometry(polygonz, 4326)")
   description               String              @db.VarChar(100)
-  application_document_id   Int
-  application_document      ApplicationDocument @relation(fields: [application_document_id], references: [application_document_id])          
+  application_id            BigInt              @db.BigInt
+  application               Application         @relation(fields: [application_id], references: [application_id])          
 	created_at                DateTime            @default(now())
   
   @@index([geom], name: "application_area_idx", type: Gist)
@@ -127,11 +138,12 @@ model ProtectedArea {
   id                        Int                 @id @default(autoincrement())
   geom                      Unsupported("public.geometry(polygonz, 4326)")
   description               String              @db.VarChar(100)
-  user_id                   BigInt
-  user                      User                @relation(fields: [user_id], references: [user_id])          
-	created_at                DateTime            @default(now())
   protected_area_type_id    Int
   type                      ProtectedAreaType   @relation(fields: [protected_area_type_id], references: [protected_area_type_id])
+  organization_id           Int
+  organization              Organization         @relation(fields: [organization_id], references: [organization_id])
+  created_by                String
+	created_at                DateTime            @default(now())
 
   @@index([geom], name: "protected_area_idx", type: Gist)
 	@@map("protected_area")
