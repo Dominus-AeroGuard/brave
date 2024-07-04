@@ -24,7 +24,7 @@ model Organization {
   created_at        DateTime      @default(now())
   pilots            Pilot[]
   applications      Application[]
-  user_organization UserOrganization[] 
+  users UserOrganization[] 
   protected_areas   ProtectedArea[]
 
 
