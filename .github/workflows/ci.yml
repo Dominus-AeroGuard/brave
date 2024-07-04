@@ -42,7 +42,19 @@ jobs:
         with:
           task-definition: brave-task-definition.json 
           container-name: brave
-          image: ${{ steps.build-image.outputs.image }}    
+          image: ${{ steps.build-image.outputs.image }}
+          environment-variables: |
+            [
+              {
+                "name": "NODE_ENV",
+                "valueFrom": "arn:aws:secretsmanager:us-east-1:654654354697:secret:brave-hFJXwT:NODE_ENV::"
+              },
+              {
+                "name": "DATABASE_URL",
+                "valueFrom": "arn:aws:secretsmanager:us-east-1:654654354697:secret:brave-hFJXwT:DATABASE_URL::"
+              }
+            ]
+
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
