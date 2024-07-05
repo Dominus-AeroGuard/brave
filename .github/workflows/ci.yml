@@ -36,6 +36,14 @@ jobs:
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT    
 
+      - name: Retrieve AWS Account ID
+        id: get-account-id
+        run: echo "AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)" >> $GITHUB_ENV
+
+      - name: Update task definition AWS ACCOUNT ID
+        run: |
+          sed -i '' 's|AWS_ACCOUNT|$AWS_ACCOUNT_ID|g' .aws/brave-task-definition.json
+
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
