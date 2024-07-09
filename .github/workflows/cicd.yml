@@ -58,6 +58,12 @@ jobs:
           mkdir -p ~/.docker
           echo '{ "credsStore": "pass" }' > ~/.docker/config.json
 
+      - name: Permissions for pass
+        run: sudo chmod +x /usr/local/bin/docker-credential-pass
+
+      - name: Set owner for pass
+        run: sudo chown root:root /usr/local/bin/docker-credential-pass
+
       - name: Verify Docker configuration
         run: docker-credential-pass
 
