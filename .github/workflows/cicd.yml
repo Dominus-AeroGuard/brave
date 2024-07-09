@@ -58,6 +58,9 @@ jobs:
           mkdir -p ~/.docker
           echo '{ "credsStore": "pass" }' > ~/.docker/config.json
 
+      - name: Verify Docker configuration
+        run: docker-credential-pass
+
       - name: Login to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
