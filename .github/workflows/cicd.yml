@@ -30,9 +30,11 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-          echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --edit-key "${{ secrets.GPG_KEY_ID }}" trust quit
+          echo -e "5\ny\n" | gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --command-fd 0 --edit-key "$GPG_KEY_ID" trust quit
+  
 
       - name: Initialize pass
         run: pass init "${{ secrets.GPG_KEY_ID }}"
