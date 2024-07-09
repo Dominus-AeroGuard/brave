@@ -32,7 +32,7 @@ jobs:
         run: |
           git clone https://github.com/docker/docker-credential-helpers.git
           cd docker-credential-helpers/pass
-          go build -o docker-credential-pass
+          sudo go build -o docker-credential-pass
           sudo mv docker-credential-pass /usr/local/bin/
           echo "docker-credential-pass installed at $(which docker-credential-pass)"
 
