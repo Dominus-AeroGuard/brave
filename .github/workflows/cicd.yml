@@ -12,6 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pass gnupg2 golang-go git
+
       - name: Create .env file
         run: echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env &&
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env &&
@@ -23,13 +28,13 @@ jobs:
           echo "AWS_BUCKET_NAME_KML=${{ secrets.AWS_BUCKET_NAME_KML }}" >> .env &&
           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
       
-      - name: Install pass, gnupg, and docker-credential-pass
+      - name: Install docker-credential-pass
         run: |
-          sudo apt-get update
-          sudo apt-get install -y pass gnupg2
-          sudo apt-get install -y golang-go
-          go install github.com/docker/docker-credential-helpers/pass@latest
-          sudo cp ~/go/bin/docker-credential-pass /usr/local/bin/docker-credential-pass
+          git clone https://github.com/docker/docker-credential-helpers.git
+          cd docker-credential-helpers
+          cd pass
+          go build -o docker-credential-pass
+          sudo mv docker-credential-pass /usr/local/bin/
 
       - name: Set up GPG key
         env:
