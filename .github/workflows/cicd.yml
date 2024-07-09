@@ -1,0 +1,29 @@
+name: Deploy Brave App
+
+on:
+  push:
+    branches:
+      - feature/deploy-ec2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Create .env file
+        run: echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env &&
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env &&
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env &&
+          echo "AWS_SECRET=${{ secrets.AWS_SECRET }}" >> .env &&
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env &&
+          echo "AWS_BUCKET_NAME_RO=${{ secrets.AWS_BUCKET_NAME_RO }}" >> .env &&
+          echo "AWS_BUCKET_NAME_RA=${{ secrets.AWS_BUCKET_NAME_RA }}" >> .env &&
+          echo "AWS_BUCKET_NAME_KML=${{ secrets.AWS_BUCKET_NAME_KML }}" >> .env &&
+          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
+      - name: Build docker image
+        run: docker build -t aeroguard/brave-app .
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push image to docker hub
+        run: docker push aeroguard/brave-app:latest
