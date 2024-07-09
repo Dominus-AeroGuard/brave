@@ -12,11 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pass gnupg2 golang-go git
-
       - name: Create .env file
         run: echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env &&
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env &&
@@ -28,53 +23,11 @@ jobs:
           echo "AWS_BUCKET_NAME_KML=${{ secrets.AWS_BUCKET_NAME_KML }}" >> .env &&
           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
 
-      - name: Install docker-credential-pass
-        run: |
-          git clone https://github.com/docker/docker-credential-helpers.git
-          cd docker-credential-helpers/pass
-          sudo go build -o docker-credential-pass
-          sudo mv docker-credential-pass /usr/local/bin/
-          echo "docker-credential-pass installed at $(which docker-credential-pass)"
-
-      - name: Verify docker-credential-pass installation
-        run: |
-          ls -l /usr/local/bin/docker-credential-pass
-          echo $PATH
-
-      - name: Set up GPG key
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
-        run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-          echo -e "5\ny\n" | gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --command-fd 0 --edit-key "$GPG_KEY_ID" trust quit
-
-      - name: Initialize pass
-        run: pass init "${{ secrets.GPG_KEY_ID }}"
-
-      - name: Configure Docker to use pass
-        run: |
-          mkdir -p ~/.docker
-          echo '{ "credsStore": "pass" }' > ~/.docker/config.json
-
-      - name: Permissions for pass
-        run: sudo chmod +x /usr/local/bin/docker-credential-pass
-
-      - name: Set owner for pass
-        run: sudo chown root:root /usr/local/bin/docker-credential-pass
-
-      - name: Verify Docker configuration
-        run: docker-credential-pass
+      - name: Build docker image
+        run: docker build -t aeroguard/brave-app .
 
       - name: Login to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin --verbose
-
-      - name: Build docker image
-        run: docker build -t aeroguard/brave-app:latest .
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push image to docker hub
         run: docker push aeroguard/brave-app:latest
