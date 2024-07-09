@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Create .env file
         run: echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env &&
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env &&
@@ -21,9 +22,34 @@ jobs:
           echo "AWS_BUCKET_NAME_RA=${{ secrets.AWS_BUCKET_NAME_RA }}" >> .env &&
           echo "AWS_BUCKET_NAME_KML=${{ secrets.AWS_BUCKET_NAME_KML }}" >> .env &&
           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
-      - name: Build docker image
-        run: docker build -t aeroguard/brave-app .
+      
+      - name: Install pass
+        run: sudo apt-get update && sudo apt-get install -y pass gnupg2
+
+      - name: Set up GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --edit-key "${{ secrets.GPG_KEY_ID }}" trust quit
+
+      - name: Initialize pass
+        run: pass init "${{ secrets.GPG_KEY_ID }}"
+
+      - name: Configure Docker to use pass
+        run: |
+          mkdir -p ~/.docker
+          echo '{ "credsStore": "pass" }' > ~/.docker/config.json
+
       - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+      - name: Build docker image
+        run: docker build -t aeroguard/brave-app:latest .
+
       - name: Push image to docker hub
         run: docker push aeroguard/brave-app:latest
