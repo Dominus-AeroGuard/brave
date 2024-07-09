@@ -23,8 +23,14 @@ jobs:
           echo "AWS_BUCKET_NAME_KML=${{ secrets.AWS_BUCKET_NAME_KML }}" >> .env &&
           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
       
-      - name: Install pass
-        run: sudo apt-get update && sudo apt-get install -y pass gnupg2
+      - name: Install pass, gnupg, and docker-credential-pass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pass gnupg2
+          sudo apt-get install -y golang-go
+          go get -u github.com/docker/docker-credential-helpers/credentials
+          go get -u github.com/docker/docker-credential-helpers/pass
+          sudo cp ~/go/bin/docker-credential-pass /usr/local/bin/docker-credential-pass
 
       - name: Set up GPG key
         env:
@@ -34,7 +40,6 @@ jobs:
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
           echo -e "5\ny\n" | gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --command-fd 0 --edit-key "$GPG_KEY_ID" trust quit
-  
 
       - name: Initialize pass
         run: pass init "${{ secrets.GPG_KEY_ID }}"
