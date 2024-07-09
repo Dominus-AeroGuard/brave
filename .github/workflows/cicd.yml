@@ -27,14 +27,19 @@ jobs:
           echo "AWS_BUCKET_NAME_RA=${{ secrets.AWS_BUCKET_NAME_RA }}" >> .env &&
           echo "AWS_BUCKET_NAME_KML=${{ secrets.AWS_BUCKET_NAME_KML }}" >> .env &&
           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
-      
+
       - name: Install docker-credential-pass
         run: |
           git clone https://github.com/docker/docker-credential-helpers.git
-          cd docker-credential-helpers
-          cd pass
+          cd docker-credential-helpers/pass
           go build -o docker-credential-pass
           sudo mv docker-credential-pass /usr/local/bin/
+          echo "docker-credential-pass installed at $(which docker-credential-pass)"
+
+      - name: Verify docker-credential-pass installation
+        run: |
+          ls -l /usr/local/bin/docker-credential-pass
+          echo $PATH
 
       - name: Set up GPG key
         env:
