@@ -28,8 +28,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pass gnupg2
           sudo apt-get install -y golang-go
-          go get -u github.com/docker/docker-credential-helpers/credentials
-          go get -u github.com/docker/docker-credential-helpers/pass
+          go install github.com/docker/docker-credential-helpers/pass@latest
           sudo cp ~/go/bin/docker-credential-pass /usr/local/bin/docker-credential-pass
 
       - name: Set up GPG key
