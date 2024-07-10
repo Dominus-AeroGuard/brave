@@ -1,0 +1,34 @@
+POST /v1/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+
+{
+  "name": "John Doe",
+  "document": "12345678901", // validar CPF, validar se já existe, retornar 422 Unprocessable Entity
+  "email": "jonh@doe.com"
+}
+
+###
+
+GET /v1/users?page=2&pageSize=1&document=12345678901&email=john@doe.com
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+
+# Response 200OK
+# {
+#   "data": [
+#     {
+#       "user_id": 1,
+#       "name": "John Doe",
+#       "document": "**********12",
+#       "email": ""
+#     }
+#   ],
+#   "meta": {
+#     "page": 2,
+#     "pageSize": 1,
+#     "total": 1
+#   }
+# }
+
+

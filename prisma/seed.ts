@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-async function applicatioStatusSeed() {
+async function applicationStatusSeed() {
   const applicationStatus = [
     {
       id: 1,
@@ -42,8 +42,59 @@ async function applicatioStatusSeed() {
   console.log('\n\t✔  application_status has been seeded');
 }
 
+async function organizationSeed() {
+  return prisma.organization.upsert({
+    where: {
+      organization_id: 1,
+    },
+    update: {
+      name: 'Test Organization',
+    },
+    create: {
+      name: 'Test Organization',
+    },
+  });
+}
+
+async function userSeed() {
+  return prisma.user.upsert({
+    where: {
+      user_id: 1,
+    },
+    update: {
+      name: 'Jonh Doe',
+    },
+    create: {
+      name: 'Jonh Doe',
+      email: 'jonh@example.com',
+      document: '92564656048',
+      status: 'ACTIVE',
+    },
+  });
+}
+
+async function pilotSeed() {
+  return prisma.pilot.upsert({
+    where: {
+      pilot_id: 1,
+    },
+    update: {
+      name: 'Jonh Doe',
+    },
+    create: {
+      name: 'Jonh Doe',
+      license: '123456',
+      document: '92564656048',
+      organization_id: 1,
+    },
+  });
+}
+
 async function main() {
-  await applicatioStatusSeed();
+  await applicationStatusSeed();
+  await organizationSeed();
+  await userSeed();
+  await pilotSeed();
 }
 
 main()
