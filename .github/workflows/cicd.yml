@@ -31,3 +31,14 @@ jobs:
 
       - name: Push image to docker hub
         run: docker push aeroguard/brave-app:latest
+  
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from Docker Hub
+        run: docker pull aeroguard/brave-app:latest
+      - name: Delete existing container
+        run: docker rm -f brave-app-container || true
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name brave-app-container aeroguard/brave-app:latest
