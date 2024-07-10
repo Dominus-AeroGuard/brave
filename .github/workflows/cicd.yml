@@ -38,9 +38,11 @@ jobs:
     steps:
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      - name: Pull image from Docker Hub
-        run: docker pull aeroguard/brave-app:latest
       - name: Delete existing container
         run: docker rm -f brave-app-container || true
+      - name: Delete existing image
+        run: docker rmi aeroguard/brave-app:latest || true
+      - name: Pull image from Docker Hub
+        run: docker pull aeroguard/brave-app:latest
       - name: Run docker container
         run: docker run -d -p 3000:3000 --name brave-app-container aeroguard/brave-app:latest
