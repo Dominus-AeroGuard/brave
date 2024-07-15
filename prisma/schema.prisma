@@ -82,6 +82,7 @@ model Application {
   events          ApplicationEvent[]
   documents       ApplicationDocument[]
   areas           ApplicationArea[]
+  analisys        ApplicationAnalisys[]
 
   @@index([user_id, created_at(sort: Desc)])
   @@map("application")
@@ -145,6 +146,38 @@ model ApplicationArea {
 
   @@index([geom], name: "application_area_idx", type: Gist)
   @@map("application_area")
+}
+
+enum ApplicationAnalisysStatus {
+  PENDING
+  APPROVED
+  FAILED
+  REJECTED
+}
+
+model ApplicationAnalisys {
+  application_analisys_id      Int                       @id @default(autoincrement())
+  application_analisys_type_id Int
+  application_id               BigInt                    @db.BigInt
+  elapsed_time                 Int
+  status                       ApplicationAnalisysStatus @default(PENDING)
+  details                      Json?
+  created_at                   DateTime                  @default(now())
+  application                  Application               @relation(fields: [application_id], references: [application_id])
+  type                         ApplicationAnalisysType   @relation(fields: [application_analisys_type_id], references: [application_analisys_type_id])
+
+  @@map("application_analisys")
+}
+
+model ApplicationAnalisysType {
+  application_analisys_type_id Int                   @id @default(autoincrement())
+  name                         String                @db.VarChar(100)
+  allow_reprocess              Boolean               @default(true)
+  active                       Boolean               @default(true)
+  created_at                   DateTime              @default(now())
+  applicationAnalisys          ApplicationAnalisys[]
+
+  @@map("application_analisys_type")
 }
 
 model ProtectedArea {

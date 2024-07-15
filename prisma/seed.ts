@@ -42,8 +42,60 @@ async function applicationStatusSeed() {
   console.log('\n\t✔  application_status has been seeded');
 }
 
+async function applicationAnalisysType() {
+  const applicationAnalisysType = [
+    {
+      id: 1,
+      name: 'CLIMA',
+    },
+    {
+      id: 2,
+      name: 'BUFFER',
+    },
+    {
+      id: 3,
+      name: 'BULA',
+    },
+    {
+      id: 4,
+      name: 'VALIDADE_DOCUMENTOS',
+    },
+    {
+      id: 5,
+      name: 'PRE_APLICACAO_PREENCHIDA',
+    },
+    {
+      id: 6,
+      name: 'GEOLOCALIZAO',
+    },
+    {
+      id: 7,
+      name: 'DENTRO_DO_PRAZO',
+    },
+  ];
+
+  const insertApplicationAnalisysType = applicationAnalisysType.map(
+    ({ id, ...rest }) =>
+      prisma.applicationAnalisysType.upsert({
+        where: {
+          application_analisys_type_id: id,
+        },
+        update: {
+          name: rest.name,
+        },
+        create: {
+          name: rest.name,
+        },
+      }),
+  );
+
+  await Promise.all(insertApplicationAnalisysType);
+
+  console.log('\n\t✔  application_analisys_type has been seeded');
+}
+
 async function organizationSeed() {
-  return prisma.organization.upsert({
+  await prisma.organization.upsert({
     where: {
       organization_id: 1,
     },
@@ -54,10 +106,12 @@ async function organizationSeed() {
       name: 'Test Organization',
     },
   });
+
+  console.log('\n\t✔  organization has been seeded');
 }
 
 async function userSeed() {
-  return prisma.user.upsert({
+  await prisma.user.upsert({
     where: {
       user_id: 1,
     },
@@ -71,10 +125,12 @@ async function userSeed() {
       status: 'ACTIVE',
     },
   });
+
+  console.log('\n\t✔  user has been seeded');
 }
 
 async function pilotSeed() {
-  return prisma.pilot.upsert({
+  await prisma.pilot.upsert({
     where: {
       pilot_id: 1,
     },
@@ -88,13 +144,19 @@ async function pilotSeed() {
       organization_id: 1,
     },
   });
+
+  console.log('\n\t✔  pilot has been seeded');
 }
 
 async function main() {
+  if (process.env.NODE_ENV === 'development') {
+    await organizationSeed();
+    await userSeed();
+    await pilotSeed();
+  }
+
   await applicationStatusSeed();
-  await organizationSeed();
-  await userSeed();
-  await pilotSeed();
+  await applicationAnalisysType();
 }
 
 main()
