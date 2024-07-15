@@ -1,0 +1,10 @@
+node_modules
+.git
+.next
+.github
+.vscode
+dist
+http
+.env.example
+.docker-compose.yml
+Dockerfile
