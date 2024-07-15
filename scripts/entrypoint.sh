@@ -7,4 +7,4 @@ npx prisma migrate deploy
 npx prisma db seed
 
 # Start the NestJS application
-npm run start:prod
+npm run start:dev
