@@ -9,7 +9,7 @@ export class CreateApplicationDocumentFileRequest {
     format: 'binary',
     description: 'The file to be uploaded',
   })
-  file: File;
+  file: Express.Multer.File;
 
   @ApiProperty({
     description:
