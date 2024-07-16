@@ -3,7 +3,7 @@ name: Deploy Brave App
 on:
   push:
     branches:
-      - feature/deploy-ec2
+      - main
 
 jobs:
   build:
