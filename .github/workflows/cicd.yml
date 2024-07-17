@@ -92,4 +92,4 @@ jobs:
         run: docker pull ${{ env.ECR_REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
 
       - name: Run docker container
-        run: docker run -d -p 3000:3000 --name brave-app-container ${{ env.ECR_REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+        run: docker run -d -p 3000:3000 --name brave-app-container --restart always ${{ env.ECR_REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
