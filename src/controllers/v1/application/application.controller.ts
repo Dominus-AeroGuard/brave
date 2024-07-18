@@ -34,6 +34,7 @@ import { Application } from '../../../domain/entities';
 import { PaginableEntity } from '../../dtos/paginable.dto';
 import { ValidationRequestDto } from '../../dtos/validation-request.dto';
 import { ErrorRequestDto } from '../../dtos/error-request.dto';
+import { FinishApplicationUseCase } from 'src/domain/use-cases/application/finish-application.use-case';
 
 @ApiTags('applications')
 @Controller('v1/applications')
@@ -48,6 +49,8 @@ export class ApplicationController {
     private readonly updateApplication: UpdateApplicationUseCase,
     @Inject(ListApplicationUseCase)
     private readonly listApplication: ListApplicationUseCase,
+    @Inject(FinishApplicationUseCase)
+    private readonly FinishApplicationUseCase: FinishApplicationUseCase,
     @Inject(ApplicationRepository)
     private readonly applicationRepository: ApplicationRepository,
   ) {}
@@ -121,5 +124,13 @@ export class ApplicationController {
   @ApiNoContentResponse()
   remove(@Request() { user }, @Param('id') id: string) {
     return this.applicationRepository.remove(user.organizationId, id);
+  }
+
+  @Post(':id/finish')
+  @ApiParam({ name: 'id', type: BigInt, example: 1 })
+  finish(@Request() { user }, @Param('id') id: string) {
+    return this.FinishApplicationUseCase.execute({
+      applicationId: Number(id),
+    });
   }
 }
