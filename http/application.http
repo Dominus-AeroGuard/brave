@@ -4,8 +4,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiO
 
 {
   "vehicle": "brave",
-  "startDate": "2024-07-02T20:11:01Z",
-  "endDate": "2024-07-02T23:30:00Z",
+  "startDate": "2024-07-16T16:11:01Z",
+  "endDate": "2024-07-16T17:30:00Z",
   "pilot": {
     "id": 1
   }
