@@ -1,45 +1,25 @@
-POST /v1/organization/users
+POST http://localhost:3000/v1/organizations/users
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 
 {
-  "user_id": 1,
-}
-
-# Response 201Created
-
-###
-
-GET /v1/organization/users
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
-
-# Response 200OK
-# {
-#   "data": [
-#     {
-#       "user_id": 1,
-#       "status": "INVITED",
-#     }
-#   ]
-# }
-
-###
-
-GET /v1/organization/users/1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
-
-# Response 200OK
-{
-  "user_id": 1,
+  "user_id": 2
 }
 
 ###
 
-DELETE /v1/organization/users/1
+GET http://localhost:3000/v1/organizations/users
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 
-# Response 204No Content
-# colocar o campo active como false
+###
+
+GET http://localhost:3000/v1/organizations/users/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+
+###
+
+DELETE http://localhost:3000/v1/organizations/users/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
