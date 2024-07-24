@@ -19,7 +19,16 @@ export class CreateUserOrganizationUseCase {
     private userOrganizationRepository: IUserOrganizationRepository,
   ) {}
 
-  execute(data: CreatUserOrganizationRequest): Promise<UserOrganization> {
-    return this.userOrganizationRepository.create(data);
+  async execute(data: CreatUserOrganizationRequest): Promise<UserOrganization> {
+    const userOrganization: UserOrganization =
+      await this.userOrganizationRepository.findOne(
+        data.organization.id,
+        data.user_id,
+      );
+    if (userOrganization) {
+      return userOrganization;
+    } else {
+      return this.userOrganizationRepository.create(data);
+    }
   }
 }
