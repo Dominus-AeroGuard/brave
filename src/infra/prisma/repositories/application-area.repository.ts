@@ -10,6 +10,11 @@ export interface IApplicationAreaRepository {
       applicationId: number;
     }>,
   ): Promise<number>;
+  createMany(
+    data: Array<string>,
+    description: string,
+    applicationId: number,
+  ): Promise<number>;
   findOne(id: number): Promise<ApplicationArea>;
   findAll(applicationId: number): Promise<ApplicationArea[]>;
   removeOne(id: number): Promise<void>;
@@ -34,6 +39,20 @@ export class ApplicationAreaRepository
     return result;
   }
 
+  async createMany(
+    data: Array<string>,
+    description: string,
+    applicationId: number,
+  ): Promise<number> {
+    const result = await this.prisma.$transaction(async(tx) => {  
+      let count = 0;
+      for(let d of data){
+        count += await this.prisma.$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${d}), ${d}::text, ${description}::text, ${applicationId})`
+      }
+      return count;
+    });
+    return result;
+  }
   async findOne(id: number): Promise<ApplicationArea> {
     const applicationArea = await this.prisma.applicationArea.findUnique({
       where: {

@@ -5,10 +5,6 @@ import { ApplicationDocumentService } from '../../services/application-document/
 import { AwsService } from '../../../infra/aws/aws.service';
 import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
 import { DOMParser } from '@xmldom/xmldom';
-import { PrismaClient } from '@prisma/client';
-import { Point } from 'geojson'
-import { json } from 'stream/consumers';
-import { PrismaService } from 'src/infra/prisma/prisma.service';
 import { IApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
 
 export interface ApplicationDocumentRequest {
@@ -106,16 +102,8 @@ export class CreateApplicationDocumentUseCase {
             });
           }  
         });
-          
-        for (let feat of feats){
-          const applicationArea = {
-            geom: feat,
-            description: "",
-            applicationId: applicationId,
-          };
-    
-          await this.arearepository.create(applicationArea);
-        }
+         
+        await this.arearepository.createMany(feats, '', applicationId);
       }    
     } catch (error) {
       console.error(error);
