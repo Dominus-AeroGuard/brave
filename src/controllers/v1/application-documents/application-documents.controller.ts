@@ -57,7 +57,7 @@ export class ApplicationDocumentsController {
     @UploadedFiles(
       new ParseFilePipeBuilder()
         .addMaxSizeValidator({
-          maxSize: 100000024,
+          maxSize: 102400000,
         })
         .build(),
       new SchemaValidationPipe(),

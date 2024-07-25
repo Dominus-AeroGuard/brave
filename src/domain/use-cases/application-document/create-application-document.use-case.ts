@@ -10,7 +10,6 @@ import { Point } from 'geojson'
 import { json } from 'stream/consumers';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 import { IApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
-//import tj from '@mapbox/togeojson';
 
 export interface ApplicationDocumentRequest {
   files: Array<
@@ -40,10 +39,7 @@ export class CreateApplicationDocumentUseCase {
 
     const uploadedFiles = await this.saveFile(request);
 
-    const kmlfiles = uploadedFiles.filter(file => file.typeId == Number(ApplicationDocumentType.KML));
-    if (kmlfiles?.length > 0){
-      const sucesso = await this.loadKML(request.applicationId, kmlfiles[0].buffer);
-    }
+    await this.saveApplicationArea(request.applicationId, uploadedFiles);
 
     const applicationDocuments = uploadedFiles.map((file) => ({
       path: file.path,
@@ -85,47 +81,44 @@ export class CreateApplicationDocumentUseCase {
     return await Promise.all(promises);
   }
 
-  private async loadKML(applicationId: number, buffer: Buffer): Promise<boolean> {
+  private async saveApplicationArea(applicationId: number, uploadedFiles: Array<Partial<{ originalname: string; path: string; typeId: number; buffer: Buffer }>>) {
     try {
-      const prisma = new PrismaClient();
-      
-      var tj = require('@mapbox/togeojson');
+      const kmlfiles = uploadedFiles.filter(file => file.typeId == Number(ApplicationDocumentType.KML));
+      if (kmlfiles?.length > 0){      
+        var tj = require('@mapbox/togeojson');
 
-      const kmlString = new DOMParser().parseFromString(String(buffer));
-      const geojson = tj.kml(kmlString);
+        const kmlString = new DOMParser().parseFromString(String(kmlfiles[0].buffer));
+        const geojson = tj.kml(kmlString);
 
-      var feats = [];
-      geojson.features.forEach((feature) => {
-        if (feature?.geometry?.type ==  'Polygon'){
-          var feat = JSON.stringify(feature?.geometry);         
-          feats.push(feat);
-        } 
-        else if (feature?.geometry?.type ==  'MultiPolygon')
-        {
-          feature?.geometry?.coordinates.forEach((coords) => {
-            var feat="{'type':'Polygon','coordinates':" + coords + "}";
+        var feats = [];
+        geojson.features.forEach((feature) => {
+          if (feature?.geometry?.type ==  'Polygon'){
+            const feat = JSON.stringify(feature?.geometry);         
             feats.push(feat);
-            }
-         );         
-        }      
-      })
-        
-      for (var feat of feats){
-        const applicationArea = {
-          geom: feat,
-          description: "",
-          applicationId: applicationId,
-        };
-  
-        await this.arearepository.create(applicationArea);
-      }
+          } 
+          else if (feature?.geometry?.type ==  'GeometryCollection')
+          {
+            feature?.geometry?.geometries.forEach((geom) => {
+              if (geom?.type ==  'Polygon'){
+                const feat = JSON.stringify(geom);
+                feats.push(feat);  
+              }                
+            });
+          }  
+        });
+          
+        for (let feat of feats){
+          const applicationArea = {
+            geom: feat,
+            description: "",
+            applicationId: applicationId,
+          };
     
-      return true;
-
+          await this.arearepository.create(applicationArea);
+        }
+      }    
     } catch (error) {
-
       console.error(error);
-      return false;
     }
   }
 }

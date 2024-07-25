@@ -138,6 +138,7 @@ model ApplicationDocumentType {
 model ApplicationArea {
   id             Int                                            @id @default(autoincrement())
   geom           Unsupported("public.geometry(polygonz, 4326)")
+  geomjson       String
   description    String                                         @db.VarChar(100)
   application_id BigInt                                         @db.BigInt
   application    Application                                    @relation(fields: [application_id], references: [application_id])
@@ -150,6 +151,7 @@ model ApplicationArea {
 model ProtectedArea {
   id                     Int                                            @id @default(autoincrement())
   geom                   Unsupported("public.geometry(polygonz, 4326)")
+  geomjson               String
   description            String                                         @db.VarChar(100)
   protected_area_type_id Int
   type                   ProtectedAreaType                              @relation(fields: [protected_area_type_id], references: [protected_area_type_id])
