@@ -2,6 +2,7 @@ import { Module, Global } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { ApplicationRepository } from './repositories/application.repository';
 import { ApplicationDocumentRepository } from './repositories/application-document.repository';
+import { ApplicationAreaRepository } from './repositories/application-area.repository';
 import { UserOrganizationRepository } from './repositories/user-organization.repository';
 
 @Global()
@@ -17,6 +18,10 @@ import { UserOrganizationRepository } from './repositories/user-organization.rep
       useClass: ApplicationDocumentRepository,
     },
     {
+      provide: 'IApplicationAreaRepository',
+      useClass: ApplicationAreaRepository,
+    },
+    {
       provide: 'IUserOrganizationRepository',
       useClass: UserOrganizationRepository,
     },
@@ -30,6 +35,10 @@ import { UserOrganizationRepository } from './repositories/user-organization.rep
     {
       provide: 'IApplicationDocumentRepository',
       useClass: ApplicationDocumentRepository,
+    },
+    {
+      provide: 'IApplicationAreaRepository',
+      useClass: ApplicationAreaRepository,
     },
     {
       provide: 'IUserOrganizationRepository',
