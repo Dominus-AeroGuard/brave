@@ -3,6 +3,7 @@ import { PrismaService } from './prisma.service';
 import { ApplicationRepository } from './repositories/application.repository';
 import { ApplicationDocumentRepository } from './repositories/application-document.repository';
 import { ApplicationAreaRepository } from './repositories/application-area.repository';
+import { UserOrganizationRepository } from './repositories/user-organization.repository';
 
 @Global()
 @Module({
@@ -20,6 +21,10 @@ import { ApplicationAreaRepository } from './repositories/application-area.repos
       provide: 'IApplicationAreaRepository',
       useClass: ApplicationAreaRepository,
     },
+    {
+      provide: 'IUserOrganizationRepository',
+      useClass: UserOrganizationRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -34,6 +39,10 @@ import { ApplicationAreaRepository } from './repositories/application-area.repos
     {
       provide: 'IApplicationAreaRepository',
       useClass: ApplicationAreaRepository,
+    },
+    {
+      provide: 'IUserOrganizationRepository',
+      useClass: UserOrganizationRepository,
     },
   ],
 })
