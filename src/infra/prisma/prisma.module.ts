@@ -4,6 +4,7 @@ import { ApplicationRepository } from './repositories/application.repository';
 import { ApplicationDocumentRepository } from './repositories/application-document.repository';
 import { ApplicationAreaRepository } from './repositories/application-area.repository';
 import { UserOrganizationRepository } from './repositories/user-organization.repository';
+import { ProtectedAreaRepository } from './repositories/protected-area.repository';
 
 @Global()
 @Module({
@@ -25,6 +26,10 @@ import { UserOrganizationRepository } from './repositories/user-organization.rep
       provide: 'IUserOrganizationRepository',
       useClass: UserOrganizationRepository,
     },
+    {
+      provide: 'IProtectedAreaRepository',
+      useClass: ProtectedAreaRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -43,6 +48,10 @@ import { UserOrganizationRepository } from './repositories/user-organization.rep
     {
       provide: 'IUserOrganizationRepository',
       useClass: UserOrganizationRepository,
+    },
+    {
+      provide: 'IProtectedAreaRepository',
+      useClass: ProtectedAreaRepository,
     },
   ],
 })

@@ -13,6 +13,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { SchemaValidationPipe } from './pipes/schema-validation.pipe';
 import { ApplicationDocumentsModule } from './controllers/v1/application-documents/application-documents.module';
 import { DomainModule } from './domain/domain.module';
+import { ProtectedAreaModule } from './controllers/v1/protected-area/protected-area.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { DomainModule } from './domain/domain.module';
     ApplicationModule,
     ApplicationDocumentsModule,
     OrganizationModule,
+    ProtectedAreaModule,
     DomainModule,
   ],
   controllers: [],
