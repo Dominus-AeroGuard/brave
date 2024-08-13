@@ -25,19 +25,18 @@ async function protectedAreaTypeSeed() {
     },
   ];
 
-  const insertprotectedAreaType = protectedAreaType.map(
-    ({ id, ...rest }) =>
-      prisma.protectedAreaType.upsert({
-        where: {
-          protected_area_type_id: id,
-        },
-        update: {
-          description: rest.description,
-        },
-        create: {
-          description: rest.description,
-        },
-      }),
+  const insertprotectedAreaType = protectedAreaType.map(({ id, ...rest }) =>
+    prisma.protectedAreaType.upsert({
+      where: {
+        protected_area_type_id: id,
+      },
+      update: {
+        description: rest.description,
+      },
+      create: {
+        description: rest.description,
+      },
+    }),
   );
 
   await Promise.all(insertprotectedAreaType);
@@ -138,6 +137,41 @@ async function applicationAnalisysType() {
   console.log('\n\t✔  application_analisys_type has been seeded');
 }
 
+async function applicationNotificationStatus() {
+  const applicationNotificationStatus = [
+    {
+      id: 1,
+      description: 'PENDENTE',
+      active: true,
+    },
+    {
+      id: 2,
+      description: 'FINALIZADA',
+      active: true,
+    },
+  ];
+
+  const insertApplicationNotificationStatus = applicationNotificationStatus.map(
+    ({ id, ...rest }) =>
+      prisma.applicationNotificationStatus.upsert({
+        where: {
+          id,
+        },
+        update: {
+          description: rest.description,
+        },
+        create: {
+          description: rest.description,
+          active: rest.active,
+        },
+      }),
+  );
+
+  await Promise.all(insertApplicationNotificationStatus);
+
+  console.log('\n\t✔  application_notification_status has been seeded');
+}
+
 async function organizationSeed() {
   await prisma.organization.upsert({
     where: {
@@ -202,6 +236,7 @@ async function main() {
   await applicationStatusSeed();
   await applicationAnalisysType();
   await protectedAreaTypeSeed();
+  await applicationNotificationStatus();
 }
 
 main()
