@@ -50,7 +50,7 @@ export class ApplicationAreaRepository
         count += await this.prisma.$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${d}), ${d}::text, ${description}::text, ${applicationId})`
       }
       return count;
-    });
+    }, { timeout: 20000 });
     return result;
   }
   async findOne(id: number): Promise<ApplicationArea> {

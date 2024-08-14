@@ -1,6 +1,50 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+async function protectedAreaTypeSeed() {
+  const protectedAreaType = [
+    {
+      id: 1,
+      description: 'RESERVA_LEGAL_APP',
+    },
+    {
+      id: 2,
+      description: 'AREA_URBANA',
+    },
+    {
+      id: 3,
+      description: 'MANANCIAL',
+    },
+    {
+      id: 4,
+      description: 'SERICICULTURA',
+    },
+    {
+      id: 5,
+      description: 'AGRUPAMENTO_DE_ANIMAIS',
+    },
+  ];
+
+  const insertprotectedAreaType = protectedAreaType.map(
+    ({ id, ...rest }) =>
+      prisma.protectedAreaType.upsert({
+        where: {
+          protected_area_type_id: id,
+        },
+        update: {
+          description: rest.description,
+        },
+        create: {
+          description: rest.description,
+        },
+      }),
+  );
+
+  await Promise.all(insertprotectedAreaType);
+
+  console.log('\n\t✔  protected_area_type has been seeded');
+}
+
 async function applicationStatusSeed() {
   const applicationStatus = [
     {
@@ -157,6 +201,7 @@ async function main() {
 
   await applicationStatusSeed();
   await applicationAnalisysType();
+  await protectedAreaTypeSeed();
 }
 
 main()
