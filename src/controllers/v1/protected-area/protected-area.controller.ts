@@ -34,13 +34,13 @@ import {
   } from '@nestjs/swagger';
   import { ValidationRequestDto } from '../../dtos/validation-request.dto';
   import { ErrorRequestDto } from '../../dtos/error-request.dto';
-import { CreateProtectedAreaUseCase } from 'src/domain/use-cases/protected-area/create-protected-area.use-case';
+import { CreateProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/create-protected-area.use-case';
 import { CreateProtectedAreaRequest } from './models/create-protected-area.model';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { FindByDistanceProtectedAreaUseCase } from 'src/domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
-import { ProtectedArea } from 'src/domain/entities';
-import { ProtectedAreaTypeEnum } from 'src/domain/enums/protected-area-type.enum';
-import { ProtectedAreaRepository } from 'src/infra/prisma/repositories/protected-area.repository';
+import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
+import { ProtectedArea } from '../../../domain/entities';
+import { ProtectedAreaTypeEnum } from '../../../domain/enums/protected-area-type.enum';
+import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
   
   @ApiTags('protected-areas')
   @Controller('v1/protected-areas')

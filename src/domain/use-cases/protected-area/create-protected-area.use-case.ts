@@ -3,8 +3,8 @@ import { ProtectedAreaTypeEnum } from "src/domain/enums/protected-area-type.enum
 import { IProtectedAreaRepository } from "src/infra/prisma/repositories/protected-area.repository";
 import { DOMParser } from '@xmldom/xmldom';
 
-  export interface ProtectedAreaRequest {
-    file: Express.Multer.File;
+  export interface CreateProtectedAreaRequest {
+    file: Express.Multer.File,
     description: string,
     typeId: ProtectedAreaTypeEnum,
     organizationId: number,
@@ -18,7 +18,7 @@ import { DOMParser } from '@xmldom/xmldom';
       private protectedAreaRepository: IProtectedAreaRepository,
     ) {}
   
-    async execute(request: ProtectedAreaRequest): Promise<number> {
+    async execute(request: CreateProtectedAreaRequest): Promise<number> {
         var tj = require('@mapbox/togeojson');
 
         const kmlString = new DOMParser().parseFromString(String(request.file.buffer));

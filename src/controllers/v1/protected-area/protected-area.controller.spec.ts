@@ -1,9 +1,9 @@
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProtectedAreaController } from './protected-area.controller';
-import { CreateProtectedAreaUseCase } from 'src/domain/use-cases/protected-area/create-protected-area.use-case';
-import { FindByDistanceProtectedAreaUseCase } from 'src/domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
-import { ProtectedAreaRepository } from 'src/infra/prisma/repositories/protected-area.repository';
+import { CreateProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/create-protected-area.use-case';
+import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
+import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
 
 describe('ProtectedAreaController', () => {
   let controller: ProtectedAreaController;
