@@ -1,6 +1,6 @@
 export enum ApplicationAnalisysStatusEnum {
-  PENDING,
-  APPROVED,
-  FAILED,
-  REJECTED,
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  FAILED = 'FAILED',
+  REJECTED = 'REJECTED',
 }

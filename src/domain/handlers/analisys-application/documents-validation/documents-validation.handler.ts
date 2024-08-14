@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { AbstractHandler } from '../../abstract.handler';
+import { AnalisysApplicationContext } from '../analisys-application.context';
 
 @Injectable()
-export class DocumentsValidationHandler extends AbstractHandler {
-  public handle(request: any): any {
-    request.documents = '1sedfgsdfg';
-    return super.handle(request);
+export class DocumentsValidationHandler extends AbstractHandler<AnalisysApplicationContext> {
+  public handle() {
+    return super.handle();
   }
 }

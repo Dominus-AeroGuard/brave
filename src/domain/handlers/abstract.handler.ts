@@ -1,25 +1,24 @@
 import { Logger } from '@nestjs/common';
 
-export interface AnalisysApplicationContext {
-  applicationId: number;
-}
-
-export class AbstractHandler implements Handler {
-  private nextHandler: Handler;
+export class AbstractHandler<T> implements Handler<T> {
+  private nextHandler: Handler<T>;
   private readonly logger = new Logger(AbstractHandler.name);
+  public request: T;
 
-  public setNext(handler: Handler): Handler {
+  public setNext(handler: Handler<T>): Handler<T> {
     this.nextHandler = handler;
     return handler;
   }
 
-  public handle<AnalisysApplicationContext>(
-    request: AnalisysApplicationContext,
-  ): AnalisysApplicationContext {
-    this.logger.log(`Processing ${this.constructor.name}`, request);
+  setRequest(request: T) {
+    this.request = request;
+  }
+
+  public handle() {
+    this.logger.log(`Processing ${this.constructor.name}`, this.request);
 
     if (this.nextHandler) {
-      return this.nextHandler.handle(request);
+      return this.nextHandler.handle();
     }
 
     return null;

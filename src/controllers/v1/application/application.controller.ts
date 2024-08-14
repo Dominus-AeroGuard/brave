@@ -128,9 +128,9 @@ export class ApplicationController {
 
   @Post(':id/finish')
   @ApiParam({ name: 'id', type: BigInt, example: 1 })
-  finish(@Request() { user }, @Param('id') id: string) {
+  finish(@Request() { user }, @Param('id') id: bigint) {
     return this.FinishApplicationUseCase.execute({
-      applicationId: Number(id),
+      applicationId: id,
     });
   }
 }

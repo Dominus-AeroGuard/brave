@@ -19,7 +19,7 @@ export class ApplicationAnalisys {
   constructor(
     elapsedTime: number,
     typeName: string,
-    status: number,
+    status: ApplicationAnalisysStatusEnum,
     createdAt: Date,
   ) {
     this.elapsedTime = elapsedTime;

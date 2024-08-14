@@ -6,6 +6,7 @@ import { ApplicationAreaRepository } from './repositories/application-area.repos
 import { UserOrganizationRepository } from './repositories/user-organization.repository';
 import { ProtectedAreaRepository } from './repositories/protected-area.repository';
 import { ApplicationNotificationRepository } from './repositories/application-notification.repository';
+import { ApplicationAnalisysRepository } from './repositories/application-analisys.repository';
 
 @Global()
 @Module({
@@ -35,6 +36,10 @@ import { ApplicationNotificationRepository } from './repositories/application-no
       provide: 'IApplicationNotificationRepository',
       useClass: ApplicationNotificationRepository,
     },
+    {
+      provide: 'IApplicationAnalisysRepository',
+      useClass: ApplicationAnalisysRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -61,6 +66,10 @@ import { ApplicationNotificationRepository } from './repositories/application-no
     {
       provide: 'IApplicationNotificationRepository',
       useClass: ApplicationNotificationRepository,
+    },
+    {
+      provide: 'IApplicationAnalisysRepository',
+      useClass: ApplicationAnalisysRepository,
     },
   ],
 })

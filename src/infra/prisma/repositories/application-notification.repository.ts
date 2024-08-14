@@ -7,11 +7,12 @@ import {
   ApplicationNotificationStatus,
 } from '../../../domain/entities/application-notification.entity';
 import { ApplicationAnalisys } from '../../../domain/entities/application-analisys.entity';
+import { ApplicationAnalisysStatusEnum } from '../../../domain/enums/application-analisys-status.enum';
 
 export interface IApplicationNotificationRepository {
   create(
     data: Partial<{
-      userId: number;
+      userId?: number;
       status: ApplicationNotificationStatusEnum;
       applicationId: bigint;
       fiscalId: number;
@@ -134,7 +135,7 @@ export class ApplicationNotificationRepository
           new ApplicationAnalisys(
             analisy.elapsed_time,
             analisy.type.name,
-            Number(analisy.status),
+            analisy.status as ApplicationAnalisysStatusEnum,
             analisy.created_at,
           ),
       ),
@@ -239,7 +240,7 @@ export class ApplicationNotificationRepository
               new ApplicationAnalisys(
                 analisy.elapsed_time,
                 analisy.type.name,
-                Number(analisy.status),
+                analisy.status as ApplicationAnalisysStatusEnum,
                 analisy.created_at,
               ),
           ),
