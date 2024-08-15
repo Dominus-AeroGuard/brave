@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AnalisysApplicationService } from 'src/domain/services/analisys-application/analisys-application.service';
+import { AnalisysApplicationService } from '../../../domain/services/analisys-application/analisys-application.service';
 
 export interface FinishApplicationRequest {
-  applicationId: number;
+  applicationId: bigint;
+  userId: number;
 }
 
 @Injectable()

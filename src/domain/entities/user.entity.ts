@@ -5,7 +5,11 @@ export class User {
   @ApiProperty()
   public id: number;
 
+  @ApiProperty()
+  public name: string;
+
   constructor(user: Prisma.User) {
     this.id = user.user_id;
+    this.name = user.name;
   }
 }

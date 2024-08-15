@@ -1,4 +1,4 @@
-interface Handler {
-  setNext(handler: Handler): Handler;
-  handle<T>(request: T): T;
+interface Handler<T> {
+  setNext(handler: Handler<T>): Handler<T>;
+  handle(request: T);
 }

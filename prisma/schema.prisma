@@ -16,14 +16,15 @@ enum UserStatus {
 }
 
 model User {
-  user_id       Int                @id @default(autoincrement())
-  name          String             @db.VarChar(100)
-  email         String             @db.VarChar(100)
-  document      String             @db.VarChar(14)
-  status        UserStatus         @default(INVITED)
-  created_at    DateTime           @default(now())
+  user_id       Int                       @id @default(autoincrement())
+  name          String                    @db.VarChar(100)
+  email         String                    @db.VarChar(100)
+  document      String                    @db.VarChar(14)
+  status        UserStatus                @default(INVITED)
+  created_at    DateTime                  @default(now())
   applications  Application[]
   organizations UserOrganization[]
+  notifications ApplicationNotification[]
 
   @@map("user")
 }
@@ -69,20 +70,21 @@ model Pilot {
 }
 
 model Application {
-  application_id  BigInt                @id @default(autoincrement()) @db.BigInt
-  user_id         Int
-  organization_id Int
-  vehicle         String                @db.VarChar(100)
-  start_date      DateTime
-  end_date        DateTime
-  created_by      String                @db.VarChar(100)
-  created_at      DateTime              @default(now())
-  user            User                  @relation(fields: [user_id], references: [user_id])
-  organization    Organization          @relation(fields: [organization_id], references: [organization_id])
-  events          ApplicationEvent[]
-  documents       ApplicationDocument[]
-  areas           ApplicationArea[]
-  analisys        ApplicationAnalisys[]
+  application_id          BigInt                    @id @default(autoincrement()) @db.BigInt
+  user_id                 Int
+  organization_id         Int
+  vehicle                 String                    @db.VarChar(100)
+  start_date              DateTime
+  end_date                DateTime
+  created_by              String                    @db.VarChar(100)
+  created_at              DateTime                  @default(now())
+  user                    User                      @relation(fields: [user_id], references: [user_id])
+  organization            Organization              @relation(fields: [organization_id], references: [organization_id])
+  events                  ApplicationEvent[]
+  documents               ApplicationDocument[]
+  areas                   ApplicationArea[]
+  analisys                ApplicationAnalisys[]
+  ApplicationNotification ApplicationNotification[]
 
   @@index([user_id, created_at(sort: Desc)])
   @@map("application")
@@ -160,12 +162,14 @@ model ApplicationAnalisys {
   application_analisys_id      Int                       @id @default(autoincrement())
   application_analisys_type_id Int
   application_id               BigInt                    @db.BigInt
+  application_notification_id  BigInt?                   @db.BigInt
   elapsed_time                 Int
   status                       ApplicationAnalisysStatus @default(PENDING)
   details                      Json?
   created_at                   DateTime                  @default(now())
   application                  Application               @relation(fields: [application_id], references: [application_id])
   type                         ApplicationAnalisysType   @relation(fields: [application_analisys_type_id], references: [application_analisys_type_id])
+  ApplicationNotification      ApplicationNotification?  @relation(fields: [application_notification_id], references: [application_notification_id])
 
   @@map("application_analisys")
 }
@@ -179,6 +183,41 @@ model ApplicationAnalisysType {
   applicationAnalisys          ApplicationAnalisys[]
 
   @@map("application_analisys_type")
+}
+
+model ApplicationNotification {
+  application_notification_id BigInt                         @id @default(autoincrement())
+  application_id              BigInt                         @db.BigInt
+  created_at                  DateTime                       @default(now())
+  fiscal_id                   Int
+  application                 Application                    @relation(fields: [application_id], references: [application_id])
+  fiscal                      User                           @relation(fields: [fiscal_id], references: [user_id])
+  analisys                    ApplicationAnalisys[]
+  events                      ApplicationNotificationEvent[]
+
+  @@map("application_notification")
+}
+
+model ApplicationNotificationEvent {
+  event_id                           BigInt                        @id @default(autoincrement()) @db.BigInt
+  application_notification_id        BigInt                        @db.BigInt
+  application_notification_status_id Int
+  created_by                         String
+  created_at                         DateTime                      @default(now())
+  status                             ApplicationNotificationStatus @relation(fields: [application_notification_status_id], references: [id])
+  notification                       ApplicationNotification       @relation(fields: [application_notification_id], references: [application_notification_id])
+
+  @@map("application_notification_event")
+}
+
+model ApplicationNotificationStatus {
+  id            Int                            @id @default(autoincrement())
+  description   String                         @db.VarChar(100)
+  active        Boolean                        @default(true)
+  created_at    DateTime                       @default(now())
+  notifications ApplicationNotificationEvent[]
+
+  @@map("application_notification_status")
 }
 
 model ProtectedArea {

@@ -22,9 +22,7 @@ export interface IApplicationAreaRepository {
 }
 
 @Injectable()
-export class ApplicationAreaRepository
-  implements IApplicationAreaRepository
-{
+export class ApplicationAreaRepository implements IApplicationAreaRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(
@@ -34,8 +32,9 @@ export class ApplicationAreaRepository
       applicationId: number;
     }>,
   ): Promise<number> {
-    const result = await this.prisma.$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${data.geom}), ${data.geom}::text, ${data.description}::text, ${data.applicationId})`;
-    
+    const result = await this.prisma
+      .$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${data.geom}), ${data.geom}::text, ${data.description}::text, ${data.applicationId})`;
+
     return result;
   }
 
@@ -44,13 +43,17 @@ export class ApplicationAreaRepository
     description: string,
     applicationId: number,
   ): Promise<number> {
-    const result = await this.prisma.$transaction(async(tx) => {  
-      let count = 0;
-      for(let d of data){
-        count += await this.prisma.$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${d}), ${d}::text, ${description}::text, ${applicationId})`
-      }
-      return count;
-    }, { timeout: 20000 });
+    const result = await this.prisma.$transaction(
+      async (tx) => {
+        let count = 0;
+        for (const d of data) {
+          count +=
+            await tx.$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${d}), ${d}::text, ${description}::text, ${applicationId})`;
+        }
+        return count;
+      },
+      { timeout: 20000 },
+    );
     return result;
   }
   async findOne(id: number): Promise<ApplicationArea> {
@@ -88,5 +91,4 @@ export class ApplicationAreaRepository
       },
     });
   }
-
 }

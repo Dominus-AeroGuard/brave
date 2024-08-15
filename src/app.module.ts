@@ -14,6 +14,7 @@ import { SchemaValidationPipe } from './pipes/schema-validation.pipe';
 import { ApplicationDocumentsModule } from './controllers/v1/application-documents/application-documents.module';
 import { DomainModule } from './domain/domain.module';
 import { ProtectedAreaModule } from './controllers/v1/protected-area/protected-area.module';
+import { NotificationModule } from './controllers/v1/notification/notification.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProtectedAreaModule } from './controllers/v1/protected-area/protected-a
     OrganizationModule,
     ProtectedAreaModule,
     DomainModule,
+    NotificationModule,
   ],
   controllers: [],
   providers: [

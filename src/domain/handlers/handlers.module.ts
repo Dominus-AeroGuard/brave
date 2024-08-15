@@ -6,6 +6,7 @@ import { DocumentsValidationHandler } from './analisys-application/documents-val
 import { PreApplicationValidationHandler } from './analisys-application/pre-application-validation/pre-application-validation.handler';
 import { GeolocationHandler } from './analisys-application/geolocation/geolocation.handler';
 import { DeadlineValidationHandler } from './analisys-application/deadline-validation/deadline-validation.handler';
+import { SendNotificationHandler } from './analisys-application/send-notification/send-notification.handler';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import { DeadlineValidationHandler } from './analisys-application/deadline-valid
     PreApplicationValidationHandler,
     GeolocationHandler,
     DeadlineValidationHandler,
+    SendNotificationHandler,
   ],
   exports: [
     WeatherHandler,
@@ -25,6 +27,7 @@ import { DeadlineValidationHandler } from './analisys-application/deadline-valid
     PreApplicationValidationHandler,
     GeolocationHandler,
     DeadlineValidationHandler,
+    SendNotificationHandler,
   ],
 })
 export class HandlersModule {}

@@ -3,5 +3,5 @@ export enum ProtectedAreaTypeEnum {
   AreaUrbana = 2,
   Manancial = 3,
   Sericicultura = 4,
-  AgrupamentodeAnimais = 5
+  AgrupamentodeAnimais = 5,
 }

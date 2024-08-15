@@ -9,7 +9,7 @@ import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/pr
   providers: [
     CreateProtectedAreaUseCase,
     FindByDistanceProtectedAreaUseCase,
-    ProtectedAreaRepository
+    ProtectedAreaRepository,
   ],
 })
 export class ProtectedAreaModule {}
