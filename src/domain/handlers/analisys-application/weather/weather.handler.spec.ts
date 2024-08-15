@@ -6,7 +6,15 @@ describe('WeatherHandler', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [WeatherHandler],
+      providers: [
+        WeatherHandler,
+        {
+          provide: 'IApplicationAnalisysRepository',
+          useValue: {
+            create: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<WeatherHandler>(WeatherHandler);

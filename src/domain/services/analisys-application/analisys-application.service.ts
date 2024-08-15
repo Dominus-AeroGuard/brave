@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { AnalisysApplicationContext } from 'src/domain/handlers/analisys-application/analisys-application.context';
-import { BufferHandler } from 'src/domain/handlers/analisys-application/buffer/buffer.handler';
-import { DeadlineValidationHandler } from 'src/domain/handlers/analisys-application/deadline-validation/deadline-validation.handler';
-import { DocumentsValidationHandler } from 'src/domain/handlers/analisys-application/documents-validation/documents-validation.handler';
-import { GeolocationHandler } from 'src/domain/handlers/analisys-application/geolocation/geolocation.handler';
-import { PreApplicationValidationHandler } from 'src/domain/handlers/analisys-application/pre-application-validation/pre-application-validation.handler';
-import { PrescriptionHandler } from 'src/domain/handlers/analisys-application/prescription/prescription.handler';
-import { SendNotificationHandler } from 'src/domain/handlers/analisys-application/send-notification/send-notification.handler';
-import { WeatherHandler } from 'src/domain/handlers/analisys-application/weather/weather.handler';
+import { AnalisysApplicationContext } from '../../../domain/handlers/analisys-application/analisys-application.context';
+import { BufferHandler } from '../../../domain/handlers/analisys-application/buffer/buffer.handler';
+import { DeadlineValidationHandler } from '../../../domain/handlers/analisys-application/deadline-validation/deadline-validation.handler';
+import { DocumentsValidationHandler } from '../../../domain/handlers/analisys-application/documents-validation/documents-validation.handler';
+import { GeolocationHandler } from '../../../domain/handlers/analisys-application/geolocation/geolocation.handler';
+import { PreApplicationValidationHandler } from '../../../domain/handlers/analisys-application/pre-application-validation/pre-application-validation.handler';
+import { PrescriptionHandler } from '../../../domain/handlers/analisys-application/prescription/prescription.handler';
+import { SendNotificationHandler } from '../../../domain/handlers/analisys-application/send-notification/send-notification.handler';
+import { WeatherHandler } from '../../../domain/handlers/analisys-application/weather/weather.handler';
 
 @Injectable()
 export class AnalisysApplicationService {
@@ -36,7 +36,6 @@ export class AnalisysApplicationService {
   }
 
   public execute(data: AnalisysApplicationContext) {
-    this.chain.setRequest(data);
-    this.chain.handle();
+    this.chain.handle(data);
   }
 }

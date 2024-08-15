@@ -1,38 +1,16 @@
-GET http://localhost:3000/v1/applications/notifications?page=2&pageSize=1&fiscal_id=1
+GET http://localhost:3000/v1/notifications?page=1&size=1&applicationId=1&statusId=1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 
-{
-  "data": [
-    {
-      "fiscal": {
-        "id": 1,
-        "name": "Fiscal"
-      },
-      "application": {
-        "id": "1"
-      },
-      "status": {
-        "id": 1,
-        "description": "Pendente"
-      },
-      "analisys": [
-        {
-          "type": {
-            "name": "WEATHER"
-          },
-          "status": "FAILED",
-          "elapsed_time": 5123,
-          "created_at": ""
-        }
-      ]
-    }
-  ]
-}
+###
+
+GET http://localhost:3000/v1/notifications/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 
 ### 
 
-PUT http://localhost:3000/v1/applications/notifications/1
+PATCH http://localhost:3000/v1/notifications/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 

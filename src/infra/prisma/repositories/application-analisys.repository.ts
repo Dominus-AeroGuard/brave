@@ -8,10 +8,11 @@ import { ApplicationAnalisysStatusEnum } from '../../../domain/enums/application
 export interface IApplicationAnalisysRepository {
   create(
     data: Partial<{
-      userId?: number;
-      status: ApplicationAnalisysStatusEnum;
       applicationId: bigint;
-      fiscalId: number;
+      elapsedTime: number;
+      details?: string;
+      status: ApplicationAnalisysStatusEnum;
+      type: ApplicationAnalisysTypeEnum;
     }>,
   ): Promise<ApplicationAnalisys>;
   findOne(id: number): Promise<ApplicationAnalisys>;
@@ -50,7 +51,6 @@ export class ApplicationAnalisysRepository
       details?: string;
       status: ApplicationAnalisysStatusEnum;
       type: ApplicationAnalisysTypeEnum;
-      fiscalId: number;
     }>,
   ): Promise<ApplicationAnalisys> {
     const analisys = await this.prisma.applicationAnalisys.create({
@@ -86,6 +86,7 @@ export class ApplicationAnalisysRepository
     });
 
     return new ApplicationAnalisys(
+      analisy.application_analisys_id,
       analisy.elapsed_time,
       analisy.type.name,
       analisy.status as ApplicationAnalisysStatusEnum,
@@ -156,6 +157,7 @@ export class ApplicationAnalisysRepository
     return analisys.map(
       (analisy) =>
         new ApplicationAnalisys(
+          analisy.application_analisys_id,
           analisy.elapsed_time,
           analisy.type.name,
           analisy.status as ApplicationAnalisysStatusEnum,

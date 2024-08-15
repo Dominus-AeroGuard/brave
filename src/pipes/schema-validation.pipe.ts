@@ -21,7 +21,7 @@ export class SchemaValidationPipe implements PipeTransform<any> {
     if (errors.length > 0) {
       throw new BadRequestException({ errors: this.serializeErrors(errors) });
     }
-    return value;
+    return object;
   }
 
   private serializeErrors(errors: ValidationError[]): any {

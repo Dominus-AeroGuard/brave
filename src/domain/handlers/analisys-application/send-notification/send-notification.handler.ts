@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AbstractHandler } from '../../abstract.handler';
 import { IApplicationNotificationRepository } from '../../../../infra/prisma/repositories/application-notification.repository';
 import { ApplicationAnalisysStatusEnum } from '../../../enums/application-analisys-status.enum';
@@ -8,6 +8,8 @@ import { IApplicationAnalisysRepository } from '../../../../infra/prisma/reposit
 
 @Injectable()
 export class SendNotificationHandler extends AbstractHandler<AnalisysApplicationContext> {
+  private readonly logger = new Logger(AbstractHandler.name);
+
   constructor(
     @Inject('IApplicationNotificationRepository')
     private notificationRepository: IApplicationNotificationRepository,
@@ -17,9 +19,9 @@ export class SendNotificationHandler extends AbstractHandler<AnalisysApplication
     super();
   }
 
-  public async handle() {
+  public async handle(context: AnalisysApplicationContext) {
     const analisys = await this.analisysRepository.findAll(
-      this.request.applicationId,
+      context.applicationId,
       {
         status: [ApplicationAnalisysStatusEnum.FAILED],
       },
@@ -27,17 +29,21 @@ export class SendNotificationHandler extends AbstractHandler<AnalisysApplication
 
     if (analisys.length) {
       await this.notificationRepository.create({
+        userId: 1,
         status: ApplicationNotificationStatusEnum.Pending,
-        fiscalId: this.getFiscal(this.request.applicationId),
-        applicationId: this.request.applicationId,
+        fiscalId: this.getFiscal(context.applicationId),
+        applicationId: context.applicationId,
       });
+
+      this.logger.log('Notification has been created', context);
     }
 
-    return super.handle();
+    return super.handle(context);
   }
 
   private getFiscal(applicationId: bigint): number {
     // TODO: definir qual a regra para atribuir um fiscal
+    console.log('applicationId => ', applicationId);
     return 1;
   }
 }

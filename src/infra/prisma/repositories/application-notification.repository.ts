@@ -124,6 +124,7 @@ export class ApplicationNotificationRepository
     });
 
     return new ApplicationNotification(
+      notification.application_notification_id,
       new User(notification.fiscal),
       notification.application.application_id,
       new ApplicationNotificationStatus(
@@ -133,6 +134,7 @@ export class ApplicationNotificationRepository
       notification.analisys.map(
         (analisy) =>
           new ApplicationAnalisys(
+            analisy.application_analisys_id,
             analisy.elapsed_time,
             analisy.type.name,
             analisy.status as ApplicationAnalisysStatusEnum,
@@ -192,6 +194,9 @@ export class ApplicationNotificationRepository
         fiscal_id: {
           in: params.fiscalId,
         },
+        application_id: {
+          in: params.applicationId,
+        },
         events: {
           some: {
             application_notification_status_id: {
@@ -229,6 +234,7 @@ export class ApplicationNotificationRepository
     return notifications.map(
       (notification) =>
         new ApplicationNotification(
+          notification.application_notification_id,
           new User(notification.fiscal),
           notification.application.application_id,
           new ApplicationNotificationStatus(
@@ -238,6 +244,7 @@ export class ApplicationNotificationRepository
           notification.analisys.map(
             (analisy) =>
               new ApplicationAnalisys(
+                analisy.application_analisys_id,
                 analisy.elapsed_time,
                 analisy.type.name,
                 analisy.status as ApplicationAnalisysStatusEnum,

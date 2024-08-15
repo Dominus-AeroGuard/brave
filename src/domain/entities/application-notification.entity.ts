@@ -17,12 +17,15 @@ export class ApplicationNotificationStatus {
 }
 
 export class ApplicationNotification {
+  @ApiProperty()
+  id: string;
+
   @ApiProperty({ description: 'Fiscal responsável' })
   fiscal: User;
 
   @ApiProperty({ description: 'Aplicação que gerou a notificação' })
   application: Partial<{
-    id: bigint;
+    id: string;
   }>;
 
   @ApiProperty()
@@ -32,13 +35,15 @@ export class ApplicationNotification {
   analisys: ApplicationAnalisys[];
 
   constructor(
+    id: bigint,
     user: User,
     applicationId: bigint,
     status: ApplicationNotificationStatus,
     analisys: ApplicationAnalisys[],
   ) {
+    this.id = id.toString();
     this.fiscal = user;
-    this.application.id = applicationId;
+    this.application = { id: applicationId.toString() };
     this.status = status;
     this.analisys = analisys;
   }

@@ -13,6 +13,7 @@ describe('SendNotificationHandler', () => {
 
   const buildAnalisysMock = (status: ApplicationAnalisysStatusEnum) => [
     {
+      id: 1,
       elapsedTime: 1200,
       type: { name: 'WEATHER' },
       status,
@@ -21,13 +22,14 @@ describe('SendNotificationHandler', () => {
   ];
 
   const buildNotificationMock = (analisys: ApplicationAnalisys[]) => ({
+    id: '1',
     fiscal: {
       id: Number(1),
       name: 'Fiscal',
       '': undefined,
     },
     application: {
-      id: BigInt(1),
+      id: '1',
     },
     status: {
       id: ApplicationNotificationStatusEnum.Pending,
@@ -85,9 +87,12 @@ describe('SendNotificationHandler', () => {
         .mockResolvedValue(analisys),
     };
 
-    handler.setRequest({ applicationId: BigInt(1) });
+    const context = {
+      applicationId: BigInt(1),
+      userId: 1,
+    };
 
-    await handler.handle();
+    await handler.handle(context);
 
     expect(applicationAnalisysRepositorySpy.findAll).toHaveBeenCalled();
     expect(applicationNotificationRepositorySpy.create).toHaveBeenCalled();
@@ -109,9 +114,12 @@ describe('SendNotificationHandler', () => {
         .mockResolvedValue(analisys),
     };
 
-    handler.setRequest({ applicationId: BigInt(1) });
+    const context = {
+      applicationId: BigInt(1),
+      userId: 1,
+    };
 
-    await handler.handle();
+    await handler.handle(context);
 
     expect(applicationAnalisysRepositorySpy.findAll).toHaveBeenCalled();
     expect(applicationNotificationRepositorySpy.create).not.toHaveBeenCalled();

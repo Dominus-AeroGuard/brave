@@ -5,7 +5,7 @@ export class User {
   @ApiProperty()
   public id: number;
 
-  @ApiProperty();
+  @ApiProperty()
   public name: string;
 
   constructor(user: Prisma.User) {

@@ -53,10 +53,15 @@ export class CreateApplicationDocumentUseCase {
       throw new BadRequestException('File is required');
   }
 
-  private async saveFile(
-    request: ApplicationDocumentRequest,
-  ): Promise<
-    Array<Partial<{ originalname: string; path: string; typeId: number; buffer: Buffer }>>
+  private async saveFile(request: ApplicationDocumentRequest): Promise<
+    Array<
+      Partial<{
+        originalname: string;
+        path: string;
+        typeId: number;
+        buffer: Buffer;
+      }>
+    >
   > {
     const promises = request.files.map(async (file) => {
       const key = this.applicationDocumentService.generateFileName(file.file);
@@ -70,41 +75,54 @@ export class CreateApplicationDocumentUseCase {
         originalname: file.file.originalname,
         typeId: file.typeId,
         path: this.awsService.buildPath(bucket, key),
-        buffer: file.file.buffer
+        buffer: file.file.buffer,
       };
     });
 
     return await Promise.all(promises);
   }
 
-  private async saveApplicationArea(applicationId: number, uploadedFiles: Array<Partial<{ originalname: string; path: string; typeId: number; buffer: Buffer }>>) {
+  private async saveApplicationArea(
+    applicationId: number,
+    uploadedFiles: Array<
+      Partial<{
+        originalname: string;
+        path: string;
+        typeId: number;
+        buffer: Buffer;
+      }>
+    >,
+  ) {
     try {
-      const kmlfiles = uploadedFiles.filter(file => file.typeId == Number(ApplicationDocumentType.KML));
-      if (kmlfiles?.length > 0){      
-        var tj = require('@mapbox/togeojson');
+      const kmlfiles = uploadedFiles.filter(
+        (file) => file.typeId == Number(ApplicationDocumentType.KML),
+      );
+      if (kmlfiles?.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const tj = require('@mapbox/togeojson');
 
-        const kmlString = new DOMParser().parseFromString(String(kmlfiles[0].buffer));
+        const kmlString = new DOMParser().parseFromString(
+          String(kmlfiles[0].buffer),
+        );
         const geojson = tj.kml(kmlString);
 
-        var feats = [];
+        const feats = [];
         geojson.features.forEach((feature) => {
-          if (feature?.geometry?.type ==  'Polygon'){
-            const feat = JSON.stringify(feature?.geometry);         
+          if (feature?.geometry?.type == 'Polygon') {
+            const feat = JSON.stringify(feature?.geometry);
             feats.push(feat);
-          } 
-          else if (feature?.geometry?.type ==  'GeometryCollection')
-          {
+          } else if (feature?.geometry?.type == 'GeometryCollection') {
             feature?.geometry?.geometries.forEach((geom) => {
-              if (geom?.type ==  'Polygon'){
+              if (geom?.type == 'Polygon') {
                 const feat = JSON.stringify(geom);
-                feats.push(feat);  
-              }                
+                feats.push(feat);
+              }
             });
-          }  
+          }
         });
-         
+
         await this.arearepository.createMany(feats, '', applicationId);
-      }    
+      }
     } catch (error) {
       console.error(error);
     }
