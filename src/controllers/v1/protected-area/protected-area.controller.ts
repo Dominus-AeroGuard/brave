@@ -31,7 +31,6 @@ import { ErrorRequestDto } from '../../dtos/error-request.dto';
 import { CreateProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/create-protected-area.use-case';
 import { CreateProtectedAreaRequest } from './models/create-protected-area.model';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
 import { ProtectedArea } from '../../../domain/entities';
 import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
 
@@ -44,8 +43,6 @@ export class ProtectedAreaController {
   constructor(
     @Inject(CreateProtectedAreaUseCase)
     private readonly createProtectedArea: CreateProtectedAreaUseCase,
-    @Inject(FindByDistanceProtectedAreaUseCase)
-    private readonly findByDistanceProtectedArea: FindByDistanceProtectedAreaUseCase,
     @Inject(ProtectedAreaRepository)
     private readonly protectedAreaRepository: ProtectedAreaRepository,
   ) {}
@@ -84,19 +81,6 @@ export class ProtectedAreaController {
       user.organizationId,
       query.typeId ? parseInt(query.typeId) : undefined,
     );
-  }
-
-  @Get('/applications/:id')
-  @ApiParam({ name: 'id', type: BigInt })
-  @ApiQuery({ name: 'distance', required: true, type: Number })
-  @ApiQuery({ name: 'typeId', required: true, type: Number })
-  @ApiOkResponse({ type: [ProtectedArea] })
-  findByDistance(@Query() query: any, @Param('id') applicationId: string) {
-    return this.findByDistanceProtectedArea.execute({
-      applicationId: Number(applicationId),
-      distance: Number(query.distance),
-      typeId: Number(query.typeId),
-    });
   }
 
   @Delete(':id')
