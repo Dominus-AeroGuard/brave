@@ -22,10 +22,6 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
   }
 
   public async handle(context: AnalisysApplicationContext) {
-    const { performance } = require('perf_hooks');
-
-    const start = performance.now();
-
     let areas : ProtectedArea[] = [];
     const protectedAreaTypes = await this.protectedAreaTypeRepository.findAll();
     for (const protectedAreaType of protectedAreaTypes){
@@ -37,12 +33,10 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
         areas.push(... resp);
       });
     }
-
-    const end = performance.now();
-
+    
     await this.analisysRepository.create({
       applicationId: context.applicationId,
-      elapsedTime: end - start,
+      elapsedTime:0,
       status: areas.length > 0 ? ApplicationAnalisysStatusEnum.FAILED : ApplicationAnalisysStatusEnum.APPROVED,
       type: ApplicationAnalisysTypeEnum.BUFFER,      
     });
