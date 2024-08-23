@@ -7,7 +7,7 @@ import { IApplicationAnalisysRepository } from '../../../../infra/prisma/reposit
 import { IProtectedAreaRepository } from '../../../../infra/prisma/repositories/protected-area.repository';
 import { ProtectedArea } from '../../../../domain/entities';
 import { IProtectedAreaTypeRepository } from '../../../../infra/prisma/repositories/protected-area-type.repository';
-
+import { performance } from 'perf_hooks';
 @Injectable()
 export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
   constructor(
@@ -22,6 +22,9 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
   }
 
   public async handle(context: AnalisysApplicationContext) {
+
+    const start = performance.now();
+
     let areas : ProtectedArea[] = [];
     const protectedAreaTypes = await this.protectedAreaTypeRepository.findAll();
     for (const protectedAreaType of protectedAreaTypes){
@@ -33,10 +36,12 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
         areas.push(... resp);
       });
     }
-    
+
+    const end = performance.now();
+
     await this.analisysRepository.create({
       applicationId: context.applicationId,
-      elapsedTime:0,
+      elapsedTime: end - start,
       status: areas.length > 0 ? ApplicationAnalisysStatusEnum.FAILED : ApplicationAnalisysStatusEnum.APPROVED,
       type: ApplicationAnalisysTypeEnum.BUFFER,      
     });
