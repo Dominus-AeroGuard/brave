@@ -87,7 +87,10 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
       protected_area.organization,
       new ProtectedAreaType(
         protected_area.type.protected_area_type_id,
+        protected_area.type.name,
         protected_area.type.description,
+        protected_area.type.distance,
+        protected_area.type.distance_drone
       ),
     );
   }
@@ -113,8 +116,11 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
         protected_area.organization,
         new ProtectedAreaType(
           protected_area.type.protected_area_type_id,
+          protected_area.type.name,
           protected_area.type.description,
-        ),
+          protected_area.type.distance,
+          protected_area.type.distance_drone
+          ),
       );
     });
   }
@@ -144,8 +150,11 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
         protected_area.organization,
         new ProtectedAreaType(
           protected_area.type.protected_area_type_id,
+          protected_area.type.name,
           protected_area.type.description,
-        ),
+          protected_area.type.distance,
+          protected_area.type.distance_drone
+          ),
       );
     });
   }

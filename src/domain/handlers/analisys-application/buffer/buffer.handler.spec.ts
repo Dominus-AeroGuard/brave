@@ -6,7 +6,9 @@ describe('BufferHandler', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [BufferHandler],
+      providers: [
+        BufferHandler,        
+      ],
     }).compile();
 
     service = module.get<BufferHandler>(BufferHandler);

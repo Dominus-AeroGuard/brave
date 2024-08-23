@@ -6,18 +6,32 @@ export class ProtectedAreaType {
   @ApiProperty({ description: 'ID do tipo de área de proteção', example: 1 })
   public id: number;
 
-  @ApiProperty({
-    description: 'Descrição do tipo de área de proteção',
-    example: 'Área de proteção ambiental',
-  })
+  @ApiProperty({description: 'Nome do tipo de área de proteção', example: 'AREA_URBANA' })
+  public name: string;
+
+  @ApiProperty({description: 'Descrição do tipo de área de proteção', example: 'Área de proteção permanente' })
   public description: string;
 
-  constructor(id: number, description: string) {
+  @ApiProperty({ description: 'Distância mínima permitida para aplicações aéreas', example: 500 })
+  public distance: number;
+
+  @ApiProperty({ description: 'Distância mínima permitida para aplicações com drone', example: 20 })
+  public distance_drone: number;
+
+  constructor(
+    id: number, 
+    name: string, 
+    description: string, 
+    distance: number, 
+    distance_drone: number
+  ) {
     this.id = id;
+    this.name = name;
     this.description = description;
+    this.distance = distance;
+    this.distance_drone = distance_drone;
   }
 }
-
 export class ProtectedArea {
   @ApiProperty({ description: 'ID da área de proteção' })
   public id: number;

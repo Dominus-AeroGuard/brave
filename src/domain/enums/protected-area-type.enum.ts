@@ -1,7 +1,9 @@
 export enum ProtectedAreaTypeEnum {
-  ReservaLegalAPP = 1,
-  AreaUrbana = 2,
-  Manancial = 3,
-  Sericicultura = 4,
-  AgrupamentodeAnimais = 5,
+  RESERVA_LEGAL_APP = 1,
+  AREA_URBANA = 2,
+  MANANCIAL_PARA_ABASTECIMENTO = 3,
+  MANANCIAL = 4,
+  MORADIA_ISOLADA = 5,
+  AGRUPAMENTO_DE_ANIMAIS = 6,
+  SERICICULTURA = 7
 }

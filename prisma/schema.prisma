@@ -238,7 +238,11 @@ model ProtectedArea {
 
 model ProtectedAreaType {
   protected_area_type_id Int             @id @default(autoincrement())
-  description            String          @db.VarChar(100)
+  name                   String          @db.VarChar(100)
+  description            String          @db.VarChar(1000)
+  distance               Int
+  distance_drone         Int
+  active                 Boolean         @default(true)
   created_at             DateTime        @default(now())
   protected_area         ProtectedArea[]
 
