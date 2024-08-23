@@ -7,7 +7,25 @@ describe('BufferHandler', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        BufferHandler,        
+        BufferHandler, 
+        {
+          provide: 'IApplicationAnalisysRepository',
+          useValue: {
+            create: jest.fn(),
+          },
+        },
+        {
+          provide: 'IProtectedAreaRepository',
+          useValue: {
+            findByDistance: jest.fn(),
+          },
+        },      
+        {
+          provide: 'IProtectedAreaTypeRepository',
+          useValue: {
+            findAll: jest.fn(),
+          },
+        },      
       ],
     }).compile();
 

@@ -18,12 +18,6 @@ describe('ProtectedAreaController', () => {
           },
         },
         {
-          provide: FindByDistanceProtectedAreaUseCase,
-          useValue: {
-            execute: jest.fn(),
-          },
-        },
-        {
           provide: ProtectedAreaRepository,
           useValue: {
             findOne: jest.fn(),

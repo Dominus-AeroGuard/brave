@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AbstractHandler } from '../../abstract.handler';
 import { AnalisysApplicationContext } from '../analisys-application.context';
-import { ApplicationAnalisysStatusEnum } from 'src/domain/enums/application-analisys-status.enum';
-import { ApplicationAnalisysTypeEnum } from 'src/domain/enums/application-analisys-type.enum';
-import { IApplicationAnalisysRepository } from 'src/infra/prisma/repositories/application-analisys.repository';
-import { IProtectedAreaRepository } from 'src/infra/prisma/repositories/protected-area.repository';
-import { ProtectedArea } from 'src/domain/entities';
-import { IProtectedAreaTypeRepository } from 'src/infra/prisma/repositories/protected-area-type.repository';
+import { ApplicationAnalisysStatusEnum } from '../../../../domain/enums/application-analisys-status.enum';
+import { ApplicationAnalisysTypeEnum } from '../../../../domain/enums/application-analisys-type.enum';
+import { IApplicationAnalisysRepository } from '../../../../infra/prisma/repositories/application-analisys.repository';
+import { IProtectedAreaRepository } from '../../../../infra/prisma/repositories/protected-area.repository';
+import { ProtectedArea } from '../../../../domain/entities';
+import { IProtectedAreaTypeRepository } from '../../../../infra/prisma/repositories/protected-area-type.repository';
 
 @Injectable()
 export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
