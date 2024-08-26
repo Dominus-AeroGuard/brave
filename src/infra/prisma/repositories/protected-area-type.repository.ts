@@ -7,7 +7,9 @@ export interface IProtectedAreaTypeRepository {
 }
 
 @Injectable()
-export class ProtectedAreaTypeRepository implements IProtectedAreaTypeRepository {
+export class ProtectedAreaTypeRepository
+  implements IProtectedAreaTypeRepository
+{
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<ProtectedAreaType[]> {
@@ -17,18 +19,17 @@ export class ProtectedAreaTypeRepository implements IProtectedAreaTypeRepository
       },
       orderBy: {
         protected_area_type_id: 'asc',
-      }
+      },
     });
 
     return protectedAreaTypes.map((type) => {
       return new ProtectedAreaType(
-        type.protected_area_type_id, 
-        type.name, 
+        type.protected_area_type_id,
+        type.name,
         type.description,
         type.distance,
-        type.distance_drone
+        type.distance_drone,
       );
     });
   }
-
 }

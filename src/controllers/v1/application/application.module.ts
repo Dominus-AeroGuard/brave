@@ -15,7 +15,7 @@ import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/pr
     ListApplicationUseCase,
     FinishApplicationUseCase,
     ApplicationRepository,
-    FindByDistanceProtectedAreaUseCase
+    FindByDistanceProtectedAreaUseCase,
   ],
 })
 export class ApplicationModule {}

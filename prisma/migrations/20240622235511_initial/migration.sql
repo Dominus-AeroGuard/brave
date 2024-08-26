@@ -118,3 +118,52 @@ ALTER TABLE "application_document" ADD CONSTRAINT "application_document_applicat
 
 -- AddForeignKey
 ALTER TABLE "application_document" ADD CONSTRAINT "application_document_application_document_type_id_fkey" FOREIGN KEY ("application_document_type_id") REFERENCES "application_document_type"("application_document_type_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- Tabela  `user`
+COMMENT ON COLUMN "user"."user_id" IS 'Identificador único do usuário';
+COMMENT ON COLUMN "user"."organization_id" IS 'Identificador da organização à qual o usuário pertence';
+COMMENT ON COLUMN "user"."created_at" IS 'Data e hora de criação do registro';
+-- Tabela  `organization`
+COMMENT ON COLUMN "organization"."organization_id" IS 'Identificador único da organização';
+COMMENT ON COLUMN "organization"."name" IS 'Nome da organização';
+COMMENT ON COLUMN "organization"."created_at" IS 'Data e hora de criação do registro';
+-- Tabela  `pilot`
+COMMENT ON COLUMN "pilot"."pilot_id" IS 'Identificador único do piloto';
+COMMENT ON COLUMN "pilot"."organization_id" IS 'Identificador da organização à qual o piloto pertence';
+COMMENT ON COLUMN "pilot"."name" IS 'Nome do piloto';
+COMMENT ON COLUMN "pilot"."document" IS 'Documento de identificação do piloto';
+COMMENT ON COLUMN "pilot"."license" IS 'Licença do piloto';
+COMMENT ON COLUMN "pilot"."created_at" IS 'Data e hora de criação do registro';
+-- Tabela  `application`
+COMMENT ON COLUMN "application"."application_id" IS 'Identificador único da aplicação';
+COMMENT ON COLUMN "application"."user_id" IS 'Identificador do usuário que criou a aplicação';
+COMMENT ON COLUMN "application"."organization_id" IS 'Identificador da organização relacionada à aplicação';
+COMMENT ON COLUMN "application"."vehicle" IS 'Tipo de veículo relacionado à aplicação';
+COMMENT ON COLUMN "application"."start_date" IS 'Data de início da aplicação';
+COMMENT ON COLUMN "application"."end_date" IS 'Data de término da aplicação';
+COMMENT ON COLUMN "application"."created_by" IS 'Nome da pessoa que criou a aplicação';
+COMMENT ON COLUMN "application"."created_at" IS 'Data e hora de criação do registro';
+-- Tabela  `application_event`
+COMMENT ON COLUMN "application_event"."application_event_id" IS 'Identificador único do evento da aplicação';
+COMMENT ON COLUMN "application_event"."application_id" IS 'Identificador da aplicação associada';
+COMMENT ON COLUMN "application_event"."application_status_id" IS 'Identificador do status da aplicação';
+COMMENT ON COLUMN "application_event"."pilot_id" IS 'Identificador do piloto associado ao evento';
+COMMENT ON COLUMN "application_event"."created_by" IS 'Nome da pessoa que criou o evento';
+COMMENT ON COLUMN "application_event"."created_at" IS 'Data e hora de criação do registro';
+-- Tabela  `application_status`
+COMMENT ON COLUMN "application_status"."application_status_id" IS 'Identificador único do status da aplicação';
+COMMENT ON COLUMN "application_status"."description" IS 'Descrição do status da aplicação';
+COMMENT ON COLUMN "application_status"."active" IS 'Indica se o status está ativo ou não';
+COMMENT ON COLUMN "application_status"."created_at" IS 'Data e hora de criação do registro';
+-- Tabela  `application_document`
+COMMENT ON COLUMN "application_document"."application_document_id" IS 'Identificador único do documento da aplicação';
+COMMENT ON COLUMN "application_document"."application_id" IS 'Identificador da aplicação associada';
+COMMENT ON COLUMN "application_document"."application_document_type_id" IS 'Identificador do tipo de documento';
+COMMENT ON COLUMN "application_document"."original_name" IS 'Nome original do arquivo/documento';
+COMMENT ON COLUMN "application_document"."data" IS 'Dados do documento em formato JSONB';
+COMMENT ON COLUMN "application_document"."path" IS 'Caminho onde o documento está armazenado';
+-- Tabela  `application_document_type`
+COMMENT ON COLUMN "application_document_type"."application_document_type_id" IS 'Identificador único do tipo de documento';
+COMMENT ON COLUMN "application_document_type"."description" IS 'Descrição do tipo de documento';
+COMMENT ON COLUMN "application_document_type"."active" IS 'Indica se o tipo de documento está ativo ou não';
+COMMENT ON COLUMN "application_document_type"."created_at" IS 'Data e hora de criação do registro';

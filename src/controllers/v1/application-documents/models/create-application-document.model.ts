@@ -1,4 +1,4 @@
-import { IsIn, IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApplicationDocumentType } from '../../../../domain/enums/application-document-type.enum';
 import { Type } from 'class-transformer';
@@ -18,7 +18,9 @@ export class CreateApplicationDocumentFileRequest {
     enum: Object.values(ApplicationDocumentType),
   })
   @IsNotEmpty()
-  @IsIn(Object.values(ApplicationDocumentType).map((v) => v.toString()))
+  @IsInt()
+  @Type(() => Number)
+  @IsEnum(ApplicationDocumentType)
   typeId: number;
 }
 

@@ -10,5 +10,18 @@
       "username": "postgres",
       "password": "postgres"
     }
-  ]
+  ],
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE"
+    },
+    "local": {
+      "host": "localhost:3000",
+      "token": "{{$shared token}}"
+    },
+    "production": {
+      "host": "brave.aeroguard.app.br",
+      "token": "{{$shared token}}"
+    }
+  }
 }
