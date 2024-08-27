@@ -48,9 +48,11 @@ describe('BufferHandler', () => {
           .mockResolvedValue(areaTypes),
       };
 
+      expect(repositorySpy.findAll).toBeDefined();
+
       const context = {
-        applicationId: BigInt(1),
-        userId: 1
+        applicationId: BigInt(0),
+        userId: 0
       }
 
       // Act
