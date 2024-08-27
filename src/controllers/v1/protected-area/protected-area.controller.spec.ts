@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProtectedAreaController } from './protected-area.controller';
 import { CreateProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/create-protected-area.use-case';
-import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
 import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
 
 describe('ProtectedAreaController', () => {
@@ -13,12 +12,6 @@ describe('ProtectedAreaController', () => {
       providers: [
         {
           provide: CreateProtectedAreaUseCase,
-          useValue: {
-            execute: jest.fn(),
-          },
-        },
-        {
-          provide: FindByDistanceProtectedAreaUseCase,
           useValue: {
             execute: jest.fn(),
           },

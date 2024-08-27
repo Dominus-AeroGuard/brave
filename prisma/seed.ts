@@ -5,23 +5,59 @@ async function protectedAreaTypeSeed() {
   const protectedAreaType = [
     {
       id: 1,
-      description: 'RESERVA_LEGAL_APP',
+      name: 'RESERVA_LEGAL_APP',
+      description: 'Reserva Legal ou Área de Proteção Permanente',
+      distance: 500,
+      distance_drone: 20,
+      active: true,
     },
     {
       id: 2,
-      description: 'AREA_URBANA',
+      name: 'AREA_URBANA',
+      description: 'Povoações, Cidades, Vilas ou Bairros',
+      distance: 500,
+      distance_drone: 20,
+      active: true,
     },
     {
       id: 3,
-      description: 'MANANCIAL',
+      name: 'MANANCIAL_PARA_ABASTECIMENTO',
+      description: 'Mananciais de captação de água para abastecimento de população',
+      distance: 500,
+      distance_drone: 20,
+      active: true,
     },
     {
       id: 4,
-      description: 'SERICICULTURA',
+      name: 'MANANCIAL',
+      description: 'Mananciais de água',
+      distance: 250,
+      distance_drone: 20,
+      active: true,
     },
     {
       id: 5,
-      description: 'AGRUPAMENTO_DE_ANIMAIS',
+      name: 'MORADIA_ISOLADA',
+      description: 'Moradias isoladas',
+      distance: 250,
+      distance_drone: 20,
+      active: true,
+    },
+    {
+      id: 6,
+      name: 'AGRUPAMENTO_DE_ANIMAIS',
+      description: 'agrupamentos de animais',
+      distance: 250,
+      distance_drone: 20,
+      active: true,
+    },
+    {
+      id: 7,
+      name: 'SERICICULTURA',
+      description: 'SERICICULTURA',
+      distance: 500,
+      distance_drone: 20,
+      active: true,
     },
   ];
 
@@ -31,10 +67,17 @@ async function protectedAreaTypeSeed() {
         protected_area_type_id: id,
       },
       update: {
+        name: rest.name,
         description: rest.description,
+        distance: rest.distance,
+        distance_drone: rest.distance_drone
       },
       create: {
+        protected_area_type_id: id,
+        name: rest.name,
         description: rest.description,
+        distance: rest.distance,
+        distance_drone: rest.distance_drone
       },
     }),
   );

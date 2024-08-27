@@ -30,11 +30,12 @@ import {
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
-import { Application } from '../../../domain/entities';
+import { Application, ProtectedArea } from '../../../domain/entities';
 import { PaginableEntity } from '../../dtos/paginable.dto';
 import { ValidationRequestDto } from '../../dtos/validation-request.dto';
 import { ErrorRequestDto } from '../../dtos/error-request.dto';
 import { FinishApplicationUseCase } from '../../../domain/use-cases/application/finish-application.use-case';
+import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
 
 @ApiTags('applications')
 @Controller('v1/applications')
@@ -53,6 +54,8 @@ export class ApplicationController {
     private readonly finishApplicationUseCase: FinishApplicationUseCase,
     @Inject(ApplicationRepository)
     private readonly applicationRepository: ApplicationRepository,
+    @Inject(FindByDistanceProtectedAreaUseCase)
+    private readonly findByDistanceProtectedArea: FindByDistanceProtectedAreaUseCase,
   ) {}
 
   @Post()
@@ -101,6 +104,19 @@ export class ApplicationController {
   @ApiOkResponse({ type: Application })
   findOne(@Request() { user }, @Param('id') id: string) {
     return this.applicationRepository.findOne(user.organizationId, id);
+  }
+
+  @Get(':id/protected-areas')
+  @ApiParam({ name: 'id', type: BigInt })
+  @ApiQuery({ name: 'distance', required: true, type: Number })
+  @ApiQuery({ name: 'typeId', required: true, type: Number })
+  @ApiOkResponse({ type: [ProtectedArea] })
+  findByDistance(@Query() query: any, @Param('id') applicationId: string) {
+    return this.findByDistanceProtectedArea.execute({
+      applicationId: Number(applicationId),
+      distance: Number(query.distance),
+      typeId: Number(query.typeId),
+    });
   }
 
   @Patch(':id')

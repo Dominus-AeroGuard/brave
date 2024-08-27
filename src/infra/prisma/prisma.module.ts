@@ -7,6 +7,7 @@ import { UserOrganizationRepository } from './repositories/user-organization.rep
 import { ProtectedAreaRepository } from './repositories/protected-area.repository';
 import { ApplicationNotificationRepository } from './repositories/application-notification.repository';
 import { ApplicationAnalisysRepository } from './repositories/application-analisys.repository';
+import { ProtectedAreaTypeRepository } from './repositories/protected-area-type.repository';
 
 @Global()
 @Module({
@@ -31,6 +32,10 @@ import { ApplicationAnalisysRepository } from './repositories/application-analis
     {
       provide: 'IProtectedAreaRepository',
       useClass: ProtectedAreaRepository,
+    },
+    {
+      provide: 'IProtectedAreaTypeRepository',
+      useClass: ProtectedAreaTypeRepository,
     },
     {
       provide: 'IApplicationNotificationRepository',
@@ -62,6 +67,10 @@ import { ApplicationAnalisysRepository } from './repositories/application-analis
     {
       provide: 'IProtectedAreaRepository',
       useClass: ProtectedAreaRepository,
+    },
+    {
+      provide: 'IProtectedAreaTypeRepository',
+      useClass: ProtectedAreaTypeRepository,
     },
     {
       provide: 'IApplicationNotificationRepository',
