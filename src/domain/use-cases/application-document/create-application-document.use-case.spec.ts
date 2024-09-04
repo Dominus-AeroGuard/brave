@@ -9,6 +9,7 @@ import { ApplicationDocumentType } from '../../enums/application-document-type.e
 import { Readable } from 'stream';
 import { ApplicationDocumentService } from '../../services/application-document/application-document.service';
 import { IApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
+import { OcrService } from '../../../infra/http/ocr/ocr.service';
 
 describe('CreateApplicationDocumentUseCase', () => {
   const filePath =
@@ -18,6 +19,7 @@ describe('CreateApplicationDocumentUseCase', () => {
   let applicationDocumentService: ApplicationDocumentService;
   let repository: IApplicationDocumentRepository;
   let arearepository: IApplicationAreaRepository;
+  let ocrService: OcrService;
   let awsService: AwsService;
 
   beforeEach(async () => {
@@ -44,6 +46,12 @@ describe('CreateApplicationDocumentUseCase', () => {
             buildPath: jest.fn(),
           },
         },
+        {
+          provide: OcrService,
+          useValue: {
+            extractDocumentData: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -60,6 +68,7 @@ describe('CreateApplicationDocumentUseCase', () => {
       'IApplicationAreaRepository',
     );
     awsService = moduleRef.get<AwsService>(AwsService);
+    ocrService = moduleRef.get<OcrService>(OcrService);
   });
 
   describe('execute', () => {
@@ -90,20 +99,42 @@ describe('CreateApplicationDocumentUseCase', () => {
         applicationId: 123,
       };
 
+      const ocrResponseMock = {
+        receituario_agronomico: {
+          nome_usuario: 'Nome Usuario',
+          numero_receita: '123',
+          endereco_cidade_propriedade: 'endereco_cidade_propriedade',
+          cultura: 'cultura',
+          data_emissao: 'data_emissao',
+          nome_produto: 'nome_produto',
+          dosagem: 'dosagem',
+          modalidade_aplicacao: 'modalidade_aplicacao',
+          formulacao: 'formulacao',
+          area_aplicada: 'area_aplicada',
+          classificacao_toxicologica: 'classificacao_toxicologica',
+          nome_engenheiro: 'nome_engenheiro',
+          assinatura: 'assinatura',
+        },
+      };
+
       const repositorySpy = {
-        create: jest.spyOn(repository, 'create').mockResolvedValue([
-          {
-            id: 1,
-            path: filePath,
-            originalName: 'test-file.txt',
-            data: {},
-            type: {
-              id: ApplicationDocumentType.RA,
-              description: 'RA',
-              active: true,
-            },
+        create: jest.spyOn(repository, 'create').mockResolvedValue({
+          id: 1,
+          path: filePath,
+          originalName: 'test-file.txt',
+          data: ocrResponseMock.receituario_agronomico,
+          type: {
+            id: ApplicationDocumentType.RA,
+            description: 'RA',
+            active: true,
           },
-        ]),
+        }),
+      };
+
+      const ocrSpy = {
+        extractDocumentData: jest
+          .spyOn(ocrService, 'extractDocumentData')
+          .mockResolvedValue(ocrResponseMock),
       };
 
       const awsServiceSpy = {
@@ -126,28 +157,37 @@ describe('CreateApplicationDocumentUseCase', () => {
       // Assert
       expect(awsServiceSpy.buildUrl).toHaveBeenCalled();
       expect(awsServiceSpy.uploadFile).toHaveBeenCalled();
+      expect(ocrSpy.extractDocumentData).toHaveBeenCalled();
       expect(
         applicationDocumentServiceSpy.getBucketByDocumentType,
       ).toHaveBeenCalledWith(ApplicationDocumentType.RA);
       expect(
         applicationDocumentServiceSpy.generateFileName,
       ).toHaveBeenCalledWith(files[0].file);
-      expect(repositorySpy.create).toHaveBeenCalledWith([
-        {
-          path: filePath,
-          originalName: 'test-file.txt',
-          data: {},
-          applicationId: 123,
-          typeId: ApplicationDocumentType.RA,
-        },
-      ]);
+      expect(repositorySpy.create).toHaveBeenCalledWith({
+        path: filePath,
+        originalName: 'test-file.txt',
+        applicationId: 123,
+        typeId: ApplicationDocumentType.RA,
+        data: Object.keys(ocrResponseMock.receituario_agronomico).map(
+          (key) => ({
+            key,
+            value: ocrResponseMock.receituario_agronomico[key],
+            created_by: 1,
+          }),
+        ),
+      });
+      expect(ocrSpy.extractDocumentData).toHaveBeenCalledWith({
+        file: files[0].file,
+        type: ApplicationDocumentType[ApplicationDocumentType.RA].toString(),
+      });
 
       expect(result).toEqual([
         {
           id: 1,
           path: filePath,
           originalName: 'test-file.txt',
-          data: {},
+          data: ocrResponseMock.receituario_agronomico,
           type: {
             id: ApplicationDocumentType.RA,
             description: 'RA',
@@ -445,7 +485,6 @@ describe('CreateApplicationDocumentUseCase', () => {
             fieldname: 'file',
             originalname: 'test-file.kml',
             encoding: '7bit',
-            //mimetype: 'application/vnd.google-earth.kml+xml',
             mimetype: 'text/plain',
             size: 10240000,
             buffer: Buffer.copyBytesFrom(u16, 0, 4154),
@@ -464,19 +503,17 @@ describe('CreateApplicationDocumentUseCase', () => {
       };
 
       const repositorySpy = {
-        create: jest.spyOn(repository, 'create').mockResolvedValue([
-          {
-            id: 1,
-            path: filePath,
-            originalName: 'test-file.kml',
-            data: {},
-            type: {
-              id: ApplicationDocumentType.KML,
-              description: 'KML',
-              active: true,
-            },
+        create: jest.spyOn(repository, 'create').mockResolvedValue({
+          id: 1,
+          path: filePath,
+          originalName: 'test-file.kml',
+          data: {},
+          type: {
+            id: ApplicationDocumentType.KML,
+            description: 'KML',
+            active: true,
           },
-        ]),
+        }),
         createMany: jest
           .spyOn(arearepository, 'createMany')
           .mockResolvedValue(1),
@@ -508,6 +545,7 @@ describe('CreateApplicationDocumentUseCase', () => {
       expect(
         applicationDocumentServiceSpy.generateFileName,
       ).toHaveBeenCalledWith(files[0].file);
+      expect(repositorySpy.createMany).toHaveBeenCalled();
       expect(repositorySpy.createMany).toHaveBeenCalledWith(
         [
           '{"type":"Polygon","coordinates":[[[-53.7588254576975,-22.4335679082046,0],[-53.7588770635741,-22.4336402452921,0],[-53.7589216828569,-22.4337140642201,0],[-53.7589534025494,-22.4337692929664,0],[-53.7589771251116,-22.4338121519697,0],[-53.7590074569348,-22.4338633965193,0],[-53.7590249046164,-22.433895656838,0],[-53.7588760683222,-22.4339569752167,0],[-53.7588627944373,-22.4339328128496,0],[-53.7588359988199,-22.4338875974292,0],[-53.7588117131615,-22.4338438206461,0],[-53.7587792993152,-22.43378743957,0],[-53.7587376679417,-22.4337184217021,0],[-53.7586937545034,-22.4336568678964,0],[-53.7588254576975,-22.4335679082046,0]]]}',
@@ -515,15 +553,13 @@ describe('CreateApplicationDocumentUseCase', () => {
         '',
         1,
       );
-      expect(repositorySpy.create).toHaveBeenCalledWith([
-        {
-          path: filePath,
-          originalName: 'test-file.kml',
-          data: {},
-          applicationId: 1,
-          typeId: ApplicationDocumentType.KML,
-        },
-      ]);
+      expect(repositorySpy.create).toHaveBeenCalledWith({
+        path: filePath,
+        originalName: 'test-file.kml',
+        data: [],
+        applicationId: 1,
+        typeId: ApplicationDocumentType.KML,
+      });
 
       expect(result).toEqual([
         {

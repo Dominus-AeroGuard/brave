@@ -1,9 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmptyObject } from 'class-validator';
-import { JsonObject } from '@prisma/client/runtime/library';
+import { Type } from 'class-transformer';
+import { IsEnum, IsInt } from 'class-validator';
+import { ApplicationDocumentType } from '../../../../domain/entities/application-document.entity';
 
 export class UpdateApplicationDocumentRequest {
   @ApiProperty()
-  @IsNotEmptyObject()
-  data: JsonObject;
+  @IsInt()
+  @Type(() => Number)
+  @IsEnum(ApplicationDocumentType)
+  typeId: number;
 }

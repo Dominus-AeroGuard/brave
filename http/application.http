@@ -1,11 +1,11 @@
-POST http://localhost:3000/v1/applications
+POST http://{{host}}/v1/applications
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+Authorization: Bearer {{token}}
 
 {
   "vehicle": "brave",
-  "startDate": "2024-07-16T16:11:01Z",
-  "endDate": "2024-07-16T17:30:00Z",
+  "startDate": "2025-08-16T16:11:01Z",
+  "endDate": "2025-08-16T17:30:00Z",
   "pilot": {
     "id": 1
   }
@@ -13,21 +13,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiO
 
 ###
 
-GET http://localhost:3000/v1/applications?page=2&pageSize=1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+GET http://{{host}}/v1/applications
+  ?page=1
+  &pageSize=10
+Authorization: Bearer {{token}}
 
 ####
 
-GET http://localhost:3000/v1/applications/2
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+GET http://{{host}}/v1/applications/1
+Authorization: Bearer {{token}}
 
 ####
 
-PATCH  http://localhost:3000/v1/applications/2
+PATCH  http://{{host}}/v1/applications/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+Authorization: Bearer {{token}}
 
 {
   "vehicle": "brave",
@@ -43,6 +43,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiO
 
 ###
 
-POST http://localhost:3000/v1/applications/1/finish
+POST http://{{host}}/v1/applications/2/finish
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
+Authorization: Bearer {{token}}

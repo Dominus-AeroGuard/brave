@@ -29,9 +29,8 @@ describe('FindByDistanceProtectedAreaUseCase', () => {
 
   describe('execute', () => {
     it('should find protected areas by distance from application', async () => {
-      const areas = [
-      ];
-     
+      const areas = [];
+
       const repositorySpy = {
         findByDistance: jest
           .spyOn(repository, 'findByDistance')
@@ -39,7 +38,11 @@ describe('FindByDistanceProtectedAreaUseCase', () => {
       };
 
       // Act
-      const result = await useCase.execute({applicationId: 1, distance: 500, typeId: 2});
+      const result = await useCase.execute({
+        applicationId: 1,
+        distance: 500,
+        typeId: 2,
+      });
 
       // Assert
       expect(repositorySpy.findByDistance).toHaveBeenCalledWith(1, 500, 2);
