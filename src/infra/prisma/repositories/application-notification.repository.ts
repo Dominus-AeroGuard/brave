@@ -8,6 +8,7 @@ import {
 } from '../../../domain/entities/application-notification.entity';
 import { ApplicationAnalisys } from '../../../domain/entities/application-analisys.entity';
 import { ApplicationAnalisysStatusEnum } from '../../../domain/enums/application-analisys-status.enum';
+import { AnalysisBuffer } from 'src/domain/entities/analysis-buffer.entity';
 
 export interface IApplicationNotificationRepository {
   create(
@@ -137,6 +138,7 @@ export class ApplicationNotificationRepository
             analisy.application_analisys_id,
             analisy.elapsed_time,
             analisy.type.name,
+            analisy.details?.toString(),
             analisy.status as ApplicationAnalisysStatusEnum,
             analisy.created_at,
           ),
@@ -247,6 +249,7 @@ export class ApplicationNotificationRepository
                 analisy.application_analisys_id,
                 analisy.elapsed_time,
                 analisy.type.name,
+                analisy.details?.toString(),
                 analisy.status as ApplicationAnalisysStatusEnum,
                 analisy.created_at,
               ),

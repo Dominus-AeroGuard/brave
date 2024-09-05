@@ -37,13 +37,13 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
       });
     }
 
-    let detail: {protectedAreaId: number, meters: string}[] = [];
+    let detail: {protectedAreaId: number, meters: number}[] = [];
     for (const finded_area of areas){
       await this.protectedAreaRepository.getDistanceTo(
         finded_area.id, 
         Number(context.applicationId)
       ).then( distance => {
-        detail.push({protectedAreaId: finded_area.id, meters: (finded_area.type.distance - distance[0].min).toFixed(2)});
+        detail.push({protectedAreaId: finded_area.id, meters: (finded_area.type.distance - distance[0].min)});
       })
     }       
     
@@ -52,7 +52,7 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
 
     await this.analisysRepository.create({
       applicationId: context.applicationId,
-      details: detail.map(item => ("{protectedAreaId: " + item.protectedAreaId + ", meters: " + item.meters + "}" )).join(', '),
+      details: JSON.stringify(detail),
       elapsedTime: end - start,
       status: areas.length > 0 ? ApplicationAnalisysStatusEnum.FAILED : ApplicationAnalisysStatusEnum.APPROVED,
       type: ApplicationAnalisysTypeEnum.BUFFER,      
