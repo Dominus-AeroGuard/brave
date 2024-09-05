@@ -1,20 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
 import { ApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
-import { ApplicationNotification } from '../../../domain/entities/application-notification.entity';
 import { AnalysisBuffer } from 'src/domain/entities/analysis-buffer.entity';
 import { ApplicationAreaRepository } from 'src/infra/prisma/repositories/application-area.repository';
 import { ProtectedAreaRepository } from 'src/infra/prisma/repositories/protected-area.repository';
-
-// export interface NotificationRequest {
-//   query: Partial<{
-//     applicationId?: bigint[];
-//     statusId?: number[];
-//     fiscalId?: number[];
-//     page?: number;
-//     size?: number;
-//   }>;
-// }
 
 @Injectable()
 export class NotificationBufferUseCase {

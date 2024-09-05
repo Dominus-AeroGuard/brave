@@ -8,7 +8,6 @@ import {
 } from '../../../domain/entities/application-notification.entity';
 import { ApplicationAnalisys } from '../../../domain/entities/application-analisys.entity';
 import { ApplicationAnalisysStatusEnum } from '../../../domain/enums/application-analisys-status.enum';
-import { AnalysisBuffer } from 'src/domain/entities/analysis-buffer.entity';
 
 export interface IApplicationNotificationRepository {
   create(
