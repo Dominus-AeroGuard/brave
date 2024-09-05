@@ -116,16 +116,29 @@ model ApplicationStatus {
 }
 
 model ApplicationDocument {
-  application_document_id      Int                     @id @default(autoincrement())
-  application_id               BigInt                  @db.BigInt
+  application_document_id      Int                       @id @default(autoincrement())
+  application_id               BigInt                    @db.BigInt
   application_document_type_id Int
-  original_name                String                  @db.VarChar(200)
-  data                         Json
-  path                         String                  @db.VarChar(1000)
-  application                  Application             @relation(fields: [application_id], references: [application_id])
-  type                         ApplicationDocumentType @relation(fields: [application_document_type_id], references: [application_document_type_id])
+  original_name                String                    @db.VarChar(200)
+  path                         String                    @db.VarChar(1000)
+  application                  Application               @relation(fields: [application_id], references: [application_id])
+  type                         ApplicationDocumentType   @relation(fields: [application_document_type_id], references: [application_document_type_id])
+  data                         ApplicationDocumentData[]
 
   @@map("application_document")
+}
+
+model ApplicationDocumentData {
+  id          BigInt              @id @default(autoincrement())
+  document_id Int
+  key         String              @db.VarChar(100)
+  value       String              @db.VarChar(200)
+  revision    Int                 @default(1)
+  created_by  Int
+  created_at  DateTime            @default(now())
+  document    ApplicationDocument @relation(fields: [document_id], references: [application_document_id])
+
+  @@map("application_document_data")
 }
 
 model ApplicationDocumentType {

@@ -9,7 +9,7 @@ export class Organization {
   name: string;
 
   @ApiProperty({ description: 'Data de criação da organização' })
-  created_at: string;
+  created_at?: string;
 
   constructor(organization: Prisma.Organization) {
     this.id = organization.organization_id;

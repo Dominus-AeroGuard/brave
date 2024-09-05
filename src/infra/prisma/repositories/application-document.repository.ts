@@ -3,27 +3,30 @@ import {
   ApplicationDocumentType,
 } from '../../../domain/entities/application-document.entity';
 import { PrismaService } from '../prisma.service';
-import { Injectable } from '@nestjs/common';
-import { JsonObject } from '@prisma/client/runtime/library';
+import { Inject, Injectable } from '@nestjs/common';
+import { IApplicationDocumentDataRepository } from './application-document-data.repository';
 
 export interface IApplicationDocumentRepository {
   create(
-    data: Array<
-      Partial<{
-        data: JsonObject;
-        path: string;
-        originalName: string;
-        typeId: number;
-        applicationId: number;
-      }>
-    >,
-  ): Promise<Array<ApplicationDocument>>;
+    data: Partial<{
+      path: string;
+      originalName: string;
+      data: Array<
+        Partial<{
+          key: string;
+          value: string;
+          created_by: number;
+        }>
+      >;
+      typeId: number;
+      applicationId: number;
+    }>,
+  ): Promise<ApplicationDocument>;
   findOne(id: number, applicationId?: number): Promise<ApplicationDocument>;
   update(
     id: number,
     applicationId: number,
     data: Partial<{
-      data: JsonObject;
       typeId: number;
     }>,
   ): Promise<ApplicationDocument>;
@@ -35,7 +38,11 @@ export interface IApplicationDocumentRepository {
 export class ApplicationDocumentRepository
   implements IApplicationDocumentRepository
 {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject('IApplicationDocumentDataRepository')
+    private documentDataRepository: IApplicationDocumentDataRepository,
+  ) {}
 
   async findOne(
     id: number,
@@ -51,41 +58,53 @@ export class ApplicationDocumentRepository
           type: true,
         },
       });
+
     return this.buildApplicationDocumentEntity(applicationDocument);
   }
 
   async create(
-    data: Array<
-      Partial<{
-        data: JsonObject;
-        path: string;
-        originalName: string;
-        typeId: number;
-        applicationId: number;
-      }>
-    >,
-  ): Promise<Array<ApplicationDocument>> {
-    const result = await this.prisma.applicationDocument.createManyAndReturn({
-      data: data.map((d) => ({
-        path: d.path,
-        data: d.data,
-        original_name: d.originalName,
-        application_document_type_id: d.typeId,
-        application_id: d.applicationId,
-      })),
+    data: Partial<{
+      path: string;
+      originalName: string;
+      data: Array<
+        Partial<{
+          key: string;
+          value: string;
+          created_by: number;
+        }>
+      >;
+      typeId: number;
+      applicationId: number;
+    }>,
+  ): Promise<ApplicationDocument> {
+    const result = await this.prisma.applicationDocument.create({
+      data: {
+        path: data.path,
+        original_name: data.originalName,
+        application_document_type_id: data.typeId,
+        application_id: data.applicationId,
+        data: {
+          createMany: {
+            data: data.data.map(({ key, value, created_by }) => ({
+              key,
+              value,
+              created_by,
+            })),
+          },
+        },
+      },
       include: {
         type: true,
       },
     });
 
-    return result.map(this.buildApplicationDocumentEntity);
+    return this.findOne(result.application_document_id);
   }
 
   async update(
     id: number,
     applicationId: number,
     data: Partial<{
-      data: JsonObject;
       typeId: number;
     }>,
   ): Promise<ApplicationDocument> {
@@ -96,7 +115,6 @@ export class ApplicationDocumentRepository
       },
       data: {
         application_document_type_id: data.typeId,
-        data: data.data,
       },
       include: {
         type: true,
@@ -125,21 +143,32 @@ export class ApplicationDocumentRepository
       },
     });
 
-    return documents.map(this.buildApplicationDocumentEntity);
+    return Promise.all(documents.map(this.buildApplicationDocumentEntity));
   }
 
-  private buildApplicationDocumentEntity({
+  private buildApplicationDocumentEntity = async ({
     application_document_id,
     original_name,
     path,
-    data,
     type,
-  }): ApplicationDocument {
+  }): Promise<ApplicationDocument> => {
     const applicationDocumentType = new ApplicationDocumentType(
       type.application_status_id,
       type.description,
       type.active,
     );
+
+    const documentData = await this.documentDataRepository.findAll(
+      application_document_id,
+    );
+
+    const data = documentData.reduce((prev, curr) => {
+      if (!prev[curr.key]) {
+        prev[curr.key] = curr.value;
+      }
+
+      return prev;
+    }, {});
 
     return new ApplicationDocument(
       application_document_id,
@@ -148,5 +177,5 @@ export class ApplicationDocumentRepository
       data,
       applicationDocumentType,
     );
-  }
+  };
 }

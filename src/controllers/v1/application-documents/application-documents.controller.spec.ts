@@ -86,15 +86,13 @@ describe('ApplicationDocumentsController', () => {
       const applicationId = 123;
       const documentId = 456;
       const updatedDocument = {
-        data: {
-          key: 'value',
-        },
+        typeId: 1,
       };
       const applicationDocument = {
         id: documentId,
         originalName: 'example.txt',
         path: 'https://aeroguard-ra.s3.us-east-1.amazonaws.com/fa742fe4-73d3-49f1-9ec2-54f7b5d406ee.txt',
-        data: updatedDocument.data,
+        data: {},
         type: {
           id: 1,
           description: 'RA',
