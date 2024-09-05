@@ -27,6 +27,7 @@ export interface IProtectedAreaRepository {
     distance: number,
     typeId: number,
   ): Promise<ProtectedArea[]>;
+  getDistanceTo(id: number, applicationId: number): Promise<number>;
   removeOne(organizationId: number, id: number): Promise<void>;
   removeAll(organizationId: number, typeId: number): Promise<void>;
 }
@@ -158,6 +159,15 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
       );
     });
   }
+
+  async getDistanceTo(
+    id: number, 
+    applicationId: number
+  ): Promise<number> {    
+    return await this.prisma.$queryRaw<
+      number
+      >`select min(ST_Distance(p.geom::geography, a.geom::geography)) from "protected_area" as p, "application_area" as a where p.id = ${id} and a.application_id = ${applicationId}`;
+  };
 
   async removeOne(organizationId: number, id: number): Promise<void> {
     await this.prisma.protectedArea.delete({

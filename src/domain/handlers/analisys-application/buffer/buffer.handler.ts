@@ -33,14 +33,26 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
         protectedAreaType.distance,
         protectedAreaType.id,
       ).then(resp => {
-        areas.push(... resp);
+        areas.push(...resp);
       });
     }
+
+    let detail: {protectedAreaId: number, meters: string}[] = [];
+    for (const finded_area of areas){
+      await this.protectedAreaRepository.getDistanceTo(
+        finded_area.id, 
+        Number(context.applicationId)
+      ).then( distance => {
+        detail.push({protectedAreaId: finded_area.id, meters: (finded_area.type.distance - distance[0].min).toFixed(2)});
+      })
+    }       
+    
 
     const end = performance.now();
 
     await this.analisysRepository.create({
       applicationId: context.applicationId,
+      details: detail.map(item => ("{protectedAreaId: " + item.protectedAreaId + ", meters: " + item.meters + "}" )).join(', '),
       elapsedTime: end - start,
       status: areas.length > 0 ? ApplicationAnalisysStatusEnum.FAILED : ApplicationAnalisysStatusEnum.APPROVED,
       type: ApplicationAnalisysTypeEnum.BUFFER,      
