@@ -22,19 +22,21 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
   }
 
   public async handle(context: AnalisysApplicationContext) {
-
     const start = performance.now();
 
-    let areas : ProtectedArea[] = [];
+    const areas: ProtectedArea[] = [];
     const protectedAreaTypes = await this.protectedAreaTypeRepository.findAll();
-    for (const protectedAreaType of protectedAreaTypes){
-      await this.protectedAreaRepository.findByDistance(
-        Number(context.applicationId),
-        protectedAreaType.distance,
-        protectedAreaType.id,
-      ).then(resp => {
-        areas.push(...resp);
-      });
+
+    for (const protectedAreaType of protectedAreaTypes) {
+      await this.protectedAreaRepository
+        .findByDistance(
+          Number(context.applicationId),
+          protectedAreaType.distance,
+          protectedAreaType.id,
+        )
+        .then((resp) => {
+          areas.push(...resp);
+        });
     }
 
     let detail: {protectedAreaId: number, meters: number}[] = [];
@@ -54,8 +56,11 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
       applicationId: context.applicationId,
       details: JSON.stringify(detail),
       elapsedTime: end - start,
-      status: areas.length > 0 ? ApplicationAnalisysStatusEnum.FAILED : ApplicationAnalisysStatusEnum.APPROVED,
-      type: ApplicationAnalisysTypeEnum.BUFFER,      
+      status:
+        areas.length > 0
+          ? ApplicationAnalisysStatusEnum.FAILED
+          : ApplicationAnalisysStatusEnum.APPROVED,
+      type: ApplicationAnalisysTypeEnum.BUFFER,
     });
 
     return super.handle(context);

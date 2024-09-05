@@ -5,9 +5,6 @@ import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/prot
 
 @Module({
   controllers: [ProtectedAreaController],
-  providers: [
-    CreateProtectedAreaUseCase,
-    ProtectedAreaRepository,
-  ],
+  providers: [CreateProtectedAreaUseCase, ProtectedAreaRepository],
 })
 export class ProtectedAreaModule {}

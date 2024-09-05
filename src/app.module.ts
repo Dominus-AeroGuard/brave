@@ -15,15 +15,19 @@ import { ApplicationDocumentsModule } from './controllers/v1/application-documen
 import { DomainModule } from './domain/domain.module';
 import { ProtectedAreaModule } from './controllers/v1/protected-area/protected-area.module';
 import { NotificationModule } from './controllers/v1/notification/notification.module';
+import { RestModule } from './infra/http/rest.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     TerminusModule,
     HealthModule,
     AuthModule,
     PassportModule,
     AwsModule,
+    RestModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '60s' },

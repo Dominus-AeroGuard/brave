@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { JsonValue } from '@prisma/client/runtime/library';
 
 export class ApplicationDocumentType {
   @ApiProperty({ description: 'ID do tipo de documento', example: 1 })
@@ -38,7 +37,7 @@ export class ApplicationDocument {
   public path: string;
 
   @ApiProperty({ description: 'Dados do arquivo extraidos pela OCR' })
-  public data: JsonValue;
+  public data: object;
 
   @ApiProperty({
     description: 'Tipo do documento',
@@ -49,7 +48,7 @@ export class ApplicationDocument {
     id: number,
     originalName: string,
     path: string,
-    data: JsonValue,
+    data: Partial<{ key: string }>,
     type: ApplicationDocumentType,
   ) {
     this.id = id;

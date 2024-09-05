@@ -9,7 +9,7 @@ describe('BufferHandler', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        BufferHandler, 
+        BufferHandler,
         {
           provide: 'IApplicationAnalisysRepository',
           useValue: {
@@ -21,13 +21,13 @@ describe('BufferHandler', () => {
           useValue: {
             findByDistance: jest.fn(),
           },
-        },      
+        },
         {
           provide: 'IProtectedAreaTypeRepository',
           useValue: {
             findAll: jest.fn(),
           },
-        },      
+        },
       ],
     }).compile();
 
@@ -39,9 +39,8 @@ describe('BufferHandler', () => {
 
   describe('handle', () => {
     it('should execute buffer analysis', async () => {
-      const areaTypes = [
-      ];
-     
+      const areaTypes = [];
+
       const repositorySpy = {
         findAll: jest
           .spyOn(protectedAreaTypeRepository, 'findAll')
@@ -52,8 +51,8 @@ describe('BufferHandler', () => {
 
       const context = {
         applicationId: BigInt(0),
-        userId: 0
-      }
+        userId: 0,
+      };
 
       // Act
       const result = await service.handle(context);
@@ -61,5 +60,4 @@ describe('BufferHandler', () => {
       expect(result).toEqual(null);
     });
   });
-
 });

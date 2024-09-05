@@ -3,6 +3,16 @@ import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
 import { Application } from '../../../domain/entities';
 import { IApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
 
+export interface ListApplicationRequest {
+  organizationId: number;
+  id?: string;
+  pilotId?: number[];
+  statusId?: number[];
+  userId?: number[];
+  page?: number;
+  pageSize?: number;
+}
+
 @Injectable()
 export class ListApplicationUseCase {
   constructor(
@@ -11,21 +21,13 @@ export class ListApplicationUseCase {
   ) {}
 
   async execute(
-    params: Partial<{
-      id: string;
-      organizationId: number;
-      pilotId?: number[];
-      statusId?: number[];
-      userId?: number[];
-      page?: number;
-      pageSize?: number;
-    }>,
+    request: ListApplicationRequest,
   ): Promise<PaginableEntity<Application>> {
-    const result = await this.applicationRepository.findAll(params);
+    const result = await this.applicationRepository.findAll(request);
 
     return new PaginableEntity<Application>(result, {
-      page: params.page,
-      size: params.pageSize,
+      page: request.page,
+      size: request.pageSize,
     });
   }
 }

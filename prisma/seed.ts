@@ -22,7 +22,8 @@ async function protectedAreaTypeSeed() {
     {
       id: 3,
       name: 'MANANCIAL_PARA_ABASTECIMENTO',
-      description: 'Mananciais de captação de água para abastecimento de população',
+      description:
+        'Mananciais de captação de água para abastecimento de população',
       distance: 500,
       distance_drone: 20,
       active: true,
@@ -70,14 +71,14 @@ async function protectedAreaTypeSeed() {
         name: rest.name,
         description: rest.description,
         distance: rest.distance,
-        distance_drone: rest.distance_drone
+        distance_drone: rest.distance_drone,
       },
       create: {
         protected_area_type_id: id,
         name: rest.name,
         description: rest.description,
         distance: rest.distance,
-        distance_drone: rest.distance_drone
+        distance_drone: rest.distance_drone,
       },
     }),
   );
@@ -180,6 +181,47 @@ async function applicationAnalisysType() {
   console.log('\n\t✔  application_analisys_type has been seeded');
 }
 
+async function applicationDocumentType() {
+  const applicationDocumentTypes = [
+    {
+      id: 1,
+      description: 'RA',
+      active: true,
+    },
+    {
+      id: 2,
+      description: 'RO',
+      active: true,
+    },
+    {
+      id: 3,
+      description: 'KML',
+      active: true,
+    },
+  ];
+
+  const insertApplicationDocumentTypes = applicationDocumentTypes.map(
+    ({ id, ...rest }) =>
+      prisma.applicationDocumentType.upsert({
+        where: {
+          application_document_type_id: id,
+        },
+        update: {
+          description: rest.description,
+          active: rest.active,
+        },
+        create: {
+          description: rest.description,
+          active: rest.active,
+        },
+      }),
+  );
+
+  await Promise.all(insertApplicationDocumentTypes);
+
+  console.log('\n\t✔  application_document_type has been seeded');
+}
+
 async function applicationNotificationStatus() {
   const applicationNotificationStatus = [
     {
@@ -280,6 +322,7 @@ async function main() {
   await applicationAnalisysType();
   await protectedAreaTypeSeed();
   await applicationNotificationStatus();
+  await applicationDocumentType();
 }
 
 main()
