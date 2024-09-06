@@ -13,6 +13,9 @@ export class ApplicationAnalisys {
     name: string;
   }>;
 
+  @ApiProperty({ description: 'Detalhes da análise' })
+  details: string;
+  
   @ApiProperty({ description: 'Status atual do processamento' })
   status: ApplicationAnalisysStatusEnum;
 
@@ -23,12 +26,14 @@ export class ApplicationAnalisys {
     id: number,
     elapsedTime: number,
     typeName: string,
+    details: string,
     status: ApplicationAnalisysStatusEnum,
     createdAt: Date,
   ) {
     this.id = id;
     this.elapsedTime = elapsedTime;
     this.type = { name: typeName };
+    this.details = details;
     this.status = status;
     this.createdAt = createdAt;
   }

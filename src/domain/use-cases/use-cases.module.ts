@@ -6,6 +6,7 @@ import { CreateApplicationDocumentUseCase } from './application-document/create-
 import { CreateProtectedAreaUseCase } from './protected-area/create-protected-area.use-case';
 import { FindByDistanceProtectedAreaUseCase } from './protected-area/find-by-distance-protected-area.use-case';
 import { ListNotificationUseCase } from './notification/list-notification.use-case';
+import { NotificationBufferUseCase } from './notification/notification-buffer.use-case';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import { ListNotificationUseCase } from './notification/list-notification.use-ca
     CreateProtectedAreaUseCase,
     FindByDistanceProtectedAreaUseCase,
     ListNotificationUseCase,
+    NotificationBufferUseCase,
   ],
 })
 export class UseCasesModule {}

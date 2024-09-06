@@ -26,6 +26,7 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
 
     const areas: ProtectedArea[] = [];
     const protectedAreaTypes = await this.protectedAreaTypeRepository.findAll();
+
     for (const protectedAreaType of protectedAreaTypes) {
       await this.protectedAreaRepository
         .findByDistance(
@@ -38,10 +39,22 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
         });
     }
 
+    let detail: {protectedAreaId: number, meters: number}[] = [];
+    for (const finded_area of areas){
+      await this.protectedAreaRepository.getDistanceTo(
+        finded_area.id, 
+        Number(context.applicationId)
+      ).then( distance => {
+        detail.push({protectedAreaId: finded_area.id, meters: (finded_area.type.distance - distance[0].min)});
+      })
+    }       
+    
+
     const end = performance.now();
 
     await this.analisysRepository.create({
       applicationId: context.applicationId,
+      details: JSON.stringify(detail),
       elapsedTime: end - start,
       status:
         areas.length > 0

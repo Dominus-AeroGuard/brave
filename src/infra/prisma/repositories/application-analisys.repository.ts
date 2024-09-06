@@ -89,6 +89,7 @@ export class ApplicationAnalisysRepository
       analisy.application_analisys_id,
       analisy.elapsed_time,
       analisy.type.name,
+      analisy.details?.toString(),
       analisy.status as ApplicationAnalisysStatusEnum,
       analisy.created_at,
     );
@@ -160,6 +161,7 @@ export class ApplicationAnalisysRepository
           analisy.application_analisys_id,
           analisy.elapsed_time,
           analisy.type.name,
+          analisy.details?.toString(),
           analisy.status as ApplicationAnalisysStatusEnum,
           analisy.created_at,
         ),
