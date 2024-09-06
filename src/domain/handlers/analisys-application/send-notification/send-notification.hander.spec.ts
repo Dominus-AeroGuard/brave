@@ -5,6 +5,10 @@ import { IApplicationAnalisysRepository } from '../../../../infra/prisma/reposit
 import { ApplicationAnalisysStatusEnum } from '../../../../domain/enums/application-analisys-status.enum';
 import { ApplicationAnalisys } from '../../../../domain/entities/application-analisys.entity';
 import { ApplicationNotificationStatusEnum } from '../../../../domain/enums/application-notification-status.enum';
+import {
+  AlertLevelEnum,
+  AlertLevelEnumDescription,
+} from '../../../../domain/enums/alert-level.enum';
 
 describe('SendNotificationHandler', () => {
   let handler: SendNotificationHandler;
@@ -31,6 +35,10 @@ describe('SendNotificationHandler', () => {
     },
     application: {
       id: '1',
+    },
+    alertLevel: {
+      level: AlertLevelEnum.GRAVISSIMO,
+      description: AlertLevelEnumDescription[AlertLevelEnum.GRAVISSIMO],
     },
     status: {
       id: ApplicationNotificationStatusEnum.Pending,

@@ -2,7 +2,7 @@ import { ProtectedAreaType } from '../../../domain/entities/protected-area.entit
 import { ProtectedArea as ProtectedArea } from '../../../domain/entities';
 import { PrismaService } from '../prisma.service';
 import { Injectable } from '@nestjs/common';
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
 export interface IProtectedAreaRepository {
   create(
@@ -163,14 +163,10 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
     });
   }
 
-  async getDistanceTo(
-    id: number, 
-    applicationId: number
-  ): Promise<number> {    
-    return await this.prisma.$queryRaw<
-      number
-      >`select min(ST_Distance(p.geom::geography, a.geom::geography)) from "protected_area" as p, "application_area" as a where p.id = ${id} and a.application_id = ${applicationId}`;
-  };
+  async getDistanceTo(id: number, applicationId: number): Promise<number> {
+    return await this.prisma
+      .$queryRaw<number>`select min(ST_Distance(p.geom::geography, a.geom::geography)) from "protected_area" as p, "application_area" as a where p.id = ${id} and a.application_id = ${applicationId}`;
+  }
 
   async getAsGeoJson(ids: number[]): Promise<string> {
     // const where = ids.map(item => item).join(',');
@@ -178,7 +174,7 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
       .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select p.id, p.geom from "protected_area" as p where p.id in (${Prisma.join(ids)})) as t`;
 
     return result[0]['json_build_object'];
-  };
+  }
 
   async getWithBufferAsGeoJson(ids: number[]): Promise<string> {
     // const where = ids.map(item => item).join(',');
@@ -186,7 +182,7 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
       .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select p.id, ST_Buffer(p.geom::geography, pt.distance) from "protected_area" as p inner join "protected_area_type" as pt on p.protected_area_type_id = pt.protected_area_type_id where p.id in (${Prisma.join(ids)})) as t`;
 
     return result[0]['json_build_object'];
-  };
+  }
 
   async removeOne(organizationId: number, id: number): Promise<void> {
     await this.prisma.protectedArea.delete({

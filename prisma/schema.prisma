@@ -132,7 +132,7 @@ model ApplicationDocumentData {
   id          BigInt              @id @default(autoincrement())
   document_id Int
   key         String              @db.VarChar(100)
-  value       String              @db.VarChar(200)
+  value       String?             @db.VarChar(200)
   revision    Int                 @default(1)
   created_by  Int
   created_at  DateTime            @default(now())
@@ -198,11 +198,19 @@ model ApplicationAnalisysType {
   @@map("application_analisys_type")
 }
 
+enum NotificationAlertLevel {
+  GRAVISSIMO
+  GRAVE
+  MODERADO
+  LEVE
+}
+
 model ApplicationNotification {
   application_notification_id BigInt                         @id @default(autoincrement())
   application_id              BigInt                         @db.BigInt
   created_at                  DateTime                       @default(now())
   fiscal_id                   Int
+  alert_level                 NotificationAlertLevel         @default(LEVE)
   application                 Application                    @relation(fields: [application_id], references: [application_id])
   fiscal                      User                           @relation(fields: [fiscal_id], references: [user_id])
   analisys                    ApplicationAnalisys[]

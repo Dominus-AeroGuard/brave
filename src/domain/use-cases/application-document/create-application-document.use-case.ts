@@ -138,15 +138,13 @@ export class CreateApplicationDocumentUseCase {
     return Object.values(data)
       .filter((value) => !!value)
       .reduce((prev, curr) => {
-        Object.keys(curr)
-          .filter((key) => !!curr[key])
-          .map((key) => {
-            prev.push({
-              key,
-              value: curr[key] || '',
-              created_by: 1,
-            });
+        Object.keys(curr).map((key) => {
+          prev.push({
+            key,
+            value: curr[key] || '',
+            created_by: 1, // TODO: pegar o usuário do context holder
           });
+        });
 
         return prev;
       }, []);

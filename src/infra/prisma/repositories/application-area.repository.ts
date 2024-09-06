@@ -82,7 +82,7 @@ export class ApplicationAreaRepository implements IApplicationAreaRepository {
       .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select id, geom from "application_area" as a where a.application_id = ${applicationId}) as t`;
 
     return result[0]['json_build_object'];
-  };
+  }
 
   async removeOne(id: number): Promise<void> {
     await this.prisma.applicationArea.delete({

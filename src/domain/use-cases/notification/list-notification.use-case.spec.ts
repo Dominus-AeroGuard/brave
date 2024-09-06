@@ -5,6 +5,10 @@ import {
 } from './list-notification.use-case';
 import { IApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
 import { ApplicationNotificationStatusEnum } from '../../enums/application-notification-status.enum';
+import {
+  AlertLevelEnum,
+  AlertLevelEnumDescription,
+} from '../../enums/alert-level.enum';
 
 describe('ListNotificationUseCase', () => {
   let useCase: ListNotificationUseCase;
@@ -42,6 +46,11 @@ describe('ListNotificationUseCase', () => {
           },
           application: {
             id: '1',
+          },
+
+          alertLevel: {
+            level: AlertLevelEnum.GRAVISSIMO,
+            description: AlertLevelEnumDescription[AlertLevelEnum.GRAVISSIMO],
           },
           status: {
             id: ApplicationNotificationStatusEnum.Pending,

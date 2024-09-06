@@ -39,16 +39,17 @@ export class BufferHandler extends AbstractHandler<AnalisysApplicationContext> {
         });
     }
 
-    let detail: {protectedAreaId: number, meters: number}[] = [];
-    for (const finded_area of areas){
-      await this.protectedAreaRepository.getDistanceTo(
-        finded_area.id, 
-        Number(context.applicationId)
-      ).then( distance => {
-        detail.push({protectedAreaId: finded_area.id, meters: (finded_area.type.distance - distance[0].min)});
-      })
-    }       
-    
+    const detail: { protectedAreaId: number; meters: number }[] = [];
+    for (const finded_area of areas) {
+      await this.protectedAreaRepository
+        .getDistanceTo(finded_area.id, Number(context.applicationId))
+        .then((distance) => {
+          detail.push({
+            protectedAreaId: finded_area.id,
+            meters: finded_area.type.distance - distance[0].min,
+          });
+        });
+    }
 
     const end = performance.now();
 

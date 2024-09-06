@@ -78,8 +78,14 @@ export class NotificationController {
   @ApiParam({ name: 'id', type: BigInt, example: 1 })
   @ApiParam({ name: 'analysisId', type: 'number', example: 1 })
   @ApiOkResponse({ type: AnalysisBuffer })
-  findAnalisyBuffer(@Param('id') id: string, @Param('analysisId') analysisId: string) {
-    return this.notificationBufferUseCase.execute(BigInt(id), Number(analysisId));
+  findAnalisyBuffer(
+    @Param('id') id: string,
+    @Param('analysisId') analysisId: string,
+  ) {
+    return this.notificationBufferUseCase.execute(
+      BigInt(id),
+      Number(analysisId),
+    );
   }
 
   @Patch(':id')
