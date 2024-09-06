@@ -15,7 +15,7 @@ export class ApplicationAnalisys {
 
   @ApiProperty({ description: 'Detalhes da análise' })
   details: string;
-  
+
   @ApiProperty({ description: 'Status atual do processamento' })
   status: ApplicationAnalisysStatusEnum;
 

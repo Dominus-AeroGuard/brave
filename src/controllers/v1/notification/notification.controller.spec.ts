@@ -5,6 +5,10 @@ import { ListNotificationUseCase } from '../../../domain/use-cases/notification/
 import { ApplicationNotificationStatusEnum } from '../../../domain/enums/application-notification-status.enum';
 import { ListNotificationRequest } from './models/list-notification.model';
 import { NotificationBufferUseCase } from '../../../domain/use-cases/notification/notification-buffer.use-case';
+import {
+  AlertLevelEnum,
+  AlertLevelEnumDescription,
+} from '../../../domain/enums/alert-level.enum';
 
 describe('NotificationController', () => {
   let controller: NotificationController;
@@ -20,6 +24,10 @@ describe('NotificationController', () => {
     },
     application: {
       id: '1',
+    },
+    alertLevel: {
+      level: AlertLevelEnum.GRAVISSIMO,
+      description: AlertLevelEnumDescription[AlertLevelEnum.GRAVISSIMO],
     },
     status: {
       id: ApplicationNotificationStatusEnum.Pending,

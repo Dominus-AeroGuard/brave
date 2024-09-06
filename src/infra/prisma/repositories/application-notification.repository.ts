@@ -131,6 +131,7 @@ export class ApplicationNotificationRepository
         notification.events[0].status.id,
         notification.events[0].status.description,
       ),
+      notification.alert_level,
       notification.analisys.map(
         (analisy) =>
           new ApplicationAnalisys(
@@ -242,6 +243,7 @@ export class ApplicationNotificationRepository
             notification.events[0].status.id,
             notification.events[0].status.description,
           ),
+          notification.alert_level,
           notification.analisys.map(
             (analisy) =>
               new ApplicationAnalisys(
