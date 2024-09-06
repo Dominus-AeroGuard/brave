@@ -4,11 +4,13 @@ import { IApplicationNotificationRepository } from '../../../infra/prisma/reposi
 import { ListNotificationUseCase } from '../../../domain/use-cases/notification/list-notification.use-case';
 import { ApplicationNotificationStatusEnum } from '../../../domain/enums/application-notification-status.enum';
 import { ListNotificationRequest } from './models/list-notification.model';
+import { NotificationBufferUseCase } from '../../../domain/use-cases/notification/notification-buffer.use-case';
 
 describe('NotificationController', () => {
   let controller: NotificationController;
   let notificationRepository: IApplicationNotificationRepository;
   let listNotificationUseCase: ListNotificationUseCase;
+  let notificationBufferUseCase: NotificationBufferUseCase;
   const notification = {
     id: '1',
     fiscal: {
@@ -43,6 +45,12 @@ describe('NotificationController', () => {
             update: jest.fn(),
           },
         },
+        {
+          provide: NotificationBufferUseCase,
+          useValue: {
+            execute: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -53,6 +61,9 @@ describe('NotificationController', () => {
     );
     listNotificationUseCase = module.get<ListNotificationUseCase>(
       ListNotificationUseCase,
+    );
+    notificationBufferUseCase = module.get<NotificationBufferUseCase>(
+      NotificationBufferUseCase,
     );
   });
 

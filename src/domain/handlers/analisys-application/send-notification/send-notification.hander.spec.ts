@@ -16,6 +16,7 @@ describe('SendNotificationHandler', () => {
       id: 1,
       elapsedTime: 1200,
       type: { name: 'WEATHER' },
+      details: '',
       status,
       createdAt: new Date(),
     },

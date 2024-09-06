@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
-import { AnalysisBuffer } from 'src/domain/entities/analysis-buffer.entity';
-import { ApplicationAreaRepository } from 'src/infra/prisma/repositories/application-area.repository';
-import { ProtectedAreaRepository } from 'src/infra/prisma/repositories/protected-area.repository';
+import { AnalysisBuffer } from '../../../domain/entities/analysis-buffer.entity';
+import { ApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
+import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
 
 @Injectable()
 export class NotificationBufferUseCase {
