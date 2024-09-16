@@ -36,28 +36,29 @@ export interface IApplicationDocumentRepository {
 
 @Injectable()
 export class ApplicationDocumentRepository
+  extends PrismaService
   implements IApplicationDocumentRepository
 {
   constructor(
-    private prisma: PrismaService,
     @Inject('IApplicationDocumentDataRepository')
     private documentDataRepository: IApplicationDocumentDataRepository,
-  ) {}
+  ) {
+    super();
+  }
 
   async findOne(
     id: number,
     applicationId?: number,
   ): Promise<ApplicationDocument> {
-    const applicationDocument =
-      await this.prisma.applicationDocument.findUnique({
-        where: {
-          application_document_id: id,
-          application_id: applicationId,
-        },
-        include: {
-          type: true,
-        },
-      });
+    const applicationDocument = await this.applicationDocument.findUnique({
+      where: {
+        application_document_id: id,
+        application_id: applicationId,
+      },
+      include: {
+        type: true,
+      },
+    });
 
     return this.buildApplicationDocumentEntity(applicationDocument);
   }
@@ -77,7 +78,7 @@ export class ApplicationDocumentRepository
       applicationId: number;
     }>,
   ): Promise<ApplicationDocument> {
-    const result = await this.prisma.applicationDocument.create({
+    const result = await this.applicationDocument.create({
       data: {
         path: data.path,
         original_name: data.originalName,
@@ -108,7 +109,7 @@ export class ApplicationDocumentRepository
       typeId: number;
     }>,
   ): Promise<ApplicationDocument> {
-    const applicationDocument = await this.prisma.applicationDocument.update({
+    const applicationDocument = await this.applicationDocument.update({
       where: {
         application_document_id: id,
         application_id: applicationId,
@@ -125,7 +126,7 @@ export class ApplicationDocumentRepository
   }
 
   async remove(id: number, applicationId: number): Promise<void> {
-    await this.prisma.applicationDocument.delete({
+    await this.applicationDocument.delete({
       where: {
         application_document_id: id,
         application_id: applicationId,
@@ -134,7 +135,7 @@ export class ApplicationDocumentRepository
   }
 
   async findAll(applicationId: string): Promise<ApplicationDocument[]> {
-    const documents = await this.prisma.applicationDocument.findMany({
+    const documents = await this.applicationDocument.findMany({
       where: {
         application_id: Number(applicationId),
       },
