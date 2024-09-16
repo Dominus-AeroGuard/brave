@@ -19,3 +19,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiO
     "id": 2
   }
 }
+
+###
+
+GET http://localhost:3000/v1/notifications/:id/buffer/:analysisId
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE

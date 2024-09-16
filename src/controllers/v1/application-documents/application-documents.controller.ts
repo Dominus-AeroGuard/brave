@@ -7,8 +7,9 @@ import {
   Inject,
   Param,
   ParseFilePipeBuilder,
+  Patch,
   Post,
-  Put,
+  Request,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -29,10 +30,11 @@ import { CreateApplicationDocumentRequest } from './models/create-application-do
 import { SchemaValidationPipe } from '../../../pipes/schema-validation.pipe';
 import { JwtAuthGuard } from '../../../auth/auth.guard';
 import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
-import { UpdateApplicationDocumentRequest } from './models/update-application-document.model';
 import { ErrorRequestDto } from '../../dtos/error-request.dto';
 import { ValidationRequestDto } from '../../dtos/validation-request.dto';
 import { ApplicationDocument } from '../../../domain/entities/application-document.entity';
+import { UpdateDocumentDataRequest } from './models/update-document-data.model';
+import { UpdateDocumentDataUseCase } from '../../../domain/use-cases/application-document/update-document-data.use-case';
 
 @ApiTags('documents')
 @Controller('v1/applications/:applicationId/documents')
@@ -44,6 +46,8 @@ export class ApplicationDocumentsController {
   constructor(
     @Inject(CreateApplicationDocumentUseCase)
     private createApplicationDocument: CreateApplicationDocumentUseCase,
+    @Inject(UpdateDocumentDataUseCase)
+    private updateDocumentDataUseCase: UpdateDocumentDataUseCase,
     @Inject('IApplicationDocumentRepository')
     private applicationDocumentRepository: IApplicationDocumentRepository,
   ) {}
@@ -97,19 +101,21 @@ export class ApplicationDocumentsController {
     );
   }
 
-  @Put(':documentId')
+  @Patch(':documentId')
   @ApiOkResponse({ type: ApplicationDocument })
   update(
+    @Request() { user },
     @Body(new SchemaValidationPipe())
-    applicationDocument: UpdateApplicationDocumentRequest,
+    documentData: UpdateDocumentDataRequest,
     @Param('applicationId') applicationId: number,
     @Param('documentId') documentId: number,
   ) {
-    return this.applicationDocumentRepository.update(
-      Number(documentId),
-      Number(applicationId),
-      applicationDocument,
-    );
+    return this.updateDocumentDataUseCase.execute({
+      documentId: Number(documentId),
+      applicationId: Number(applicationId),
+      createdBy: user.userId,
+      data: documentData.data,
+    });
   }
 
   @Delete(':documentId')

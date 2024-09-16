@@ -3,10 +3,13 @@ import { ApplicationDocumentsController } from './application-documents.controll
 import { CreateApplicationDocumentUseCase } from '../../../domain/use-cases/application-document/create-application-document.use-case';
 import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
 import { CreateApplicationDocumentRequest } from './models/create-application-document.model';
+import { UpdateDocumentDataUseCase } from '../../../domain/use-cases/application-document/update-document-data.use-case';
 
 describe('ApplicationDocumentsController', () => {
   let controller: ApplicationDocumentsController;
   let useCase: CreateApplicationDocumentUseCase;
+  let updateDataUseCase: UpdateDocumentDataUseCase;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let repository: IApplicationDocumentRepository;
 
   beforeEach(async () => {
@@ -15,6 +18,12 @@ describe('ApplicationDocumentsController', () => {
       providers: [
         {
           provide: CreateApplicationDocumentUseCase,
+          useValue: {
+            execute: jest.fn(),
+          },
+        },
+        {
+          provide: UpdateDocumentDataUseCase,
           useValue: {
             execute: jest.fn(),
           },
@@ -37,6 +46,9 @@ describe('ApplicationDocumentsController', () => {
     );
     repository = module.get<IApplicationDocumentRepository>(
       'IApplicationDocumentRepository',
+    );
+    updateDataUseCase = module.get<UpdateDocumentDataUseCase>(
+      UpdateDocumentDataUseCase,
     );
   });
 
@@ -85,11 +97,11 @@ describe('ApplicationDocumentsController', () => {
       // Arrange
       const applicationId = 123;
       const documentId = 456;
-      const updatedDocument = {
-        typeId: 1,
+      const documentData = {
+        data: [{ key: 'nome_usuario', value: 'nome' }],
       };
       const applicationDocument = {
-        id: documentId,
+        id: 63,
         originalName: 'example.txt',
         path: 'https://aeroguard-ra.s3.us-east-1.amazonaws.com/fa742fe4-73d3-49f1-9ec2-54f7b5d406ee.txt',
         data: {},
@@ -101,22 +113,24 @@ describe('ApplicationDocumentsController', () => {
       };
 
       jest
-        .spyOn(repository, 'update')
+        .spyOn(updateDataUseCase, 'execute')
         .mockResolvedValueOnce(applicationDocument);
 
       // Act
       const response = await controller.update(
-        updatedDocument,
+        { user: { userId: 1 } },
+        documentData,
         applicationId,
         documentId,
       );
 
       // Assert
-      expect(repository.update).toHaveBeenCalledWith(
-        Number(documentId),
-        Number(applicationId),
-        updatedDocument,
-      );
+      expect(updateDataUseCase.execute).toHaveBeenCalledWith({
+        documentId: Number(documentId),
+        applicationId: Number(applicationId),
+        createdBy: 1,
+        data: documentData.data,
+      });
       expect(response).toBe(applicationDocument);
     });
   });

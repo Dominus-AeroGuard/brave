@@ -25,15 +25,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiO
 
 ###
 
-PUT http://localhost:3000/v1/applications/4/documents/103
+PATCH http://localhost:3000/v1/applications/2/documents/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 Content-Type: application/json
 
 {
-  "data": {
-    "key": "value",
-    "key2": "value2"
-  }
+  "data": [
+    {
+      "key": "numero_receita",
+      "value": "00222024 140202"
+    },
+    {
+      "key": "cultura",
+      "value": "CANA-DE-AÇÚCAR"
+    }
+  ]
 }
 
 ###
