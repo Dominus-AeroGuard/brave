@@ -20,12 +20,10 @@ export class SendNotificationHandler extends AbstractHandler<AnalisysApplication
   }
 
   public async handle(context: AnalisysApplicationContext) {
-    const analisys = await this.analisysRepository.findAll(
-      context.applicationId,
-      {
-        status: [ApplicationAnalisysStatusEnum.FAILED],
-      },
-    );
+    const analisys = await this.analisysRepository.findAll({
+      application_id: context.applicationId,
+      status: [ApplicationAnalisysStatusEnum.FAILED],
+    });
 
     if (analisys.length) {
       await this.notificationRepository.create({

@@ -66,9 +66,9 @@ export class UpdateDocumentDataUseCase {
       DocumentKeysEnum[document.type.application_document_type_id];
 
     if (!keysEnum) {
-      throw new UnprocessableEntityException({
-        message: `Documento tipo ${document.type.description} não tem valores cadastradados que permitam atualização`,
-      });
+      throw new UnprocessableEntityException(
+        `Documento tipo ${document.type.description} não tem valores cadastradados que permitam atualização`,
+      );
     }
 
     const notAllowedKeysForDocument = request.data.filter(
@@ -76,9 +76,9 @@ export class UpdateDocumentDataUseCase {
     );
 
     if (notAllowedKeysForDocument.length) {
-      throw new UnprocessableEntityException({
-        message: `As chaves ${notAllowedKeysForDocument.map(({ key }) => key).join(',')} não são permitidas para o documento ${document.type.description}`,
-      });
+      throw new UnprocessableEntityException(
+        `As chaves ${notAllowedKeysForDocument.map(({ key }) => key).join(',')} não são permitidas para o documento ${document.type.description}`,
+      );
     }
   }
 }

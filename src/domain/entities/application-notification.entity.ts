@@ -49,8 +49,11 @@ export class ApplicationNotification {
   @ApiProperty()
   alertLevel: ApplicationNotificationAlertLevel;
 
-  @ApiProperty({ description: 'Lista das analises realizadas na aplicação' })
-  analisys: ApplicationAnalisys[];
+  @ApiProperty({
+    description: 'Lista das analises realizadas na aplicação',
+    type: [ApplicationAnalisys],
+  })
+  analisys: Array<ApplicationAnalisys>;
 
   constructor(
     id: bigint,

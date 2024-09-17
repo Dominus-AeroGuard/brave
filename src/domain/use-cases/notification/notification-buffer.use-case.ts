@@ -1,8 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
 import { AnalysisBuffer } from '../../../domain/entities/analysis-buffer.entity';
 import { ApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
 import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
+import { ApplicationAnalisysTypeEnum } from '../../../domain/enums/application-analisys-type.enum';
+import { AnalisysBufferDetail } from '../../../domain/entities/application-analisys.entity';
 
 @Injectable()
 export class NotificationBufferUseCase {
@@ -21,25 +27,32 @@ export class NotificationBufferUseCase {
   ): Promise<AnalysisBuffer> {
     const notification =
       await this.notificationRepository.findOne(notificationId);
-    const analysis = await notification.analisys.filter(
-      (a) => a.id == analysisId,
+
+    const analysis = await notification.analisys.find(
+      (a) =>
+        a.id == analysisId &&
+        ApplicationAnalisysTypeEnum[a.type.name] ===
+          ApplicationAnalisysTypeEnum.BUFFER,
     );
+
+    if (!analysis)
+      throw new UnprocessableEntityException(
+        'Não existe análise para essa notificação',
+      );
 
     const application_id = notification.application.id;
     const applicationGEOJSON =
       await this.applicationAreaRepository.getAsGeoJson(Number(application_id));
-
-    const details = analysis[0].details.toString();
-    const detailsArray = JSON.parse(details);
+    const details = analysis.details as Array<AnalisysBufferDetail>;
 
     const protectedAreaGEOJSON =
       await this.protectedAreaRepository.getAsGeoJson(
-        detailsArray.map((item) => item.protectedAreaId),
+        details.map((item) => item.protectedAreaId),
       );
 
     const protectedAreaBufferGEOJSON =
       await this.protectedAreaRepository.getWithBufferAsGeoJson(
-        detailsArray.map((item) => item.protectedAreaId),
+        details.map((item) => item.protectedAreaId),
       );
 
     return new AnalysisBuffer(

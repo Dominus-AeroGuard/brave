@@ -14,7 +14,6 @@ describe('NotificationController', () => {
   let controller: NotificationController;
   let notificationRepository: IApplicationNotificationRepository;
   let listNotificationUseCase: ListNotificationUseCase;
-  let notificationBufferUseCase: NotificationBufferUseCase;
   const notification = {
     id: '1',
     fiscal: {
@@ -70,9 +69,6 @@ describe('NotificationController', () => {
     listNotificationUseCase = module.get<ListNotificationUseCase>(
       ListNotificationUseCase,
     );
-    notificationBufferUseCase = module.get<NotificationBufferUseCase>(
-      NotificationBufferUseCase,
-    );
   });
 
   it('should be defined', () => {
@@ -122,30 +118,6 @@ describe('NotificationController', () => {
     expect(response).toBe(notification);
     expect(repositorySpy.findOne).toHaveBeenCalledWith(BigInt(123));
     expect(repositorySpy.findOne).toHaveBeenCalled();
-  });
-
-  it('findAnalisyBuffer', async () => {
-    const useCaseResponse = {
-      id: '1',
-      analysisId: 10,
-      applicationAreaGeoJSON: '',
-      protectedAreaGeoJSON: '',
-      protectedAreaBufferGeoJSON: '',
-    };
-
-    const useCaseSpy = {
-      execute: jest
-        .spyOn(notificationBufferUseCase, 'execute')
-        .mockResolvedValue(useCaseResponse),
-    };
-
-    // Act
-    const response = await controller.findAnalisyBuffer('1', '10');
-
-    // Assert
-    expect(response).toBe(useCaseResponse);
-    expect(useCaseSpy.execute).toHaveBeenCalledWith(1n, 10);
-    expect(useCaseSpy.execute).toHaveBeenCalled();
   });
 
   it('update', async () => {
