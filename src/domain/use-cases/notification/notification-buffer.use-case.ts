@@ -3,10 +3,10 @@ import {
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { ApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
+import { ApplicationNotificationRepository } from '../../../resources/infra/prisma/repositories/application-notification.repository';
 import { AnalysisBuffer } from '../../../domain/entities/analysis-buffer.entity';
-import { ApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
-import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
+import { ApplicationAreaRepository } from '../../../resources/infra/prisma/repositories/application-area.repository';
+import { ProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 import { ApplicationAnalisysTypeEnum } from '../../../domain/enums/application-analisys-type.enum';
 import { AnalisysBufferDetail } from '../../../domain/entities/application-analisys.entity';
 

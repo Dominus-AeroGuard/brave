@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AnalysisController } from './analysis.controller';
-import { IApplicationAnalisysRepository } from '../../../../infra/prisma/repositories/application-analisys.repository';
+import { IApplicationAnalisysRepository } from '../../../../resources/infra/prisma/repositories/application-analisys.repository';
 import { NotificationBufferUseCase } from '../../../../domain/use-cases/notification/notification-buffer.use-case';
 
 describe('AnalysisController', () => {

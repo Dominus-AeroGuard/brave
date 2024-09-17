@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../infra/prisma/prisma.service';
+import { PrismaService } from '../prisma.service';
 
-import { ApplicationAnalisys } from '../../../domain/entities/application-analisys.entity';
-import { ApplicationAnalisysTypeEnum } from '../../../domain/enums/application-analisys-type.enum';
-import { ApplicationAnalisysStatusEnum } from '../../../domain/enums/application-analisys-status.enum';
+import { ApplicationAnalisys } from '../../../../domain/entities/application-analisys.entity';
+import { ApplicationAnalisysTypeEnum } from '../../../../domain/enums/application-analisys-type.enum';
+import { ApplicationAnalisysStatusEnum } from '../../../../domain/enums/application-analisys-status.enum';
 
 export interface IApplicationAnalisysRepository {
   create(

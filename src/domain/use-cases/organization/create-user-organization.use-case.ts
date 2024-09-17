@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserOrganization } from '../../../domain/entities';
-import { IUserOrganizationRepository } from '../../../infra/prisma/repositories/user-organization.repository';
+import { IUserOrganizationRepository } from '../../../resources/infra/prisma/repositories/user-organization.repository';
 
 export interface CreatUserOrganizationRequest {
   organization: {

@@ -3,7 +3,7 @@ import {
   CreatUserOrganizationRequest,
   CreateUserOrganizationUseCase,
 } from './create-user-organization.use-case';
-import { IUserOrganizationRepository } from '../../../infra/prisma/repositories/user-organization.repository';
+import { IUserOrganizationRepository } from '../../../resources/infra/prisma/repositories/user-organization.repository';
 
 describe('CreateUserOrganizationUseCase', () => {
   let useCase: CreateUserOrganizationUseCase;

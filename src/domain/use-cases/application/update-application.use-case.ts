@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Application } from '../../../domain/entities';
-import { IApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
+import { IApplicationRepository } from '../../../resources/infra/prisma/repositories/application.repository';
 
 @Injectable()
 export class UpdateApplicationUseCase {

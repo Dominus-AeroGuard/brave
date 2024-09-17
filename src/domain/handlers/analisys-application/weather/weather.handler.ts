@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AbstractHandler } from '../../abstract.handler';
 import { AnalisysApplicationContext } from '../analisys-application.context';
-import { IApplicationAnalisysRepository } from '../../../../infra/prisma/repositories/application-analisys.repository';
+import { IApplicationAnalisysRepository } from '../../../../resources/infra/prisma/repositories/application-analisys.repository';
 import { ApplicationAnalisysStatusEnum } from '../../../../domain/enums/application-analisys-status.enum';
 import { ApplicationAnalisysTypeEnum } from '../../../../domain/enums/application-analisys-type.enum';
 

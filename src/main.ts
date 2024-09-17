@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { PrismaExceptionFilter } from './filters/prisma-exception/prisma-exception.filter';
+import { PrismaExceptionFilter } from './resources/filters/prisma-exception/prisma-exception.filter';
 import { Meta, PaginableEntity } from './controllers/dtos/paginable.dto';
 import {
   AnalisysBufferDetail,

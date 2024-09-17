@@ -1,4 +1,4 @@
-import { ApplicationArea as ApplicationArea } from '../../../domain/entities';
+import { ApplicationArea as ApplicationArea } from '../../../../domain/entities';
 import { PrismaService } from '../prisma.service';
 import { Injectable } from '@nestjs/common';
 

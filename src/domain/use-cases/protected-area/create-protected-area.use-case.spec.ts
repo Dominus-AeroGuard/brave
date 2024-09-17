@@ -3,7 +3,7 @@ import {
   CreateProtectedAreaRequest,
   CreateProtectedAreaUseCase,
 } from './create-protected-area.use-case';
-import { IProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
+import { IProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 import { Readable } from 'stream';
 
 describe('CreateUserOrganizationUseCase', () => {

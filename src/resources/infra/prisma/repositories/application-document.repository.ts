@@ -1,7 +1,7 @@
 import {
   ApplicationDocument,
   ApplicationDocumentType,
-} from '../../../domain/entities/application-document.entity';
+} from '../../../../domain/entities/application-document.entity';
 import { PrismaService } from '../prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { IApplicationDocumentDataRepository } from './application-document-data.repository';

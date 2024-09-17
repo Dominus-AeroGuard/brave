@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { IProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
+import { IProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 import { FindByDistanceProtectedAreaUseCase } from './find-by-distance-protected-area.use-case';
 
 describe('FindByDistanceProtectedAreaUseCase', () => {

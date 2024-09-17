@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationController } from './notification.controller';
-import { IApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
+import { IApplicationNotificationRepository } from '../../../resources/infra/prisma/repositories/application-notification.repository';
 import { ListNotificationUseCase } from '../../../domain/use-cases/notification/list-notification.use-case';
 import { ApplicationNotificationStatusEnum } from '../../../domain/enums/application-notification-status.enum';
 import { ListNotificationRequest } from './models/list-notification.model';

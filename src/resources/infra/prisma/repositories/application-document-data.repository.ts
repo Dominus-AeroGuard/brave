@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ApplicationDocumentData } from '../../../domain/entities/application-document-data.entity';
+import { ApplicationDocumentData } from '../../../../domain/entities/application-document-data.entity';
 import { ApplicationDocumentData as DocumentDataModel } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 

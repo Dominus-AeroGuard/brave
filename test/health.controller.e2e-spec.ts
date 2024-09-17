@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
-import { PrismaService } from '../src/infra/prisma/prisma.service';
+import { PrismaService } from '../src/resources/infra/prisma/prisma.service';
 
 describe('HealthController', () => {
   let app: INestApplication;

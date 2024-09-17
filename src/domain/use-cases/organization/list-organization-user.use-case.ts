@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
 import { UserOrganization } from '../../../domain/entities';
-import { IUserOrganizationRepository } from '../../../infra/prisma/repositories/user-organization.repository';
+import { IUserOrganizationRepository } from '../../../resources/infra/prisma/repositories/user-organization.repository';
 
 @Injectable()
 export class ListOrganizationUserUseCase {

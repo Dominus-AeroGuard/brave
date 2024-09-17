@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ApplicationAnalisysStatusEnum } from '../enums/application-analisys-status.enum';
-import parseJson from '../../utils/parse-json.util';
+import parseJson from '../../resources/utils/parse-json.util';
 
 export class AnalisysBufferDetail {
   @ApiProperty({ description: 'Identificador da area de proteção' })

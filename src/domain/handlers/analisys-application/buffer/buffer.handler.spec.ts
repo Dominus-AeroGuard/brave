@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BufferHandler } from './buffer.handler';
-import { IProtectedAreaTypeRepository } from '../../../../infra/prisma/repositories/protected-area-type.repository';
+import { IProtectedAreaTypeRepository } from '../../../../resources/infra/prisma/repositories/protected-area-type.repository';
 
 describe('BufferHandler', () => {
   let service: BufferHandler;

@@ -3,7 +3,7 @@ import {
   ListNotificationRequest,
   ListNotificationUseCase,
 } from './list-notification.use-case';
-import { IApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
+import { IApplicationNotificationRepository } from '../../../resources/infra/prisma/repositories/application-notification.repository';
 import { ApplicationNotificationStatusEnum } from '../../enums/application-notification-status.enum';
 import {
   AlertLevelEnum,

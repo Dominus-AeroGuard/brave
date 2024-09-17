@@ -4,8 +4,8 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { ApplicationDocumentDataRepository } from '../../../infra/prisma/repositories/application-document-data.repository';
-import { ApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
+import { ApplicationDocumentDataRepository } from '../../../resources/infra/prisma/repositories/application-document-data.repository';
+import { ApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { DocumentKeysEnum } from '../../../domain/enums/document-data-keys.enum';
 import { ApplicationDocument } from '../../../domain/entities/application-document.entity';
 

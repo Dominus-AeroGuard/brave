@@ -14,12 +14,12 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../../../auth/auth.guard';
+import { JwtAuthGuard } from '../../../../resources/auth/auth.guard';
 import { ErrorRequestDto } from '../../../../controllers/dtos/error-request.dto';
 import { ValidationRequestDto } from '../../../../controllers/dtos/validation-request.dto';
 import { AnalysisBuffer } from '../../../../domain/entities/analysis-buffer.entity';
 import { NotificationBufferUseCase } from '../../../../domain/use-cases/notification/notification-buffer.use-case';
-import { ApplicationAnalisysRepository } from '../../../../infra/prisma/repositories/application-analisys.repository';
+import { ApplicationAnalisysRepository } from '../../../../resources/infra/prisma/repositories/application-analisys.repository';
 import { ListAnalysisRequest } from '../models/list-analysis.model';
 import { PaginableEntity } from '../../../../controllers/dtos/paginable.dto';
 import { ApplicationAnalisys } from '../../../../domain/entities/application-analisys.entity';

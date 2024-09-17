@@ -13,11 +13,11 @@ import {
 } from '@nestjs/common';
 import { CreateApplicationRequest } from './models/create-application.model';
 import { UpdateApplicationRequest } from './models/update-application.model';
-import { JwtAuthGuard } from '../../../auth/auth.guard';
-import { SchemaValidationPipe } from '../../../pipes/schema-validation.pipe';
+import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
+import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import { CreateApplicationUseCase } from '../../../domain/use-cases/application/create-application.use-case';
 import { UpdateApplicationUseCase } from '../../../domain/use-cases/application/update-application.use-case';
-import { ApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
+import { ApplicationRepository } from '../../../resources/infra/prisma/repositories/application.repository';
 import { ListApplicationUseCase } from '../../../domain/use-cases/application/list-application.use-case';
 import {
   ApiBadRequestResponse,

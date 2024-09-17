@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ProtectedAreaTypeEnum } from '../../../domain/enums/protected-area-type.enum';
-import { IProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
+import { IProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 import { DOMParser } from '@xmldom/xmldom';
 
 export interface CreateProtectedAreaRequest {

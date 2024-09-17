@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
 import { Application } from '../../../domain/entities';
-import { IApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
+import { IApplicationRepository } from '../../../resources/infra/prisma/repositories/application.repository';
 
 export interface ListApplicationRequest {
   organizationId: number;

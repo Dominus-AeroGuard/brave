@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
-import { ApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
+import { ApplicationNotificationRepository } from '../../../resources/infra/prisma/repositories/application-notification.repository';
 import { ApplicationNotification } from '../../../domain/entities/application-notification.entity';
 
 export interface ListNotificationRequest {

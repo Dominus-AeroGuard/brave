@@ -3,13 +3,13 @@ import {
   ApplicationDocumentRequest,
   CreateApplicationDocumentUseCase,
 } from './create-application-document.use-case';
-import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
-import { AwsService } from '../../../infra/aws/aws.service';
+import { IApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
+import { AwsService } from '../../../resources/infra/aws/aws.service';
 import { ApplicationDocumentType } from '../../enums/application-document-type.enum';
 import { Readable } from 'stream';
 import { ApplicationDocumentService } from '../../services/application-document/application-document.service';
-import { IApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
-import { OcrService } from '../../../infra/http/ocr/ocr.service';
+import { IApplicationAreaRepository } from '../../../resources/infra/prisma/repositories/application-area.repository';
+import { OcrService } from '../../../resources/infra/http/ocr/ocr.service';
 
 describe('CreateApplicationDocumentUseCase', () => {
   const filePath =

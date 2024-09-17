@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SendNotificationHandler } from './send-notification.handler';
-import { IApplicationNotificationRepository } from '../../../../infra/prisma/repositories/application-notification.repository';
-import { IApplicationAnalisysRepository } from '../../../../infra/prisma/repositories/application-analisys.repository';
+import { IApplicationNotificationRepository } from '../../../../resources/infra/prisma/repositories/application-notification.repository';
+import { IApplicationAnalisysRepository } from '../../../../resources/infra/prisma/repositories/application-analisys.repository';
 import { ApplicationAnalisysStatusEnum } from '../../../../domain/enums/application-analisys-status.enum';
 import { ApplicationAnalisys } from '../../../../domain/entities/application-analisys.entity';
 import { ApplicationNotificationStatusEnum } from '../../../../domain/enums/application-notification-status.enum';
