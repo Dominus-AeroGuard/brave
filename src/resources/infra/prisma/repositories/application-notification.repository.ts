@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../infra/prisma/prisma.service';
-import { User } from '../../../domain/entities';
-import { ApplicationNotificationStatusEnum } from '../../../domain/enums/application-notification-status.enum';
+import { PrismaService } from '../prisma.service';
+import { User } from '../../../../domain/entities';
+import { ApplicationNotificationStatusEnum } from '../../../../domain/enums/application-notification-status.enum';
 import {
   ApplicationNotification,
   ApplicationNotificationStatus,
-} from '../../../domain/entities/application-notification.entity';
-import { ApplicationAnalisys } from '../../../domain/entities/application-analisys.entity';
-import { ApplicationAnalisysStatusEnum } from '../../../domain/enums/application-analisys-status.enum';
+} from '../../../../domain/entities/application-notification.entity';
+import { ApplicationAnalisys } from '../../../../domain/entities/application-analisys.entity';
+import { ApplicationAnalisysStatusEnum } from '../../../../domain/enums/application-analisys-status.enum';
 
 export interface IApplicationNotificationRepository {
   create(

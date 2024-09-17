@@ -2,11 +2,11 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ApplicationDocument } from '../../entities/application-document.entity';
 import { ApplicationDocumentType } from '../../enums/application-document-type.enum';
 import { ApplicationDocumentService } from '../../services/application-document/application-document.service';
-import { AwsService } from '../../../infra/aws/aws.service';
-import { OcrService } from '../../../infra/http/ocr/ocr.service';
-import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
+import { AwsService } from '../../../resources/infra/aws/aws.service';
+import { OcrService } from '../../../resources/infra/http/ocr/ocr.service';
+import { IApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { DOMParser } from '@xmldom/xmldom';
-import { IApplicationAreaRepository } from '../../../infra/prisma/repositories/application-area.repository';
+import { IApplicationAreaRepository } from '../../../resources/infra/prisma/repositories/application-area.repository';
 
 export interface ApplicationDocumentRequest {
   files: Array<

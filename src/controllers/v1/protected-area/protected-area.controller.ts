@@ -13,8 +13,8 @@ import {
   UploadedFiles,
   ParseFilePipeBuilder,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../../../auth/auth.guard';
-import { SchemaValidationPipe } from '../../../pipes/schema-validation.pipe';
+import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
+import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -32,7 +32,7 @@ import { CreateProtectedAreaUseCase } from '../../../domain/use-cases/protected-
 import { CreateProtectedAreaRequest } from './models/create-protected-area.model';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ProtectedArea } from '../../../domain/entities';
-import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
+import { ProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 
 @ApiTags('protected-areas')
 @Controller('v1/protected-areas')

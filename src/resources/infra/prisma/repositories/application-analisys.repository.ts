@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../infra/prisma/prisma.service';
+import { PrismaService } from '../prisma.service';
 
-import { ApplicationAnalisys } from '../../../domain/entities/application-analisys.entity';
-import { ApplicationAnalisysTypeEnum } from '../../../domain/enums/application-analisys-type.enum';
-import { ApplicationAnalisysStatusEnum } from '../../../domain/enums/application-analisys-status.enum';
+import { ApplicationAnalisys } from '../../../../domain/entities/application-analisys.entity';
+import { ApplicationAnalisysTypeEnum } from '../../../../domain/enums/application-analisys-type.enum';
+import { ApplicationAnalisysStatusEnum } from '../../../../domain/enums/application-analisys-status.enum';
 
 export interface IApplicationAnalisysRepository {
   create(
@@ -28,8 +28,9 @@ export interface IApplicationAnalisysRepository {
   ): Promise<ApplicationAnalisys>;
   remove(notificationId: number): Promise<void>;
   findAll(
-    applicationId: bigint,
     params: Partial<{
+      application_id?: bigint;
+      notification_id?: bigint;
       status?: ApplicationAnalisysStatusEnum[];
       typeId?: ApplicationAnalisysTypeEnum[];
       page?: number;
@@ -126,8 +127,9 @@ export class ApplicationAnalisysRepository
   }
 
   async findAll(
-    applicationId: bigint,
     params: Partial<{
+      application_id?: bigint;
+      notification_id?: bigint;
       status?: ApplicationAnalisysStatusEnum[];
       typeId?: ApplicationAnalisysTypeEnum[];
       page?: number;
@@ -143,7 +145,8 @@ export class ApplicationAnalisysRepository
         status: {
           in: params.status,
         },
-        application_id: applicationId,
+        application_notification_id: params.notification_id,
+        application_id: params.application_id,
         application_analisys_type_id: {
           in: params.typeId,
         },

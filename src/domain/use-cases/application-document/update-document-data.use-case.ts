@@ -4,8 +4,8 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { ApplicationDocumentDataRepository } from '../../../infra/prisma/repositories/application-document-data.repository';
-import { ApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
+import { ApplicationDocumentDataRepository } from '../../../resources/infra/prisma/repositories/application-document-data.repository';
+import { ApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { DocumentKeysEnum } from '../../../domain/enums/document-data-keys.enum';
 import { ApplicationDocument } from '../../../domain/entities/application-document.entity';
 
@@ -66,9 +66,9 @@ export class UpdateDocumentDataUseCase {
       DocumentKeysEnum[document.type.application_document_type_id];
 
     if (!keysEnum) {
-      throw new UnprocessableEntityException({
-        message: `Documento tipo ${document.type.description} não tem valores cadastradados que permitam atualização`,
-      });
+      throw new UnprocessableEntityException(
+        `Documento tipo ${document.type.description} não tem valores cadastradados que permitam atualização`,
+      );
     }
 
     const notAllowedKeysForDocument = request.data.filter(
@@ -76,9 +76,9 @@ export class UpdateDocumentDataUseCase {
     );
 
     if (notAllowedKeysForDocument.length) {
-      throw new UnprocessableEntityException({
-        message: `As chaves ${notAllowedKeysForDocument.map(({ key }) => key).join(',')} não são permitidas para o documento ${document.type.description}`,
-      });
+      throw new UnprocessableEntityException(
+        `As chaves ${notAllowedKeysForDocument.map(({ key }) => key).join(',')} não são permitidas para o documento ${document.type.description}`,
+      );
     }
   }
 }

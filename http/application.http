@@ -1,4 +1,4 @@
-POST http://{{host}}/v1/applications
+POST {{host}}/v1/applications
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -13,19 +13,19 @@ Authorization: Bearer {{token}}
 
 ###
 
-GET http://{{host}}/v1/applications
+GET {{host}}/v1/applications
   ?page=1
   &pageSize=10
 Authorization: Bearer {{token}}
 
 ####
 
-GET http://{{host}}/v1/applications/1
+GET {{host}}/v1/applications/1
 Authorization: Bearer {{token}}
 
 ####
 
-PATCH  http://{{host}}/v1/applications/1
+PATCH  {{host}}/v1/applications/1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -43,6 +43,6 @@ Authorization: Bearer {{token}}
 
 ###
 
-POST http://{{host}}/v1/applications/2/finish
+POST {{host}}/v1/applications/2/finish
 Content-Type: application/json
 Authorization: Bearer {{token}}

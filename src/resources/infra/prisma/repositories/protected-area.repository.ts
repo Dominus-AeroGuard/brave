@@ -1,5 +1,5 @@
-import { ProtectedAreaType } from '../../../domain/entities/protected-area.entity';
-import { ProtectedArea as ProtectedArea } from '../../../domain/entities';
+import { ProtectedAreaType } from '../../../../domain/entities/protected-area.entity';
+import { ProtectedArea as ProtectedArea } from '../../../../domain/entities';
 import { PrismaService } from '../prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';

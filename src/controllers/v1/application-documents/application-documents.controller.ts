@@ -27,9 +27,9 @@ import {
 } from '@nestjs/swagger';
 import { CreateApplicationDocumentUseCase } from '../../../domain/use-cases/application-document/create-application-document.use-case';
 import { CreateApplicationDocumentRequest } from './models/create-application-document.model';
-import { SchemaValidationPipe } from '../../../pipes/schema-validation.pipe';
-import { JwtAuthGuard } from '../../../auth/auth.guard';
-import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
+import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
+import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
+import { IApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { ErrorRequestDto } from '../../dtos/error-request.dto';
 import { ValidationRequestDto } from '../../dtos/validation-request.dto';
 import { ApplicationDocument } from '../../../domain/entities/application-document.entity';

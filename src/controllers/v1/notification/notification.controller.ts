@@ -17,17 +17,15 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../../auth/auth.guard';
+import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { ErrorRequestDto } from '../../../controllers/dtos/error-request.dto';
 import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
 import { ValidationRequestDto } from '../../../controllers/dtos/validation-request.dto';
 import { ApplicationNotification } from '../../../domain/entities/application-notification.entity';
-import { ApplicationNotificationRepository } from '../../../infra/prisma/repositories/application-notification.repository';
+import { ApplicationNotificationRepository } from '../../../resources/infra/prisma/repositories/application-notification.repository';
 import { ListNotificationUseCase } from '../../../domain/use-cases/notification/list-notification.use-case';
 import { UpdateNotificationRequest } from './models/update-notification.model';
 import { ListNotificationRequest } from './models/list-notification.model';
-import { AnalysisBuffer } from '../../../domain/entities/analysis-buffer.entity';
-import { NotificationBufferUseCase } from '../../../domain/use-cases/notification/notification-buffer.use-case';
 
 @ApiTags('notifications')
 @Controller('v1/notifications')
@@ -40,8 +38,6 @@ export class NotificationController {
     private readonly notificationRepository: ApplicationNotificationRepository,
     @Inject(ListNotificationUseCase)
     private readonly listNotificationUseCase: ListNotificationUseCase,
-    @Inject(NotificationBufferUseCase)
-    private readonly notificationBufferUseCase: NotificationBufferUseCase,
   ) {}
 
   @Get()
@@ -72,20 +68,6 @@ export class NotificationController {
   @ApiOkResponse({ type: ApplicationNotification })
   findOne(@Param('id') id: string) {
     return this.notificationRepository.findOne(BigInt(id));
-  }
-
-  @Get(':id/buffer/:analysisId')
-  @ApiParam({ name: 'id', type: BigInt, example: 1 })
-  @ApiParam({ name: 'analysisId', type: 'number', example: 1 })
-  @ApiOkResponse({ type: AnalysisBuffer })
-  findAnalisyBuffer(
-    @Param('id') id: string,
-    @Param('analysisId') analysisId: string,
-  ) {
-    return this.notificationBufferUseCase.execute(
-      BigInt(id),
-      Number(analysisId),
-    );
   }
 
   @Patch(':id')

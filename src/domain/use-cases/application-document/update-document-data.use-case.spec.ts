@@ -3,8 +3,8 @@ import {
   UpdateDocumentDataRequest,
   UpdateDocumentDataUseCase,
 } from './update-document-data.use-case';
-import { ApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
-import { ApplicationDocumentDataRepository } from '../../../infra/prisma/repositories/application-document-data.repository';
+import { ApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
+import { ApplicationDocumentDataRepository } from '../../../resources/infra/prisma/repositories/application-document-data.repository';
 import {
   NotFoundException,
   UnprocessableEntityException,

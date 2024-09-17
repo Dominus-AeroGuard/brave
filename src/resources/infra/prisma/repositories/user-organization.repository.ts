@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../infra/prisma/prisma.service';
-import { UserOrganization as UserOrganization } from '../../../domain/entities';
+import { PrismaService } from '../prisma.service';
+import { UserOrganization as UserOrganization } from '../../../../domain/entities';
 
 export interface IUserOrganizationRepository {
   create(

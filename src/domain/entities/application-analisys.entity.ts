@@ -1,5 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ApplicationAnalisysStatusEnum } from '../enums/application-analisys-status.enum';
+import parseJson from '../../resources/utils/parse-json.util';
+
+export class AnalisysBufferDetail {
+  @ApiProperty({ description: 'Identificador da area de proteção' })
+  protectedAreaId: number;
+
+  @ApiProperty({
+    description: 'Medida em metros que a aplicação passou sobre a area',
+  })
+  meters: number;
+}
+
+export class AnalisysDetail implements Record<string, any> {}
 
 export class ApplicationAnalisys {
   @ApiProperty({ type: Number })
@@ -13,8 +26,20 @@ export class ApplicationAnalisys {
     name: string;
   }>;
 
-  @ApiProperty({ description: 'Detalhes da análise' })
-  details: string;
+  @ApiProperty({
+    description: 'Detalhes da análise',
+    oneOf: [
+      {
+        type: 'array',
+        items: { $ref: '#/components/schemas/AnalisysBufferDetail' },
+      },
+      {
+        type: 'object',
+        items: { $ref: '#/components/schemas/AnalisysDetail' },
+      },
+    ],
+  })
+  details: AnalisysDetail | AnalisysBufferDetail[];
 
   @ApiProperty({ description: 'Status atual do processamento' })
   status: ApplicationAnalisysStatusEnum;
@@ -33,7 +58,7 @@ export class ApplicationAnalisys {
     this.id = id;
     this.elapsedTime = elapsedTime;
     this.type = { name: typeName };
-    this.details = details;
+    this.details = parseJson(details);
     this.status = status;
     this.createdAt = createdAt;
   }

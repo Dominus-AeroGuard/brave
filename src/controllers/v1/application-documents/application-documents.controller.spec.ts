@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ApplicationDocumentsController } from './application-documents.controller';
 import { CreateApplicationDocumentUseCase } from '../../../domain/use-cases/application-document/create-application-document.use-case';
-import { IApplicationDocumentRepository } from '../../../infra/prisma/repositories/application-document.repository';
+import { IApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { CreateApplicationDocumentRequest } from './models/create-application-document.model';
 import { UpdateDocumentDataUseCase } from '../../../domain/use-cases/application-document/update-document-data.use-case';
 

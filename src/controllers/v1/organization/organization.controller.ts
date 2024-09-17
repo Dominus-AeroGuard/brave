@@ -13,10 +13,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { CreateUserOrganizationRequest } from './models/create-user-organization.model';
-import { JwtAuthGuard } from '../../../auth/auth.guard';
-import { SchemaValidationPipe } from '../../../pipes/schema-validation.pipe';
+import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
+import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import { CreateUserOrganizationUseCase } from '../../../domain/use-cases/organization/create-user-organization.use-case';
-import { UserOrganizationRepository } from '../../../infra/prisma/repositories/user-organization.repository';
+import { UserOrganizationRepository } from '../../../resources/infra/prisma/repositories/user-organization.repository';
 import { ListOrganizationUserUseCase } from '../../../domain/use-cases/organization/list-organization-user.use-case';
 import {
   ApiBadRequestResponse,

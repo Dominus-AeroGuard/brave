@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OrganizationController } from './organization.controller';
 import { CreateUserOrganizationUseCase } from '../../../domain/use-cases/organization/create-user-organization.use-case';
 import { ListOrganizationUserUseCase } from '../../../domain/use-cases/organization/list-organization-user.use-case';
-import { UserOrganizationRepository } from '../../../infra/prisma/repositories/user-organization.repository';
+import { UserOrganizationRepository } from '../../../resources/infra/prisma/repositories/user-organization.repository';
 
 describe('OrganizationController', () => {
   let controller: OrganizationController;

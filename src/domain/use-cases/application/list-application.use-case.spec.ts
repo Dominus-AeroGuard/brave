@@ -3,7 +3,7 @@ import {
   ListApplicationRequest,
   ListApplicationUseCase,
 } from './list-application.use-case';
-import { IApplicationRepository } from '../../../infra/prisma/repositories/application.repository';
+import { IApplicationRepository } from '../../../resources/infra/prisma/repositories/application.repository';
 
 describe('ListApplicationUseCase', () => {
   let useCase: ListApplicationUseCase;

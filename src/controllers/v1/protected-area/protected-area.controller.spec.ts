@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProtectedAreaController } from './protected-area.controller';
 import { CreateProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/create-protected-area.use-case';
-import { ProtectedAreaRepository } from '../../../infra/prisma/repositories/protected-area.repository';
+import { ProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 
 describe('ProtectedAreaController', () => {
   let controller: ProtectedAreaController;
