@@ -33,8 +33,9 @@ export class ApplicationAreaRepository implements IApplicationAreaRepository {
       applicationId: number;
     }>,
   ): Promise<number> {
-    const result = await this.prisma
-      .$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${data.geom}), ${data.geom}::text, ${data.description}::text, ${data.applicationId})`;
+    const result = await this.prisma.$executeRaw`
+      INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id")
+      VALUES (ST_Force3D(ST_GeomFromGeoJSON(${data.geom})), ${data.geom}::text, ${data.description}::text, ${data.applicationId})`;
 
     return result;
   }
@@ -48,15 +49,18 @@ export class ApplicationAreaRepository implements IApplicationAreaRepository {
       async (tx) => {
         let count = 0;
         for (const d of data) {
-          count +=
-            await tx.$executeRaw`INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id") VALUES (ST_GeomFromGeoJSON(${d}), ${d}::text, ${description}::text, ${applicationId})`;
+          count += await tx.$executeRaw`
+            INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id")
+            VALUES (ST_Force3D(ST_GeomFromGeoJSON(${d})), ${d}::text, ${description}::text, ${applicationId})`;
         }
         return count;
       },
       { timeout: 20000 },
     );
+
     return result;
   }
+
   async findOne(id: number): Promise<ApplicationArea> {
     const applicationArea = await this.prisma.applicationArea.findUnique({
       where: {

@@ -18,7 +18,7 @@ export class WeatherHandler extends AbstractHandler<AnalisysApplicationContext> 
     await this.analisysRepository.create({
       applicationId: context.applicationId,
       elapsedTime: 0,
-      status: ApplicationAnalisysStatusEnum.FAILED,
+      status: ApplicationAnalisysStatusEnum.APPROVED,
       type: ApplicationAnalisysTypeEnum.CLIMA,
     });
 
