@@ -9,7 +9,6 @@ describe('ApplicationDocumentsController', () => {
   let controller: ApplicationDocumentsController;
   let useCase: CreateApplicationDocumentUseCase;
   let updateDataUseCase: UpdateDocumentDataUseCase;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let repository: IApplicationDocumentRepository;
 
   beforeEach(async () => {
@@ -33,6 +32,8 @@ describe('ApplicationDocumentsController', () => {
           useValue: {
             update: jest.fn(),
             create: jest.fn(),
+            findOne: jest.fn(),
+            findAll: jest.fn(),
           },
         },
       ],
@@ -54,6 +55,60 @@ describe('ApplicationDocumentsController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('list', () => {
+    it('should return a list of documents by application', async () => {
+      // Arrange
+      const documents = [
+        {
+          id: 63,
+          originalName: 'example.txt',
+          path: 'https://aeroguard-ra.s3.us-east-1.amazonaws.com/fa742fe4-73d3-49f1-9ec2-54f7b5d406ee.txt',
+          data: {},
+          type: {
+            id: 1,
+            description: 'RA',
+            active: true,
+          },
+        },
+      ];
+
+      jest.spyOn(repository, 'findAll').mockResolvedValue(documents);
+
+      // Act
+      const result = await controller.list('1');
+
+      // Assert
+      expect(result).toBe(documents);
+      expect(repository.findAll).toHaveBeenCalledWith('1');
+    });
+  });
+
+  describe('get', () => {
+    it('should return document by application and document', async () => {
+      // Arrange
+      const document = {
+        id: 63,
+        originalName: 'example.txt',
+        path: 'https://aeroguard-ra.s3.us-east-1.amazonaws.com/fa742fe4-73d3-49f1-9ec2-54f7b5d406ee.txt',
+        data: {},
+        type: {
+          id: 1,
+          description: 'RA',
+          active: true,
+        },
+      };
+
+      jest.spyOn(repository, 'findOne').mockResolvedValue(document);
+
+      // Act
+      const result = await controller.get('1', '1');
+
+      // Assert
+      expect(result).toBe(document);
+      expect(repository.findOne).toHaveBeenCalledWith(1, 1);
+    });
   });
 
   describe('create', () => {
