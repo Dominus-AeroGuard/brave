@@ -48,8 +48,9 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
       user: Partial<{ id: number }>;
     }>,
   ): Promise<number> {
-    const result = await this.prisma
-      .$executeRaw`INSERT INTO "protected_area" ("geom", "geomjson", "description", "protected_area_type_id", "organization_id", "created_by") VALUES (ST_GeomFromGeoJSON(${data.geom}), ${data.geom}::text, ${data.description}::text, ${data.type.id}, ${data.organization.id}, ${data.user.id.toString()}::text)`;
+    const result = await this.prisma.$executeRaw`
+      INSERT INTO "protected_area" ("geom", "geomjson", "description", "protected_area_type_id", "organization_id", "created_by")
+      VALUES (ST_Force3D(ST_GeomFromGeoJSON(${data.geom})), ${data.geom}::text, ${data.description}::text, ${data.type.id}, ${data.organization.id}, ${data.user.id.toString()}::text)`;
 
     return result;
   }
@@ -65,8 +66,9 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
       async (tx) => {
         let count = 0;
         for (const geom of geoms) {
-          count +=
-            await tx.$executeRaw`INSERT INTO "protected_area" ("geom", "geomjson", "description", "protected_area_type_id", "organization_id", "created_by") VALUES (ST_GeomFromGeoJSON(${geom}), ${geom}::text, ${description}::text, ${typeId}, ${organizationId}, ${userId.toString()}::text)`;
+          count += await tx.$executeRaw`
+            INSERT INTO "protected_area" ("geom", "geomjson", "description", "protected_area_type_id", "organization_id", "created_by")
+            VALUES (ST_Force3D(ST_GeomFromGeoJSON(${geom})), ${geom}::text, ${description}::text, ${typeId}, ${organizationId}, ${userId.toString()}::text)`;
         }
         return count;
       },
