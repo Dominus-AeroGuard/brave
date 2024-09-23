@@ -1,19 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsEmpty } from 'class-validator';
+import { IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
 
 class Data {
   @ApiProperty()
-  @IsEmpty()
+  @IsNotEmpty()
   key: string;
 
   @ApiProperty()
+  @IsNotEmpty()
   value: string;
 }
 
 export class UpdateDocumentDataRequest {
   @ApiProperty()
   @IsArray()
-  @Type(() => Array<Data>)
+  @ValidateNested()
+  @Type(() => Data)
   data: Array<Data>;
 }
