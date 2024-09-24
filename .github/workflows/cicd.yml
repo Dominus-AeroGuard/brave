@@ -21,6 +21,7 @@ jobs:
           echo "AWS_BUCKET_NAME_RO=${{ secrets.AWS_BUCKET_NAME_RO }}" >> .env &&
           echo "AWS_BUCKET_NAME_RA=${{ secrets.AWS_BUCKET_NAME_RA }}" >> .env &&
           echo "AWS_BUCKET_NAME_KML=${{ secrets.AWS_BUCKET_NAME_KML }}" >> .env &&
+          echo "APIS_OCR_BASE_URL=${{ secrets.APIS_OCR_BASE_URL }}" >> .env &&
           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
 
       - name: Configure AWS credentials
