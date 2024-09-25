@@ -34,6 +34,7 @@ export interface IApplicationNotificationRepository {
       fiscalId?: number[];
       page?: number;
       pageSize?: number;
+      ordering?: string;
     }>,
   ): Promise<ApplicationNotification[]>;
 }
@@ -185,10 +186,12 @@ export class ApplicationNotificationRepository
       fiscalId?: number[];
       page?: number;
       pageSize?: number;
+      ordering?: any;
     }>,
   ): Promise<ApplicationNotification[]> {
     const page = params.page || 1;
     const take = params.pageSize || 10;
+    const ordering = params.ordering || 'desc';
     const skip = (page - 1) * take;
 
     const notifications = await this.prisma.applicationNotification.findMany({
@@ -206,6 +209,9 @@ export class ApplicationNotificationRepository
             },
           },
         },
+      },
+      orderBy: {
+        application_notification_id: ordering,
       },
       include: {
         fiscal: true,
