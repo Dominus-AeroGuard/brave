@@ -62,7 +62,7 @@ describe('ListNotificationUseCase', () => {
       const request: ListNotificationRequest = {
         query: {
           page: 1,
-          size: 10,
+          pageSize: 10,
           applicationId: [BigInt(1)],
         },
       };

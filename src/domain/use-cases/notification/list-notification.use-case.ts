@@ -9,7 +9,8 @@ export interface ListNotificationRequest {
     statusId?: number[];
     fiscalId?: number[];
     page?: number;
-    size?: number;
+    pageSize?: number;
+    ordering?: any;
   }>;
 }
 
@@ -28,7 +29,7 @@ export class ListNotificationUseCase {
 
     return new PaginableEntity<ApplicationNotification>(result, {
       page: query.page,
-      size: query.size,
+      size: query.pageSize,
     });
   }
 }

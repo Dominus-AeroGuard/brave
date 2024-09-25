@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsInt, IsOptional } from 'class-validator';
+import { IsArray, IsEnum, IsIn, IsInt, IsOptional } from 'class-validator';
 import { ApplicationNotificationStatusEnum } from '../../../../domain/enums/application-notification-status.enum';
 import { Transform, Type } from 'class-transformer';
 
@@ -34,13 +34,25 @@ export class ListNotificationRequest {
   @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   fiscalId?: number[];
 
-  @ApiProperty({ required: false, type: Number, example: 1 })
+  @ApiProperty({ required: false, type: Number, example: 1, default: 1 })
   @IsOptional()
+  @IsInt()
   @Transform(({ value }) => parseInt(value, 10))
   page?: number = 1;
 
-  @ApiProperty({ required: false, type: Number, example: 10 })
+  @ApiProperty({ required: false, type: Number, example: 10, default: 10 })
   @IsOptional()
+  @IsInt()
   @Transform(({ value }) => parseInt(value, 10))
-  size?: number = 10;
+  pageSize?: number = 10;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+    example: 'desc',
+    default: 'desc',
+  })
+  @IsOptional()
+  @IsIn(['asc', 'desc'], { message: 'O valor deve ser "asc" ou "desc"' })
+  ordering?: string = 'desc';
 }
