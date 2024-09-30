@@ -14,12 +14,6 @@ export class ApplicationDocumentData {
   value: string;
 
   @ApiProperty({
-    description: 'Número da revisão do documento',
-    example: 1,
-  })
-  revision: number;
-
-  @ApiProperty({
     description: 'ID do usuário que criou o documento',
     example: 123,
   })
@@ -31,16 +25,9 @@ export class ApplicationDocumentData {
   })
   createdAt: Date;
 
-  constructor(
-    key: string,
-    value: string,
-    revision: number,
-    createdBy: number,
-    createdAt: Date,
-  ) {
+  constructor(key: string, value: string, createdBy: number, createdAt: Date) {
     this.key = key;
     this.value = value;
-    this.revision = revision;
     this.createdBy = createdBy;
     this.createdAt = createdAt;
   }

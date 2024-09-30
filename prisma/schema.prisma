@@ -133,7 +133,6 @@ model ApplicationDocumentData {
   document_id Int
   key         String              @db.VarChar(100)
   value       String?             @db.VarChar(200)
-  revision    Int                 @default(1)
   created_by  Int
   created_at  DateTime            @default(now())
   document    ApplicationDocument @relation(fields: [document_id], references: [application_document_id])
