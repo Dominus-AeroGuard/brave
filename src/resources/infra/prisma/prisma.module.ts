@@ -9,6 +9,7 @@ import { ApplicationNotificationRepository } from './repositories/application-no
 import { ApplicationAnalisysRepository } from './repositories/application-analisys.repository';
 import { ProtectedAreaTypeRepository } from './repositories/protected-area-type.repository';
 import { ApplicationDocumentDataRepository } from './repositories/application-document-data.repository';
+import { ApplicationPathRepository } from './repositories/application-path.repository';
 
 @Global()
 @Module({
@@ -25,6 +26,10 @@ import { ApplicationDocumentDataRepository } from './repositories/application-do
     {
       provide: 'IApplicationAreaRepository',
       useClass: ApplicationAreaRepository,
+    },
+    {
+      provide: 'IApplicationPathRepository',
+      useClass: ApplicationPathRepository,
     },
     {
       provide: 'IUserOrganizationRepository',
@@ -64,6 +69,10 @@ import { ApplicationDocumentDataRepository } from './repositories/application-do
     {
       provide: 'IApplicationAreaRepository',
       useClass: ApplicationAreaRepository,
+    },
+    {
+      provide: 'IApplicationPathRepository',
+      useClass: ApplicationPathRepository,
     },
     {
       provide: 'IUserOrganizationRepository',

@@ -5,3 +5,4 @@ export { Pilot } from './pilot.entity';
 export { ProtectedArea } from './protected-area.entity';
 export { User } from './user.entity';
 export { UserOrganization } from './user-organization.entity';
+export { ApplicationPath } from './application-path.entity';

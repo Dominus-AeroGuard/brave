@@ -9,6 +9,7 @@ import { ApplicationAreaRepository } from '../../../resources/infra/prisma/repos
 import { ProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 import { ApplicationAnalisysTypeEnum } from '../../../domain/enums/application-analisys-type.enum';
 import { AnalisysBufferDetail } from '../../../domain/entities/application-analisys.entity';
+import { ApplicationPathRepository } from 'src/resources/infra/prisma/repositories/application-path.repository';
 
 @Injectable()
 export class NotificationBufferUseCase {
@@ -17,6 +18,8 @@ export class NotificationBufferUseCase {
     private notificationRepository: ApplicationNotificationRepository,
     @Inject('IApplicationAreaRepository')
     private applicationAreaRepository: ApplicationAreaRepository,
+    @Inject('IApplicationPathRepository')
+    private applicationPathRepository: ApplicationPathRepository,
     @Inject('IProtectedAreaRepository')
     private protectedAreaRepository: ProtectedAreaRepository,
   ) {}
@@ -41,9 +44,13 @@ export class NotificationBufferUseCase {
       );
 
     const application_id = notification.application.id;
-    const applicationGEOJSON =
-      await this.applicationAreaRepository.getAsGeoJson(Number(application_id));
     const details = analysis.details as Array<AnalisysBufferDetail>;
+
+    const applicationGEOJSON =
+    await this.applicationAreaRepository.getAsGeoJson(Number(application_id));
+
+    const applicationPathGEOJSON =
+      await this.applicationPathRepository.getAsGeoJson(Number(application_id));
 
     const protectedAreaGEOJSON =
       await this.protectedAreaRepository.getAsGeoJson(
@@ -59,6 +66,7 @@ export class NotificationBufferUseCase {
       notificationId,
       analysisId,
       applicationGEOJSON,
+      applicationPathGEOJSON,
       protectedAreaGEOJSON,
       protectedAreaBufferGEOJSON,
     );

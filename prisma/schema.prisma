@@ -83,6 +83,7 @@ model Application {
   events                  ApplicationEvent[]
   documents               ApplicationDocument[]
   areas                   ApplicationArea[]
+  paths                   ApplicationPath[]
   analisys                ApplicationAnalisys[]
   ApplicationNotification ApplicationNotification[]
 
@@ -268,4 +269,17 @@ model ProtectedAreaType {
   protected_area         ProtectedArea[]
 
   @@map("protected_area_type")
+}
+
+model ApplicationPath {
+  id             Int                                            @id @default(autoincrement())
+  geom           Unsupported("public.geometry(linestringz, 4326)")
+  geomjson       String
+  description    String                                         @db.VarChar(100)
+  application_id BigInt                                         @db.BigInt
+  application    Application                                    @relation(fields: [application_id], references: [application_id])
+  created_at     DateTime                                       @default(now())
+
+  @@index([geom], name: "application_path_idx", type: Gist)
+  @@map("application_path")
 }
