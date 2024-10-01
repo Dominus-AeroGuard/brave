@@ -7,6 +7,7 @@ import { OcrService } from '../../../resources/infra/http/ocr/ocr.service';
 import { IApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { DOMParser } from '@xmldom/xmldom';
 import { IApplicationAreaRepository } from '../../../resources/infra/prisma/repositories/application-area.repository';
+import { IApplicationPathRepository } from '../../../resources/infra/prisma/repositories/application-path.repository';
 
 export interface ApplicationDocumentRequest {
   files: Array<
@@ -25,7 +26,9 @@ export class CreateApplicationDocumentUseCase {
     @Inject('IApplicationDocumentRepository')
     private repository: IApplicationDocumentRepository,
     @Inject('IApplicationAreaRepository')
-    private arearepository: IApplicationAreaRepository,
+    private areaRepository: IApplicationAreaRepository,
+    @Inject('IApplicationPathRepository')
+    private pathRepository: IApplicationPathRepository,
     private awsService: AwsService,
     private ocrService: OcrService,
   ) {}
@@ -95,22 +98,36 @@ export class CreateApplicationDocumentUseCase {
       );
 
       const geojson = tj.kml(kmlString);
-      const feats = [];
+      const featsPolygon = [];
+      const featsLine = [];
       geojson.features.forEach((feature) => {
         if (feature?.geometry?.type == 'Polygon') {
           const feat = JSON.stringify(feature?.geometry);
-          feats.push(feat);
+          featsPolygon.push(feat);
+        } else if (feature?.geometry?.type == 'LineString') {
+          const feat = JSON.stringify(feature?.geometry);
+          featsLine.push(feat); 
         } else if (feature?.geometry?.type == 'GeometryCollection') {
           feature?.geometry?.geometries.forEach((geom) => {
             if (geom?.type == 'Polygon') {
               const feat = JSON.stringify(geom);
-              feats.push(feat);
+              featsPolygon.push(feat);
+            } else if (feature?.geometry?.type == 'LineString') {
+              const feat = JSON.stringify(feature?.geometry);
+              featsLine.push(feat); 
             }
           });
         }
       });
 
-      await this.arearepository.createMany(feats, '', applicationId);
+      if (featsPolygon.length > 0){
+        await this.areaRepository.createMany(featsPolygon, '', applicationId);
+      }
+
+      if (featsLine.length > 0){
+        await this.pathRepository.createMany(featsLine, '', applicationId);
+      }
+
     } catch (error) {
       console.error(error);
     }
