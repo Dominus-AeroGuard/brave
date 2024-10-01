@@ -10,6 +10,7 @@ import { Readable } from 'stream';
 import { ApplicationDocumentService } from '../../services/application-document/application-document.service';
 import { IApplicationAreaRepository } from '../../../resources/infra/prisma/repositories/application-area.repository';
 import { OcrService } from '../../../resources/infra/http/ocr/ocr.service';
+import { IApplicationPathRepository } from '../../../resources/infra/prisma/repositories/application-path.repository';
 
 describe('CreateApplicationDocumentUseCase', () => {
   const filePath =
@@ -19,6 +20,7 @@ describe('CreateApplicationDocumentUseCase', () => {
   let applicationDocumentService: ApplicationDocumentService;
   let repository: IApplicationDocumentRepository;
   let arearepository: IApplicationAreaRepository;
+  let pathrepository: IApplicationPathRepository;
   let ocrService: OcrService;
   let awsService: AwsService;
 
@@ -35,6 +37,12 @@ describe('CreateApplicationDocumentUseCase', () => {
         },
         {
           provide: 'IApplicationAreaRepository',
+          useValue: {
+            createMany: jest.fn(),
+          },
+        },
+        {
+          provide: 'IApplicationPathRepository',
           useValue: {
             createMany: jest.fn(),
           },
@@ -66,6 +74,9 @@ describe('CreateApplicationDocumentUseCase', () => {
     );
     arearepository = moduleRef.get<IApplicationAreaRepository>(
       'IApplicationAreaRepository',
+    );
+    pathrepository = moduleRef.get<IApplicationPathRepository>(
+      'IApplicationPathRepository',
     );
     awsService = moduleRef.get<AwsService>(AwsService);
     ocrService = moduleRef.get<OcrService>(OcrService);

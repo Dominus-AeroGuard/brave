@@ -9,7 +9,7 @@ import { ApplicationAreaRepository } from '../../../resources/infra/prisma/repos
 import { ProtectedAreaRepository } from '../../../resources/infra/prisma/repositories/protected-area.repository';
 import { ApplicationAnalisysTypeEnum } from '../../../domain/enums/application-analisys-type.enum';
 import { AnalisysBufferDetail } from '../../../domain/entities/application-analisys.entity';
-import { ApplicationPathRepository } from 'src/resources/infra/prisma/repositories/application-path.repository';
+import { ApplicationPathRepository } from '../../../resources/infra/prisma/repositories/application-path.repository';
 
 @Injectable()
 export class NotificationBufferUseCase {

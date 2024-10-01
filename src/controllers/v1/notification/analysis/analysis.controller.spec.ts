@@ -48,6 +48,7 @@ describe('AnalysisController', () => {
       id: '1',
       analysisId: 10,
       applicationAreaGeoJSON: '',
+      applicationPathGeoJSON: '',
       protectedAreaGeoJSON: '',
       protectedAreaBufferGeoJSON: '',
     };

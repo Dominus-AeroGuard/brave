@@ -7,7 +7,7 @@ import { OcrService } from '../../../resources/infra/http/ocr/ocr.service';
 import { IApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { DOMParser } from '@xmldom/xmldom';
 import { IApplicationAreaRepository } from '../../../resources/infra/prisma/repositories/application-area.repository';
-import { IApplicationPathRepository } from 'src/resources/infra/prisma/repositories/application-path.repository';
+import { IApplicationPathRepository } from '../../../resources/infra/prisma/repositories/application-path.repository';
 
 export interface ApplicationDocumentRequest {
   files: Array<
