@@ -112,8 +112,8 @@ export class CreateApplicationDocumentUseCase {
             if (geom?.type == 'Polygon') {
               const feat = JSON.stringify(geom);
               featsPolygon.push(feat);
-            } else if (feature?.geometry?.type == 'LineString') {
-              const feat = JSON.stringify(feature?.geometry);
+            } else if (geom?.type == 'LineString') {
+              const feat = JSON.stringify(geom);
               featsLine.push(feat); 
             }
           });
