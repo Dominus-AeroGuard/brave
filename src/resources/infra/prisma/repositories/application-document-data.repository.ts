@@ -32,45 +32,14 @@ export class ApplicationDocumentDataRepository
       }>
     >,
   ): Promise<ApplicationDocumentData[]> {
-    const fields = await this.findAll(documentId);
-    const records = data.map(
-      (
-        field,
-      ): Partial<{
-        document_id: number;
-        key: string;
-        value: string;
-        revision: number;
-        created_by: number;
-      }> => {
-        const documentData = fields.find(({ key }) => key === field.key);
-
-        let revision = 1;
-
-        if (documentData) {
-          revision = documentData.revision++;
-        }
-
-        return {
-          ...field,
-          document_id: documentId,
-          revision,
-          created_by: createdBy,
-        };
-      },
-    );
-
     const result =
       await this.prisma.applicationDocumentData.createManyAndReturn({
-        data: records.map(
-          ({ document_id, key, value, revision, created_by }) => ({
-            document_id,
-            key,
-            value,
-            revision,
-            created_by,
-          }),
-        ),
+        data: data.map(({ key, value }) => ({
+          document_id: documentId,
+          created_by: createdBy,
+          key,
+          value,
+        })),
       });
 
     return result.map(this.buildApplicationDocumentDataEntity);
@@ -80,8 +49,8 @@ export class ApplicationDocumentDataRepository
     const records: DocumentDataModel[] = await this.prisma.$queryRaw`
       SELECT *
       FROM application_document_data
-      WHERE (key, revision) IN (
-          SELECT key, MAX(revision) AS max_revision
+      WHERE (key, created_at) IN (
+          SELECT key, MAX(created_at) AS max_created_at
           FROM application_document_data
           GROUP BY key
       )
@@ -94,16 +63,9 @@ export class ApplicationDocumentDataRepository
   private buildApplicationDocumentDataEntity({
     key,
     value,
-    revision,
     created_by,
     created_at,
   }): ApplicationDocumentData {
-    return new ApplicationDocumentData(
-      key,
-      value,
-      revision,
-      created_by,
-      created_at,
-    );
+    return new ApplicationDocumentData(key, value, created_by, created_at);
   }
 }
