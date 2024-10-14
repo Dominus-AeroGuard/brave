@@ -1,5 +1,5 @@
 # Use the official Node.js image as a base image
-FROM node:20-alpine3.18 as builder
+FROM node:20-alpine3.18 AS builder
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -19,13 +19,19 @@ RUN npx prisma generate
 # Build the application
 RUN npm run build
 
-# Copy entrypoint script
-COPY ./scripts/entrypoint.sh /usr/src/app/entrypoint.sh
-
-RUN chmod +x /usr/src/app/entrypoint.sh
-
 # Expose the application port
 EXPOSE 3000
 
+FROM node:20-alpine3.18
+
+WORKDIR /app
+
+COPY --from=builder /usr/src/app/dist /app/dist
+COPY --from=builder /usr/src/app/prisma /app/prisma
+COPY ./scripts/entrypoint.sh /app/entrypoint.sh
+
+# Copy entrypoint script
+RUN chmod +x /app/entrypoint.sh
+
 # Start the application
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]

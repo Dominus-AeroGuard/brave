@@ -17,6 +17,7 @@
     "docker:build:up": "docker-compose up --build -d",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
+    "docker:down:data": "docker-compose down -v",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -30,7 +31,9 @@
     "test:ci": "jest --ci --coverage",
     "migration": "prisma migrate dev",
     "postmigration": "prisma db seed",
-    "migration:deploy": "prisma migrate deploy"
+    "migration:deploy": "prisma migrate deploy",
+    "presonar": "jest --coverage",
+    "sonar": "npx sonarqube-scanner"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
@@ -82,6 +85,7 @@
     "jest-mock-extended": "^4.0.0-beta1",
     "prettier": "^3.0.0",
     "prisma": "^5.15.0",
+    "sonarqube-scanner": "^4.2.3",
     "source-map-support": "^0.5.21",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.4",
@@ -101,7 +105,7 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "coverage",
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "src/**/*.ts",
