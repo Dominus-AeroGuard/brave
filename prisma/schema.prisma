@@ -16,68 +16,68 @@ enum UserStatus {
 }
 
 model User {
-  user_id       Int                       @id @default(autoincrement())
-  name          String                    @db.VarChar(100)
-  email         String                    @db.VarChar(100)
-  document      String                    @db.VarChar(14)
-  status        UserStatus                @default(INVITED)
-  created_at    DateTime                  @default(now())
+  user_id       Int                       @id @default(autoincrement()) @map("ID_USUARIO")
+  name          String                    @map("NM_USUARIO") @db.VarChar(100)
+  email         String                    @map("DS_EMAIL") @db.VarChar(100)
+  document      String                    @map("DS_DOCUMENTO") @db.VarChar(14)
+  status        UserStatus                @default(ACTIVE) @map("CS_STATUS")
+  created_at    DateTime                  @default(now()) @map("DH_CRIACAO")
   applications  Application[]
   organizations UserOrganization[]
   notifications ApplicationNotification[]
 
-  @@map("user")
+  @@map("S_USUARIO")
 }
 
 model Organization {
-  organization_id Int                @id @default(autoincrement())
-  name            String             @db.VarChar(100)
-  created_at      DateTime           @default(now())
+  organization_id Int                @id @default(autoincrement()) @map("ID_ORGANIZACAO")
+  name            String             @map("NM_ORGANIZACAO") @db.VarChar(100)
+  created_at      DateTime           @default(now()) @map("DH_CRIACAO")
   pilots          Pilot[]
   applications    Application[]
   users           UserOrganization[]
   protected_areas ProtectedArea[]
 
-  @@map("organization")
+  @@map("S_ORGANIZACAO")
 }
 
 model UserOrganization {
-  user_id         Int
-  organization_id Int
-  active          Boolean      @default(true)
-  updated_by      String
-  created_by      String
-  updated_at      DateTime     @default(now())
+  user_id         Int          @map("ID_USUARIO")
+  organization_id Int          @map("ID_ORGANIZACAO")
+  active          Boolean      @default(true) @map("ST_ATIVO")
+  updated_by      String       @map("NM_ATUALIZADO_POR") @db.VarChar(30)
+  created_by      String       @map("NM_CRIADO_POR") @db.VarChar(30)
+  updated_at      DateTime     @default(now()) @map("DH_ATUALIZACAO")
+  created_at      DateTime     @default(now()) @map("DH_CRIACAO")
   organization    Organization @relation(fields: [organization_id], references: [organization_id])
   user            User         @relation(fields: [user_id], references: [user_id])
-  created_at      DateTime     @default(now())
 
   @@id([user_id, organization_id])
-  @@map("user_organization")
+  @@map("S_USUARIO_ORGANIZACAO")
 }
 
 model Pilot {
-  pilot_id        Int                @id @default(autoincrement())
-  organization_id Int
-  name            String             @db.VarChar(100)
-  document        String             @db.VarChar(14)
-  license         String             @db.VarChar(20)
-  created_at      DateTime           @default(now())
+  pilot_id        Int                @id @default(autoincrement()) @map("ID_PILOTO")
+  organization_id Int                @map("ID_ORGANIZACAO")
+  name            String             @map("NM_PILOTO") @db.VarChar(100)
+  document        String             @map("NR_DOCUMENTO") @db.VarChar(14)
+  license         String             @map("NR_LICENCA") @db.VarChar(20)
+  created_at      DateTime           @default(now()) @map("DH_CRIACAO")
   organization    Organization       @relation(fields: [organization_id], references: [organization_id])
   events          ApplicationEvent[]
 
-  @@map("pilot")
+  @@map("S_PILOTO")
 }
 
 model Application {
-  application_id          BigInt                    @id @default(autoincrement()) @db.BigInt
-  user_id                 Int
-  organization_id         Int
-  vehicle                 String                    @db.VarChar(100)
-  start_date              DateTime
-  end_date                DateTime
-  created_by              String                    @db.VarChar(100)
-  created_at              DateTime                  @default(now())
+  application_id          BigInt                    @id @default(autoincrement()) @map("ID_APLICACAO") @db.BigInt
+  user_id                 Int                       @map("ID_USUARIO")
+  organization_id         Int                       @map("ID_ORGANIZACAO")
+  vehicle                 String                    @map("NM_VEICULO") @db.VarChar(100)
+  start_date              DateTime                  @map("DH_INICIO")
+  end_date                DateTime                  @map("DH_FIM")
+  created_by              String                    @map("NM_CRIADO_POR") @db.VarChar(30)
+  created_at              DateTime                  @default(now()) @map("DH_CRIACAO")
   user                    User                      @relation(fields: [user_id], references: [user_id])
   organization            Organization              @relation(fields: [organization_id], references: [organization_id])
   events                  ApplicationEvent[]
@@ -88,80 +88,80 @@ model Application {
   ApplicationNotification ApplicationNotification[]
 
   @@index([user_id, created_at(sort: Desc)])
-  @@map("application")
+  @@map("S_APLICACAO")
 }
 
 model ApplicationEvent {
-  application_event_id  BigInt            @id @default(autoincrement()) @db.BigInt
-  application_id        BigInt            @db.BigInt
-  application_status_id Int
-  pilot_id              Int
-  created_by            String
-  created_at            DateTime          @default(now())
+  application_event_id  BigInt            @id @default(autoincrement()) @map("ID_EVENTO_APLICACAO") @db.BigInt
+  application_id        BigInt            @map("ID_APLICACAO") @db.BigInt
+  application_status_id Int               @map("ID_STATUS_APLICACAO")
+  pilot_id              Int               @map("ID_PILOTO")
+  created_by            String            @map("NM_CRIADO_POR") @db.VarChar(30)
+  created_at            DateTime          @default(now()) @map("DH_CRIACAO")
   application           Application       @relation(fields: [application_id], references: [application_id])
   status                ApplicationStatus @relation(fields: [application_status_id], references: [application_status_id])
   pilot                 Pilot             @relation(fields: [pilot_id], references: [pilot_id])
 
   @@index([application_id, created_at(sort: Desc)])
-  @@map("application_event")
+  @@map("H_EVENTO_APLICACAO")
 }
 
 model ApplicationStatus {
-  application_status_id Int                @id @default(autoincrement())
-  description           String             @db.VarChar(100)
-  active                Boolean
-  created_at            DateTime           @default(now())
+  application_status_id Int                @id @default(autoincrement()) @map("ID_STATUS_APLICACAO")
+  description           String             @map("DS_DESCRICAO") @db.VarChar(100)
+  active                Boolean            @map("ST_ATIVO")
+  created_at            DateTime           @default(now()) @map("DH_CRIACAO")
   events                ApplicationEvent[]
 
-  @@map("application_status")
+  @@map("S_STATUS_APLICACAO")
 }
 
 model ApplicationDocument {
-  application_document_id      Int                       @id @default(autoincrement())
-  application_id               BigInt                    @db.BigInt
-  application_document_type_id Int
-  original_name                String                    @db.VarChar(200)
-  path                         String                    @db.VarChar(1000)
+  application_document_id      Int                       @id @default(autoincrement()) @map("ID_DOCUMENTO_APLICACAO")
+  application_id               BigInt                    @map("ID_APLICACAO") @db.BigInt
+  application_document_type_id Int                       @map("ID_TIPO_DOCUMENTO_APLICACAO")
+  original_name                String                    @map("NM_NOME_ORIGINAL") @db.VarChar(200)
+  path                         String                    @map("DS_CAMINHO") @db.VarChar(1000)
   application                  Application               @relation(fields: [application_id], references: [application_id])
   type                         ApplicationDocumentType   @relation(fields: [application_document_type_id], references: [application_document_type_id])
   data                         ApplicationDocumentData[]
 
-  @@map("application_document")
+  @@map("S_DOCUMENTO_APLICACAO")
 }
 
 model ApplicationDocumentData {
-  id          BigInt              @id @default(autoincrement())
-  document_id Int
-  key         String              @db.VarChar(100)
-  value       String?             @db.VarChar(200)
-  created_by  Int
-  created_at  DateTime            @default(now())
+  id          BigInt              @id @default(autoincrement()) @map("ID_DOCUMENTO_DADOS")
+  document_id Int                 @map("ID_DOCUMENTO_APLICACAO")
+  key         String              @map("DS_CHAVE") @db.VarChar(100)
+  value       String?             @map("DS_VALOR") @db.VarChar(200)
+  created_by  Int                 @map("ID_CRIADO_POR")
+  created_at  DateTime            @default(now()) @map("DH_CRIACAO")
   document    ApplicationDocument @relation(fields: [document_id], references: [application_document_id])
 
-  @@map("application_document_data")
+  @@map("S_DOCUMENTO_DADOS_APLICACAO")
 }
 
 model ApplicationDocumentType {
-  application_document_type_id Int                   @id @default(autoincrement())
-  description                  String                @db.VarChar(100)
-  active                       Boolean
-  created_at                   DateTime              @default(now())
+  application_document_type_id Int                   @id @default(autoincrement()) @map("ID_TIPO_DOCUMENTO_APLICACAO")
+  description                  String                @map("DS_DESCRICAO") @db.VarChar(100)
+  active                       Boolean               @map("ST_ATIVO")
+  created_at                   DateTime              @default(now()) @map("DH_CRIACAO")
   documents                    ApplicationDocument[]
 
-  @@map("application_document_type")
+  @@map("S_TIPO_DOCUMENTO_APLICACAO")
 }
 
 model ApplicationArea {
-  id             Int                                            @id @default(autoincrement())
-  geom           Unsupported("public.geometry(polygonz, 4326)")
-  geomjson       String
-  description    String                                         @db.VarChar(100)
-  application_id BigInt                                         @db.BigInt
+  id             Int                                            @id @default(autoincrement()) @map("ID_AREA_APLICACAO")
+  geom           Unsupported("public.geometry(polygonz, 4326)") @map("GEOMETRIA")
+  geomjson       String                                         @map("GEOMETRIA_JSON")
+  description    String                                         @map("DS_DESCRICAO") @db.VarChar(100)
+  application_id BigInt                                         @map("ID_APLICACAO") @db.BigInt
   application    Application                                    @relation(fields: [application_id], references: [application_id])
-  created_at     DateTime                                       @default(now())
+  created_at     DateTime                                       @default(now()) @map("DH_CRIACAO")
 
   @@index([geom], name: "application_area_idx", type: Gist)
-  @@map("application_area")
+  @@map("S_AREA_APLICACAO")
 }
 
 enum ApplicationAnalisysStatus {
@@ -172,30 +172,30 @@ enum ApplicationAnalisysStatus {
 }
 
 model ApplicationAnalisys {
-  application_analisys_id      Int                       @id @default(autoincrement())
-  application_analisys_type_id Int
-  application_id               BigInt                    @db.BigInt
-  application_notification_id  BigInt?                   @db.BigInt
-  elapsed_time                 Int
-  status                       ApplicationAnalisysStatus @default(PENDING)
-  details                      Json?
-  created_at                   DateTime                  @default(now())
+  application_analisys_id      Int                       @id @default(autoincrement()) @map("ID_ANALISE_APLICACAO")
+  application_analisys_type_id Int                       @map("ID_TIPO_ANALISE_APLICACAO")
+  application_id               BigInt                    @map("ID_APLICACAO") @db.BigInt
+  application_notification_id  BigInt?                   @map("ID_NOTIFICACAO_APLICACAO") @db.BigInt
+  elapsed_time                 Int                       @map("NR_TEMPO_DECORRIDO")
+  status                       ApplicationAnalisysStatus @default(PENDING) @map("CS_STATUS")
+  details                      Json?                     @map("DETALHES")
+  created_at                   DateTime                  @default(now()) @map("DH_CRIACAO")
   application                  Application               @relation(fields: [application_id], references: [application_id])
   type                         ApplicationAnalisysType   @relation(fields: [application_analisys_type_id], references: [application_analisys_type_id])
-  ApplicationNotification      ApplicationNotification?  @relation(fields: [application_notification_id], references: [application_notification_id])
+  applicationNotification      ApplicationNotification?  @relation(fields: [application_notification_id], references: [application_notification_id])
 
-  @@map("application_analisys")
+  @@map("S_ANALISE_APLICACAO")
 }
 
 model ApplicationAnalisysType {
-  application_analisys_type_id Int                   @id @default(autoincrement())
-  name                         String                @db.VarChar(100)
-  allow_reprocess              Boolean               @default(true)
-  active                       Boolean               @default(true)
-  created_at                   DateTime              @default(now())
+  application_analisys_type_id Int                   @id @default(autoincrement()) @map("ID_TIPO_ANALISE_APLICACAO")
+  name                         String                @map("DS_NOME") @db.VarChar(100)
+  allow_reprocess              Boolean               @default(true) @map("PERMITIR_REPROCESSAMENTO")
+  active                       Boolean               @default(true) @map("ST_ATIVO")
+  created_at                   DateTime              @default(now()) @map("DH_CRIACAO")
   applicationAnalisys          ApplicationAnalisys[]
 
-  @@map("application_analisys_type")
+  @@map("S_TIPO_ANALISE_APLICACAO")
 }
 
 enum NotificationAlertLevel {
@@ -206,79 +206,79 @@ enum NotificationAlertLevel {
 }
 
 model ApplicationNotification {
-  application_notification_id BigInt                         @id @default(autoincrement())
-  application_id              BigInt                         @db.BigInt
-  created_at                  DateTime                       @default(now())
-  fiscal_id                   Int
-  alert_level                 NotificationAlertLevel         @default(LEVE)
+  application_notification_id BigInt                         @id @default(autoincrement()) @map("ID_NOTIFICACAO_APLICACAO")
+  application_id              BigInt                         @map("ID_APLICACAO") @db.BigInt
+  created_at                  DateTime                       @default(now()) @map("DH_CRIACAO")
+  fiscal_id                   Int                            @map("ID_FISCAL")
+  alert_level                 NotificationAlertLevel         @default(LEVE) @map("CS_NIVEL_ALERTA")
   application                 Application                    @relation(fields: [application_id], references: [application_id])
   fiscal                      User                           @relation(fields: [fiscal_id], references: [user_id])
   analisys                    ApplicationAnalisys[]
   events                      ApplicationNotificationEvent[]
 
-  @@map("application_notification")
+  @@map("S_NOTIFICACAO_APLICACAO")
 }
 
 model ApplicationNotificationEvent {
-  event_id                           BigInt                        @id @default(autoincrement()) @db.BigInt
-  application_notification_id        BigInt                        @db.BigInt
-  application_notification_status_id Int
-  created_by                         String
-  created_at                         DateTime                      @default(now())
+  event_id                           BigInt                        @id @default(autoincrement()) @map("ID_EVENTO_NOTIFICACAO")
+  application_notification_id        BigInt                        @map("ID_NOTIFICACAO_APLICACAO") @db.BigInt
+  application_notification_status_id Int                           @map("ID_STATUS_NOTIFICACAO_APLICACAO")
+  created_by                         String                        @map("NM_CRIADO_POR") @db.VarChar(30)
+  created_at                         DateTime                      @default(now()) @map("DH_CRIACAO")
   status                             ApplicationNotificationStatus @relation(fields: [application_notification_status_id], references: [id])
   notification                       ApplicationNotification       @relation(fields: [application_notification_id], references: [application_notification_id])
 
-  @@map("application_notification_event")
+  @@map("H_EVENTO_NOTIFICACAO")
 }
 
 model ApplicationNotificationStatus {
-  id            Int                            @id @default(autoincrement())
-  description   String                         @db.VarChar(100)
-  active        Boolean                        @default(true)
-  created_at    DateTime                       @default(now())
+  id            Int                            @id @default(autoincrement()) @map("ID_STATUS_NOTIFICACAO")
+  description   String                         @map("DS_DESCRICAO") @db.VarChar(100)
+  active        Boolean                        @default(true) @map("ST_ATIVO")
+  created_at    DateTime                       @default(now()) @map("DH_CRIACAO")
   notifications ApplicationNotificationEvent[]
 
-  @@map("application_notification_status")
+  @@map("S_STATUS_NOTIFICACAO")
 }
 
 model ProtectedArea {
-  id                     Int                                            @id @default(autoincrement())
-  geom                   Unsupported("public.geometry(polygonz, 4326)")
-  geomjson               String
-  description            String                                         @db.VarChar(100)
-  protected_area_type_id Int
+  id                     Int                                            @id @default(autoincrement()) @map("ID_AREA_PROTEGIDA")
+  geom                   Unsupported("public.geometry(polygonz, 4326)") @map("GEOMETRIA")
+  geomjson               String                                         @map("GEOMETRIA_JSON")
+  description            String                                         @map("DS_DESCRICAO") @db.VarChar(100)
+  protected_area_type_id Int                                            @map("ID_TIPO_AREA_PROTEGIDA")
   type                   ProtectedAreaType                              @relation(fields: [protected_area_type_id], references: [protected_area_type_id])
-  organization_id        Int
+  organization_id        Int                                            @map("ID_ORGANIZACAO")
   organization           Organization                                   @relation(fields: [organization_id], references: [organization_id])
-  created_by             String
-  created_at             DateTime                                       @default(now())
+  created_by             String                                         @map("NM_CRIADO_POR") @db.VarChar(30)
+  created_at             DateTime                                       @default(now()) @map("DH_CRIACAO")
 
   @@index([geom], name: "protected_area_idx", type: Gist)
-  @@map("protected_area")
+  @@map("S_AREA_PROTEGIDA")
 }
 
 model ProtectedAreaType {
-  protected_area_type_id Int             @id @default(autoincrement())
-  name                   String          @db.VarChar(100)
-  description            String          @db.VarChar(1000)
-  distance               Int
-  distance_drone         Int
-  active                 Boolean         @default(true)
-  created_at             DateTime        @default(now())
+  protected_area_type_id Int             @id @default(autoincrement()) @map("ID_TIPO_AREA_PROTEGIDA")
+  name                   String          @map("NM_TIPO_AREA_PROTEGIDA") @db.VarChar(50)
+  description            String          @map("DS_DESCRICAO") @db.VarChar(200)
+  distance               Int             @map("NR_DISTANCIA")
+  distance_drone         Int             @map("NR_DISTANCIA_DRONE")
+  active                 Boolean         @default(true) @map("ST_ATIVO")
+  created_at             DateTime        @default(now()) @map("DH_CRIACAO")
   protected_area         ProtectedArea[]
 
-  @@map("protected_area_type")
+  @@map("S_TIPO_AREA_PROTEGIDA")
 }
 
 model ApplicationPath {
-  id             Int                                            @id @default(autoincrement())
-  geom           Unsupported("public.geometry(linestringz, 4326)")
-  geomjson       String
-  description    String                                         @db.VarChar(100)
-  application_id BigInt                                         @db.BigInt
-  application    Application                                    @relation(fields: [application_id], references: [application_id])
-  created_at     DateTime                                       @default(now())
+  id             Int                                               @id @default(autoincrement()) @map("ID_CAMINHO_APLICACAO")
+  geom           Unsupported("public.geometry(linestringz, 4326)") @map("GEOMETRIA")
+  geomjson       String                                            @map("GEOMETRIA_JSON")
+  description    String                                            @map("DS_DESCRICAO") @db.VarChar(100)
+  application_id BigInt                                            @map("ID_APLICACAO") @db.BigInt
+  application    Application                                       @relation(fields: [application_id], references: [application_id])
+  created_at     DateTime                                          @default(now()) @map("DH_CRIACAO")
 
   @@index([geom], name: "application_path_idx", type: Gist)
-  @@map("application_path")
+  @@map("S_CAMINHO_APLICACAO")
 }
