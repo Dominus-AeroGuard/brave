@@ -2,21 +2,25 @@ datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
   extensions = [postgis]
+  schemas    = ["SIGA"]
 }
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  previewFeatures = ["postgresqlExtensions", "multiSchema"]
 }
 
 enum UserStatus {
-  ACTIVE
-  INACTIVE
-  INVITED
+  ACTIVE   @map("ATIVO")
+  INACTIVE @map("INATIVO")
+  INVITED  @map("CONVIDADO")
+
+  @@map("STATUS_USUARIO")
+  @@schema("SIGA")
 }
 
 model User {
-  user_id       Int                       @id @default(autoincrement()) @map("ID_USUARIO")
+  user_id       Int                       @default(autoincrement()) @map("ID_USUARIO")
   name          String                    @map("NM_USUARIO") @db.VarChar(100)
   email         String                    @map("DS_EMAIL") @db.VarChar(100)
   document      String                    @map("DS_DOCUMENTO") @db.VarChar(14)
@@ -26,11 +30,13 @@ model User {
   organizations UserOrganization[]
   notifications ApplicationNotification[]
 
+  @@id([user_id], map: "PK_USUARIO")
   @@map("S_USUARIO")
+  @@schema("SIGA")
 }
 
 model Organization {
-  organization_id Int                @id @default(autoincrement()) @map("ID_ORGANIZACAO")
+  organization_id Int                @default(autoincrement()) @map("ID_ORGANIZACAO")
   name            String             @map("NM_ORGANIZACAO") @db.VarChar(100)
   created_at      DateTime           @default(now()) @map("DH_CRIACAO")
   pilots          Pilot[]
@@ -38,7 +44,9 @@ model Organization {
   users           UserOrganization[]
   protected_areas ProtectedArea[]
 
+  @@id([organization_id], map: "PK_ORGANIZACAO")
   @@map("S_ORGANIZACAO")
+  @@schema("SIGA")
 }
 
 model UserOrganization {
@@ -49,28 +57,31 @@ model UserOrganization {
   created_by      String       @map("NM_CRIADO_POR") @db.VarChar(30)
   updated_at      DateTime     @default(now()) @map("DH_ATUALIZACAO")
   created_at      DateTime     @default(now()) @map("DH_CRIACAO")
-  organization    Organization @relation(fields: [organization_id], references: [organization_id])
-  user            User         @relation(fields: [user_id], references: [user_id])
+  organization    Organization @relation(fields: [organization_id], references: [organization_id], map: "FK_USR_ORG_ID_ORG")
+  user            User         @relation(fields: [user_id], references: [user_id], map: "S_USR_ORG_ID_USR")
 
-  @@id([user_id, organization_id])
+  @@id([user_id, organization_id], map: "PK_USUARIO_ORGANIZACAO")
   @@map("S_USUARIO_ORGANIZACAO")
+  @@schema("SIGA")
 }
 
 model Pilot {
-  pilot_id        Int                @id @default(autoincrement()) @map("ID_PILOTO")
+  pilot_id        Int                @default(autoincrement()) @map("ID_PILOTO")
   organization_id Int                @map("ID_ORGANIZACAO")
   name            String             @map("NM_PILOTO") @db.VarChar(100)
-  document        String             @map("NR_DOCUMENTO") @db.VarChar(14)
-  license         String             @map("NR_LICENCA") @db.VarChar(20)
+  document        String             @map("CD_DOCUMENTO") @db.Char(14)
+  license         String             @map("CD_LICENCA") @db.Char(20)
   created_at      DateTime           @default(now()) @map("DH_CRIACAO")
-  organization    Organization       @relation(fields: [organization_id], references: [organization_id])
+  organization    Organization       @relation(fields: [organization_id], references: [organization_id], map: "FK_PILOTO_ID_ORG")
   events          ApplicationEvent[]
 
+  @@id([pilot_id], map: "PK_PILOTO")
   @@map("S_PILOTO")
+  @@schema("SIGA")
 }
 
 model Application {
-  application_id          BigInt                    @id @default(autoincrement()) @map("ID_APLICACAO") @db.BigInt
+  application_id          BigInt                    @default(autoincrement()) @map("ID_APLICACAO") @db.BigInt
   user_id                 Int                       @map("ID_USUARIO")
   organization_id         Int                       @map("ID_ORGANIZACAO")
   vehicle                 String                    @map("NM_VEICULO") @db.VarChar(100)
@@ -78,8 +89,8 @@ model Application {
   end_date                DateTime                  @map("DH_FIM")
   created_by              String                    @map("NM_CRIADO_POR") @db.VarChar(30)
   created_at              DateTime                  @default(now()) @map("DH_CRIACAO")
-  user                    User                      @relation(fields: [user_id], references: [user_id])
-  organization            Organization              @relation(fields: [organization_id], references: [organization_id])
+  user                    User                      @relation(fields: [user_id], references: [user_id], map: "FK_APL_ID_USR")
+  organization            Organization              @relation(fields: [organization_id], references: [organization_id], map: "FK_APL_ID_ORG")
   events                  ApplicationEvent[]
   documents               ApplicationDocument[]
   areas                   ApplicationArea[]
@@ -87,81 +98,95 @@ model Application {
   analisys                ApplicationAnalisys[]
   ApplicationNotification ApplicationNotification[]
 
-  @@index([user_id, created_at(sort: Desc)])
+  @@id([application_id], map: "PK_APLICACAO")
+  @@index([user_id, created_at(sort: Desc)], name: "I_APL_ID_USR_DH_CRIACAO")
   @@map("S_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationEvent {
-  application_event_id  BigInt            @id @default(autoincrement()) @map("ID_EVENTO_APLICACAO") @db.BigInt
+  application_event_id  BigInt            @default(autoincrement()) @map("ID_EVENTO_APLICACAO") @db.BigInt
   application_id        BigInt            @map("ID_APLICACAO") @db.BigInt
   application_status_id Int               @map("ID_STATUS_APLICACAO")
   pilot_id              Int               @map("ID_PILOTO")
   created_by            String            @map("NM_CRIADO_POR") @db.VarChar(30)
   created_at            DateTime          @default(now()) @map("DH_CRIACAO")
-  application           Application       @relation(fields: [application_id], references: [application_id])
-  status                ApplicationStatus @relation(fields: [application_status_id], references: [application_status_id])
-  pilot                 Pilot             @relation(fields: [pilot_id], references: [pilot_id])
+  application           Application       @relation(fields: [application_id], references: [application_id], map: "FK_H_EVT_APL_ID_APLI")
+  status                ApplicationStatus @relation(fields: [application_status_id], references: [application_status_id], map: "FK_H_EVT_APL_ID_STATUS_APL")
+  pilot                 Pilot             @relation(fields: [pilot_id], references: [pilot_id], map: "FK_H_EVT_APL_ID_PILOTO")
 
-  @@index([application_id, created_at(sort: Desc)])
+  @@id([application_event_id], map: "PK_H_EVENTO_APLICACAO")
+  @@index([application_id, created_at(sort: Desc)], name: "IAD_H_EVT_APL_ID_APL_DH_CRI")
   @@map("H_EVENTO_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationStatus {
-  application_status_id Int                @id @default(autoincrement()) @map("ID_STATUS_APLICACAO")
+  application_status_id Int                @default(autoincrement()) @map("ID_STATUS_APLICACAO")
   description           String             @map("DS_DESCRICAO") @db.VarChar(100)
   active                Boolean            @map("ST_ATIVO")
   created_at            DateTime           @default(now()) @map("DH_CRIACAO")
   events                ApplicationEvent[]
 
+  @@id([application_status_id], map: "PK_STATUS_APLICACAO")
   @@map("S_STATUS_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationDocument {
-  application_document_id      Int                       @id @default(autoincrement()) @map("ID_DOCUMENTO_APLICACAO")
+  application_document_id      Int                       @default(autoincrement()) @map("ID_DOCUMENTO_APLICACAO")
   application_id               BigInt                    @map("ID_APLICACAO") @db.BigInt
   application_document_type_id Int                       @map("ID_TIPO_DOCUMENTO_APLICACAO")
   original_name                String                    @map("NM_NOME_ORIGINAL") @db.VarChar(200)
   path                         String                    @map("DS_CAMINHO") @db.VarChar(1000)
-  application                  Application               @relation(fields: [application_id], references: [application_id])
-  type                         ApplicationDocumentType   @relation(fields: [application_document_type_id], references: [application_document_type_id])
+  application                  Application               @relation(fields: [application_id], references: [application_id], map: "FK_DOC_APL_ID_APL")
+  type                         ApplicationDocumentType   @relation(fields: [application_document_type_id], references: [application_document_type_id], map: "FK_DOC_APL_ID_TP_DOC_APL")
   data                         ApplicationDocumentData[]
 
+  @@id([application_document_id], map: "PK_DOCUMENTO_APLICACAO")
   @@map("S_DOCUMENTO_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationDocumentData {
-  id          BigInt              @id @default(autoincrement()) @map("ID_DOCUMENTO_DADOS")
+  id          BigInt              @default(autoincrement()) @map("ID_DOCUMENTO_DADOS")
   document_id Int                 @map("ID_DOCUMENTO_APLICACAO")
   key         String              @map("DS_CHAVE") @db.VarChar(100)
   value       String?             @map("DS_VALOR") @db.VarChar(200)
   created_by  Int                 @map("ID_CRIADO_POR")
   created_at  DateTime            @default(now()) @map("DH_CRIACAO")
-  document    ApplicationDocument @relation(fields: [document_id], references: [application_document_id])
+  document    ApplicationDocument @relation(fields: [document_id], references: [application_document_id], map: "FK_DOC_DADOS_APL_ID_DOC_APL")
 
+  @@id([id], map: "PK_DOCUMENTO_DADOS_APLICACAO")
   @@map("S_DOCUMENTO_DADOS_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationDocumentType {
-  application_document_type_id Int                   @id @default(autoincrement()) @map("ID_TIPO_DOCUMENTO_APLICACAO")
+  application_document_type_id Int                   @default(autoincrement()) @map("ID_TIPO_DOCUMENTO_APLICACAO")
   description                  String                @map("DS_DESCRICAO") @db.VarChar(100)
   active                       Boolean               @map("ST_ATIVO")
   created_at                   DateTime              @default(now()) @map("DH_CRIACAO")
   documents                    ApplicationDocument[]
 
+  @@id([application_document_type_id], map: "PK_TIPO_DOCUMENTO_APLICACAO")
   @@map("S_TIPO_DOCUMENTO_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationArea {
-  id             Int                                            @id @default(autoincrement()) @map("ID_AREA_APLICACAO")
-  geom           Unsupported("public.geometry(polygonz, 4326)") @map("GEOMETRIA")
-  geomjson       String                                         @map("GEOMETRIA_JSON")
+  id             Int                                            @default(autoincrement()) @map("ID_AREA_APLICACAO")
+  geom           Unsupported("public.geometry(polygonz, 4326)") @map("PG_GEOMETRIA")
+  geomjson       String                                         @map("PG_GEOMETRIA_JSON")
   description    String                                         @map("DS_DESCRICAO") @db.VarChar(100)
   application_id BigInt                                         @map("ID_APLICACAO") @db.BigInt
-  application    Application                                    @relation(fields: [application_id], references: [application_id])
+  application    Application                                    @relation(fields: [application_id], references: [application_id], map: "FK_AREA_APL_ID_APL")
   created_at     DateTime                                       @default(now()) @map("DH_CRIACAO")
 
-  @@index([geom], name: "application_area_idx", type: Gist)
+  @@id([id], map: "PK_AREA_APLICACAO")
+  @@index([geom], name: "I_APL_AREA_PG_GEOM", type: Gist)
   @@map("S_AREA_APLICACAO")
+  @@schema("SIGA")
 }
 
 enum ApplicationAnalisysStatus {
@@ -169,10 +194,13 @@ enum ApplicationAnalisysStatus {
   APPROVED
   FAILED
   REJECTED
+
+  @@map("STATUS_ANALISE_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationAnalisys {
-  application_analisys_id      Int                       @id @default(autoincrement()) @map("ID_ANALISE_APLICACAO")
+  application_analisys_id      Int                       @default(autoincrement()) @map("ID_ANALISE_APLICACAO")
   application_analisys_type_id Int                       @map("ID_TIPO_ANALISE_APLICACAO")
   application_id               BigInt                    @map("ID_APLICACAO") @db.BigInt
   application_notification_id  BigInt?                   @map("ID_NOTIFICACAO_APLICACAO") @db.BigInt
@@ -180,22 +208,26 @@ model ApplicationAnalisys {
   status                       ApplicationAnalisysStatus @default(PENDING) @map("CS_STATUS")
   details                      Json?                     @map("DETALHES")
   created_at                   DateTime                  @default(now()) @map("DH_CRIACAO")
-  application                  Application               @relation(fields: [application_id], references: [application_id])
-  type                         ApplicationAnalisysType   @relation(fields: [application_analisys_type_id], references: [application_analisys_type_id])
-  applicationNotification      ApplicationNotification?  @relation(fields: [application_notification_id], references: [application_notification_id])
+  application                  Application               @relation(fields: [application_id], references: [application_id], map: "FK_ANL_APL_ID_APL")
+  type                         ApplicationAnalisysType   @relation(fields: [application_analisys_type_id], references: [application_analisys_type_id], map: "FK_ANL_APL_ID_TP_ANL_APL")
+  applicationNotification      ApplicationNotification?  @relation(fields: [application_notification_id], references: [application_notification_id], map: "FK_ANL_APL_ID_NOT_APL")
 
+  @@id([application_analisys_id], map: "PK_ANALISE_APLICACAO")
   @@map("S_ANALISE_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationAnalisysType {
-  application_analisys_type_id Int                   @id @default(autoincrement()) @map("ID_TIPO_ANALISE_APLICACAO")
+  application_analisys_type_id Int                   @default(autoincrement()) @map("ID_TIPO_ANALISE_APLICACAO")
   name                         String                @map("DS_NOME") @db.VarChar(100)
-  allow_reprocess              Boolean               @default(true) @map("PERMITIR_REPROCESSAMENTO")
+  allow_reprocess              Boolean               @default(true) @map("ST_PERMITIR_REPROCESSAMENTO")
   active                       Boolean               @default(true) @map("ST_ATIVO")
   created_at                   DateTime              @default(now()) @map("DH_CRIACAO")
   applicationAnalisys          ApplicationAnalisys[]
 
+  @@id([application_analisys_type_id], map: "PK_TIPO_ANALISE_APLICACAO")
   @@map("S_TIPO_ANALISE_APLICACAO")
+  @@schema("SIGA")
 }
 
 enum NotificationAlertLevel {
@@ -203,62 +235,73 @@ enum NotificationAlertLevel {
   GRAVE
   MODERADO
   LEVE
+
+  @@map("NIVEL_ALERTA_NOTIFICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationNotification {
-  application_notification_id BigInt                         @id @default(autoincrement()) @map("ID_NOTIFICACAO_APLICACAO")
+  application_notification_id BigInt                         @default(autoincrement()) @map("ID_NOTIFICACAO_APLICACAO")
   application_id              BigInt                         @map("ID_APLICACAO") @db.BigInt
   created_at                  DateTime                       @default(now()) @map("DH_CRIACAO")
   fiscal_id                   Int                            @map("ID_FISCAL")
   alert_level                 NotificationAlertLevel         @default(LEVE) @map("CS_NIVEL_ALERTA")
-  application                 Application                    @relation(fields: [application_id], references: [application_id])
-  fiscal                      User                           @relation(fields: [fiscal_id], references: [user_id])
+  application                 Application                    @relation(fields: [application_id], references: [application_id], map: "FK_NOT_APL_ID_APL")
+  fiscal                      User                           @relation(fields: [fiscal_id], references: [user_id], map: "FK_NOT_APL_ID_FISCAL")
   analisys                    ApplicationAnalisys[]
   events                      ApplicationNotificationEvent[]
 
+  @@id([application_notification_id], map: "PK_NOTIFICACAO_APLICACAO")
   @@map("S_NOTIFICACAO_APLICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationNotificationEvent {
-  event_id                           BigInt                        @id @default(autoincrement()) @map("ID_EVENTO_NOTIFICACAO")
+  event_id                           BigInt                        @default(autoincrement()) @map("ID_EVENTO_NOTIFICACAO")
   application_notification_id        BigInt                        @map("ID_NOTIFICACAO_APLICACAO") @db.BigInt
   application_notification_status_id Int                           @map("ID_STATUS_NOTIFICACAO_APLICACAO")
   created_by                         String                        @map("NM_CRIADO_POR") @db.VarChar(30)
   created_at                         DateTime                      @default(now()) @map("DH_CRIACAO")
-  status                             ApplicationNotificationStatus @relation(fields: [application_notification_status_id], references: [id])
-  notification                       ApplicationNotification       @relation(fields: [application_notification_id], references: [application_notification_id])
+  status                             ApplicationNotificationStatus @relation(fields: [application_notification_status_id], references: [id], map: "FK_H_EVT_NOT_ID_STATUS_NOT_APL")
+  notification                       ApplicationNotification       @relation(fields: [application_notification_id], references: [application_notification_id], map: "FK_H_EVT_NOT_ID_NOT_APL")
 
+  @@id([event_id], map: "PK_EVENTO_NOTIFICACAO")
   @@map("H_EVENTO_NOTIFICACAO")
+  @@schema("SIGA")
 }
 
 model ApplicationNotificationStatus {
-  id            Int                            @id @default(autoincrement()) @map("ID_STATUS_NOTIFICACAO")
+  id            Int                            @default(autoincrement()) @map("ID_STATUS_NOTIFICACAO")
   description   String                         @map("DS_DESCRICAO") @db.VarChar(100)
   active        Boolean                        @default(true) @map("ST_ATIVO")
   created_at    DateTime                       @default(now()) @map("DH_CRIACAO")
   notifications ApplicationNotificationEvent[]
 
+  @@id([id], map: "PK_STATUS_NOTIFICACAO")
   @@map("S_STATUS_NOTIFICACAO")
+  @@schema("SIGA")
 }
 
 model ProtectedArea {
-  id                     Int                                            @id @default(autoincrement()) @map("ID_AREA_PROTEGIDA")
-  geom                   Unsupported("public.geometry(polygonz, 4326)") @map("GEOMETRIA")
-  geomjson               String                                         @map("GEOMETRIA_JSON")
+  id                     Int                                            @default(autoincrement()) @map("ID_AREA_PROTEGIDA")
+  geom                   Unsupported("public.geometry(polygonz, 4326)") @map("PG_GEOMETRIA")
+  geomjson               String                                         @map("PG_GEOMETRIA_JSON")
   description            String                                         @map("DS_DESCRICAO") @db.VarChar(100)
   protected_area_type_id Int                                            @map("ID_TIPO_AREA_PROTEGIDA")
-  type                   ProtectedAreaType                              @relation(fields: [protected_area_type_id], references: [protected_area_type_id])
+  type                   ProtectedAreaType                              @relation(fields: [protected_area_type_id], references: [protected_area_type_id], map: "FK_AREA_PROT_ID_TP_AREA_PROT")
   organization_id        Int                                            @map("ID_ORGANIZACAO")
-  organization           Organization                                   @relation(fields: [organization_id], references: [organization_id])
+  organization           Organization                                   @relation(fields: [organization_id], references: [organization_id], map: "FK_AREA_PROT_ID_ORG")
   created_by             String                                         @map("NM_CRIADO_POR") @db.VarChar(30)
   created_at             DateTime                                       @default(now()) @map("DH_CRIACAO")
 
-  @@index([geom], name: "protected_area_idx", type: Gist)
+  @@id([id], map: "PK_AREA_PROTEGIDA")
+  @@index([geom], name: "I_AREA_PROTEGIDA_PG_GEOM", type: Gist)
   @@map("S_AREA_PROTEGIDA")
+  @@schema("SIGA")
 }
 
 model ProtectedAreaType {
-  protected_area_type_id Int             @id @default(autoincrement()) @map("ID_TIPO_AREA_PROTEGIDA")
+  protected_area_type_id Int             @default(autoincrement()) @map("ID_TIPO_AREA_PROTEGIDA")
   name                   String          @map("NM_TIPO_AREA_PROTEGIDA") @db.VarChar(50)
   description            String          @map("DS_DESCRICAO") @db.VarChar(200)
   distance               Int             @map("NR_DISTANCIA")
@@ -267,18 +310,22 @@ model ProtectedAreaType {
   created_at             DateTime        @default(now()) @map("DH_CRIACAO")
   protected_area         ProtectedArea[]
 
+  @@id([protected_area_type_id], map: "PK_TIPO_AREA_PROTEGIDA")
   @@map("S_TIPO_AREA_PROTEGIDA")
+  @@schema("SIGA")
 }
 
 model ApplicationPath {
-  id             Int                                               @id @default(autoincrement()) @map("ID_CAMINHO_APLICACAO")
-  geom           Unsupported("public.geometry(linestringz, 4326)") @map("GEOMETRIA")
-  geomjson       String                                            @map("GEOMETRIA_JSON")
+  id             Int                                               @default(autoincrement()) @map("ID_CAMINHO_APLICACAO")
+  geom           Unsupported("public.geometry(linestringz, 4326)") @map("PG_GEOMETRIA")
+  geomjson       String                                            @map("PG_GEOMETRIA_JSON")
   description    String                                            @map("DS_DESCRICAO") @db.VarChar(100)
   application_id BigInt                                            @map("ID_APLICACAO") @db.BigInt
-  application    Application                                       @relation(fields: [application_id], references: [application_id])
+  application    Application                                       @relation(fields: [application_id], references: [application_id], map: "FK_CAMINHO_APL_ID_APL")
   created_at     DateTime                                          @default(now()) @map("DH_CRIACAO")
 
-  @@index([geom], name: "application_path_idx", type: Gist)
+  @@id([id], map: "PK_CAMINHO_APLICACAO")
+  @@index([geom], name: "I_CAMINHO_APL_PG_GEOM", type: Gist)
   @@map("S_CAMINHO_APLICACAO")
+  @@schema("SIGA")
 }
