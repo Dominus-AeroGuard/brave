@@ -7,32 +7,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions", "multiSchema"]
-}
-
-enum UserStatus {
-  ACTIVE   @map("ATIVO")
-  INACTIVE @map("INATIVO")
-  INVITED  @map("CONVIDADO")
-
-  @@map("STATUS_USUARIO")
-  @@schema("SIGA")
-}
-
-model User {
-  user_id       Int                       @default(autoincrement()) @map("ID_USUARIO")
-  name          String                    @map("NM_USUARIO") @db.VarChar(100)
-  email         String                    @map("DS_EMAIL") @db.VarChar(100)
-  document      String                    @map("DS_DOCUMENTO") @db.VarChar(14)
-  status        UserStatus                @default(ACTIVE) @map("CS_STATUS")
-  created_at    DateTime                  @default(now()) @map("DH_CRIACAO")
-  applications  Application[]
-  organizations UserOrganization[]
-  notifications ApplicationNotification[]
-
-  @@id([user_id], map: "PK_USUARIO")
-  @@map("S_USUARIO")
-  @@schema("SIGA")
+  previewFeatures = ["postgresqlExtensions", "multiSchema", "prismaSchemaFolder"]
 }
 
 model Organization {

@@ -1,0 +1,97 @@
+enum UserStatus {
+  ACTIVE   @map("ATIVO")
+  INACTIVE @map("INATIVO")
+  INVITED  @map("CONVIDADO")
+
+  @@map("STATUS_USUARIO")
+  @@schema("SIGA")
+}
+
+model User {
+  user_id         Int                       @default(autoincrement()) @map("ID_USUARIO")
+  name            String                    @map("NM_USUARIO") @db.VarChar(100)
+  email           String                    @map("DS_EMAIL") @db.VarChar(100)
+  document        String                    @map("DS_DOCUMENTO") @db.VarChar(14)
+  status          UserStatus                @default(ACTIVE) @map("CS_STATUS")
+  created_at      DateTime                  @default(now()) @map("DH_CRIACAO")
+  applications    Application[]
+  organizations   UserOrganization[]
+  notifications   ApplicationNotification[]
+  userRoles       UserRole[]
+  userPermissions UserPermission[]
+
+  @@id([user_id], map: "PK_USUARIO")
+  @@map("S_USUARIO")
+  @@schema("SIGA")
+}
+
+model Role {
+  role_id         Int              @default(autoincrement()) @map("ID_ROLE")
+  role            String           @map("NM_ROLE") @db.VarChar(30)
+  description     String           @map("DS_ROLE") @db.VarChar(100)
+  created_at      DateTime         @default(now()) @map("DH_CRIACAO")
+  created_by      Int              @map("ID_CRIADO_POR")
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+
+  @@id([role_id], map: "PK_ROLE")
+  @@map("S_ROLE")
+  @@schema("SIGA")
+}
+
+model Permission {
+  permission_id   Int              @default(autoincrement()) @map("ID_PERMISSAO")
+  resource        String           @map("DS_RECURSO") @db.VarChar(30)
+  action          String           @map("DS_ACAO") @db.VarChar(30)
+  description     String           @map("DS_PERMISSAO") @db.VarChar(100)
+  created_at      DateTime         @default(now()) @map("DH_CRIACAO")
+  created_by      Int              @map("ID_CRIADO_POR")
+  rolePermissions RolePermission[]
+  userPermissions UserPermission[]
+
+  @@id([permission_id], map: "PK_PERMISSAO")
+  @@map("S_PERMISSAO")
+  @@schema("SIGA")
+}
+
+model UserRole {
+  user_role_id Int      @default(autoincrement()) @map("ID_USUARIO_ROLE")
+  user_id      Int      @map("ID_USUARIO")
+  role_id      Int      @map("ID_ROLE")
+  created_at   DateTime @default(now()) @map("DH_CRIACAO")
+  created_by   Int      @map("ID_CRIADO_POR")
+  user         User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, map: "FK_USER_ROLE")
+  role         Role     @relation(fields: [role_id], references: [role_id], onDelete: Cascade, map: "FK_ROLE_USER")
+
+  @@id([user_role_id], map: "PK_USUARIO_ROLE")
+  @@map("S_USUARIO_ROLE")
+  @@schema("SIGA")
+}
+
+model UserPermission {
+  user_permission_id Int        @default(autoincrement()) @map("ID_USUARIO_PERMISSAO")
+  user_id            Int        @map("ID_USUARIO")
+  permission_id      Int        @map("ID_PERMISSAO")
+  created_at         DateTime   @default(now()) @map("DH_CRIACAO")
+  created_by         Int        @map("ID_CRIADO_POR")
+  user               User       @relation(fields: [user_id], references: [user_id], onDelete: Cascade, map: "FK_USER_PERMISSION")
+  permission         Permission @relation(fields: [permission_id], references: [permission_id], onDelete: Cascade, map: "FK_PERMISSION_USER")
+
+  @@id([user_permission_id], map: "PK_USUARIO_PERMISSAO")
+  @@map("S_USUARIO_PERMISSAO")
+  @@schema("SIGA")
+}
+
+model RolePermission {
+  role_permission_id Int        @default(autoincrement()) @map("ID_ROLE_PERMISSAO")
+  role_id            Int        @map("ID_ROLE")
+  permission_id      Int        @map("ID_PERMISSAO")
+  created_at         DateTime   @default(now()) @map("DH_CRIACAO")
+  created_by         Int        @map("ID_CRIADO_POR")
+  role               Role       @relation(fields: [role_id], references: [role_id], onDelete: Cascade, map: "FK_ROLE_PERMISSION")
+  permission         Permission @relation(fields: [permission_id], references: [permission_id], onDelete: Cascade, map: "FK_PERMISSION_ROLE")
+
+  @@id([role_permission_id], map: "PK_ROLE_PERMISSAO")
+  @@map("S_ROLE_PERMISSAO")
+  @@schema("SIGA")
+}
