@@ -48,13 +48,13 @@ export class ApplicationDocumentDataRepository
   async findAll(documentId: number): Promise<ApplicationDocumentData[]> {
     const records: DocumentDataModel[] = await this.prisma.$queryRaw`
       SELECT *
-      FROM application_document_data
-      WHERE (key, created_at) IN (
-          SELECT key, MAX(created_at) AS max_created_at
-          FROM application_document_data
-          GROUP BY key
+      FROM "SIGA"."S_DOCUMENTO_DADOS_APLICACAO"
+      WHERE ("DS_CHAVE", "DH_CRIACAO") IN (
+          SELECT "DS_CHAVE", MAX("DH_CRIACAO") AS max_created_at
+          FROM "SIGA"."S_DOCUMENTO_DADOS_APLICACAO"
+          GROUP BY "DS_CHAVE"
       )
-      AND document_Id = ${documentId};
+      AND "ID_DOCUMENTO_APLICACAO" = ${documentId};
     `;
 
     return records.map(this.buildApplicationDocumentDataEntity);

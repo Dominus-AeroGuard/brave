@@ -313,7 +313,7 @@ model OrganizationArea {
   geom                   Unsupported("public.geometry(polygonz, 4326)") @map("PG_GEOMETRIA")
   geomjson               String                                         @map("PG_GEOMETRIA_JSON")
   organization_id        Int                                            @map("ID_ORGANIZACAO")
-  organization           Organization                                   @relation(fields: [organization_id], references: [organization_id])
+  organization           Organization                                   @relation(fields: [organization_id], references: [organization_id], map: "FK_AREA_ORGAN_ID_ORG")
   created_by             String                                         @map("NM_CRIADO_POR") @db.VarChar(30)
   created_at             DateTime                                       @default(now()) @map("DH_CRIACAO")
 

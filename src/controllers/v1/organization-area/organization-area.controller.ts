@@ -67,6 +67,7 @@ export class OrganizationAreaController {
     return this.createOrganizationArea.execute({
       file: files[0],
       organizationId: req.user.organizationId,
+      userId: req.user.userId,
     });
   }
 
@@ -74,6 +75,13 @@ export class OrganizationAreaController {
   @ApiOkResponse({ type: [OrganizationArea] })
   findAll(@Request() { user }) {
     return this.organizationAreaRepository.findAll(
+      user.organizationId,
+    );
+  }
+
+  @Get('/geojson')
+  findAllGeojson(@Request() { user }) {
+    return this.organizationAreaRepository.getAsGeoJson(
       user.organizationId,
     );
   }

@@ -7,11 +7,13 @@ export interface IOrganizationAreaRepository {
     data: Partial<{
       geom: string;
       organization: Partial<{ id: number }>;
+      user: Partial<{ id: number }>;
     }>,
   ): Promise<number>;
   createMany(
     data: Array<string>,
     organizationId: number,
+    userId: number,
   ): Promise<number>;
   findOne(organizationId: number, id: number): Promise<OrganizationArea>;
   findAll(organizationId: number): Promise<OrganizationArea[]>;
@@ -28,11 +30,12 @@ export class OrganizationAreaRepository implements IOrganizationAreaRepository {
     data: Partial<{
       geom: string;
       organization: Partial<{ id: number }>;
+      user: Partial<{ id: number }>;
     }>,
   ): Promise<number> {
     const result = await this.prisma.$executeRaw`
-      INSERT INTO "organization_area" ("geom", "geomjson", "organization_id")
-      VALUES (ST_Force3D(ST_GeomFromGeoJSON(${data.geom})), ${data.geom}::text, ${data.organization.id})`;
+      INSERT INTO "SIGA"."S_AREA_ORGANIZACAO" ("PG_GEOMETRIA" , "PG_GEOMETRIA_JSON" , "ID_ORGANIZACAO", "NM_CRIADO_POR")
+      VALUES (ST_Force3D(ST_GeomFromGeoJSON(${data.geom})), ${data.geom}::text, ${data.organization.id}, ${data.user.id.toString()}::text)`;
 
     return result;
   }
@@ -40,14 +43,15 @@ export class OrganizationAreaRepository implements IOrganizationAreaRepository {
   async createMany(
     data: Array<string>,
     organizationId: number,
+    userId: number,
   ): Promise<number> {
     const result = await this.prisma.$transaction(
       async (tx) => {
         let count = 0;
         for (const d of data) {
           count += await tx.$executeRaw`
-            INSERT INTO "organization_area" ("geom", "geomjson", "organization_id")
-            VALUES (ST_Force3D(ST_GeomFromGeoJSON(${d})), ${d}::text, ${organizationId})`;
+            INSERT INTO "SIGA"."S_AREA_ORGANIZACAO" ("PG_GEOMETRIA" , "PG_GEOMETRIA_JSON" , "ID_ORGANIZACAO", "NM_CRIADO_POR")
+            VALUES (ST_Force3D(ST_GeomFromGeoJSON(${d})), ${d}::text, ${organizationId}, ${userId.toString()}::text)`;
         }
         return count;
       },
@@ -94,7 +98,7 @@ export class OrganizationAreaRepository implements IOrganizationAreaRepository {
 
   async getAsGeoJson(organizationId: number): Promise<string> {
     const result = await this.prisma
-      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select id, geom from "organization_area" as a where a.organization_id = ${organizationId}) as t`;
+      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select "ID_AREA_ORGANIZACAO", "PG_GEOMETRIA" from "SIGA"."S_AREA_ORGANIZACAO" as a where a."ID_ORGANIZACAO" = ${organizationId}) as t`;
 
     return result[0]['json_build_object'];
   }

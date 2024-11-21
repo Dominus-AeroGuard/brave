@@ -154,7 +154,7 @@ export class ApplicationDocumentRepository
     type,
   }): Promise<ApplicationDocument> => {
     const applicationDocumentType = new ApplicationDocumentType(
-      type.application_status_id,
+      type.application_document_type_id,
       type.description,
       type.active,
     );

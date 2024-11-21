@@ -5,6 +5,7 @@ import { DOMParser } from '@xmldom/xmldom';
 export interface CreateOrganizationAreaRequest {
   file: Express.Multer.File;
   organizationId: number;
+  userId: number;
 }
 
 @Injectable()
@@ -41,6 +42,7 @@ export class CreateOrganizationAreaUseCase {
     return await this.organizationAreaRepository.createMany(
       feats,
       request.organizationId,
+      request.userId,
     );
   }
 }
