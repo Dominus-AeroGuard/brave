@@ -1,0 +1,22 @@
+POST {{host}}/auth
+Content-Type: application/json
+
+{
+  "email": "jonh@example.com"
+}
+
+###
+
+POST {{host}}/auth/organization
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "organizationId": 1
+}
+
+### 
+
+GET {{host}}/auth/info
+Content-Type: application/json
+Authorization: Bearer {{token}}

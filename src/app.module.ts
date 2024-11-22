@@ -3,10 +3,8 @@ import { PrismaModule } from './resources/infra/prisma/prisma.module';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthModule } from './controllers/health/health.module';
 import { AwsModule } from './resources/infra/aws/aws.module';
-import { AuthModule } from './resources/auth/auth.module';
-import { JwtStrategy } from './resources/auth/jwt.strategy';
+import { AuthModule } from './controllers/auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 import { ApplicationModule } from './controllers/v1/application/application.module';
 import { OrganizationModule } from './controllers/v1/organization/organization.module';
 import { APP_PIPE } from '@nestjs/core';
@@ -28,10 +26,6 @@ import { ConfigModule } from '@nestjs/config';
     PassportModule,
     AwsModule,
     RestModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
-    }),
     ApplicationModule,
     ApplicationDocumentsModule,
     OrganizationModule,
@@ -39,9 +33,7 @@ import { ConfigModule } from '@nestjs/config';
     DomainModule,
     NotificationModule,
   ],
-  controllers: [],
   providers: [
-    JwtStrategy,
     {
       provide: APP_PIPE,
       useClass: SchemaValidationPipe,

@@ -111,14 +111,15 @@
       "src/**/*.ts",
       "tests/**/*.ts",
       "!src/infra/**/*.ts",
-      "!src/main.ts"
+      "!src/main.ts",
+      "!src/**/*.module.ts"
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 23,
-        "functions": 26,
-        "lines": 54,
-        "statements": 55
+        "branches": 38,
+        "functions": 37,
+        "lines": 66,
+        "statements": 68
       }
     }
   }
