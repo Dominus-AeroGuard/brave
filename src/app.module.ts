@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ApplicationModule } from './controllers/v1/application/application.module';
 import { OrganizationModule } from './controllers/v1/organization/organization.module';
+import { PermissionModule } from './controllers/v1/permission/permission.module';
 import { APP_PIPE } from '@nestjs/core';
 import { SchemaValidationPipe } from './resources/pipes/schema-validation.pipe';
 import { ApplicationDocumentsModule } from './controllers/v1/application-documents/application-documents.module';
@@ -35,6 +36,7 @@ import { ConfigModule } from '@nestjs/config';
     ApplicationModule,
     ApplicationDocumentsModule,
     OrganizationModule,
+    PermissionModule,
     ProtectedAreaModule,
     DomainModule,
     NotificationModule,
