@@ -7,7 +7,6 @@ import {
   Patch,
   Query,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -17,7 +16,6 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { ErrorRequestDto } from '../../../controllers/dtos/error-request.dto';
 import { PaginableEntity } from '../../../controllers/dtos/paginable.dto';
 import { ValidationRequestDto } from '../../../controllers/dtos/validation-request.dto';
@@ -29,7 +27,6 @@ import { ListNotificationRequest } from './models/list-notification.model';
 
 @ApiTags('notifications')
 @Controller('v1/notifications')
-@UseGuards(JwtAuthGuard)
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class NotificationController {

@@ -11,7 +11,6 @@ import {
   Post,
   Request,
   UploadedFiles,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
@@ -28,7 +27,6 @@ import {
 import { CreateApplicationDocumentUseCase } from '../../../domain/use-cases/application-document/create-application-document.use-case';
 import { CreateApplicationDocumentRequest } from './models/create-application-document.model';
 import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
-import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { IApplicationDocumentRepository } from '../../../resources/infra/prisma/repositories/application-document.repository';
 import { ErrorRequestDto } from '../../dtos/error-request.dto';
 import { ValidationRequestDto } from '../../dtos/validation-request.dto';
@@ -41,7 +39,6 @@ import { UpdateDocumentDataUseCase } from '../../../domain/use-cases/application
 @ApiParam({ name: 'applicationId', type: BigInt })
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
-@UseGuards(JwtAuthGuard)
 export class ApplicationDocumentsController {
   constructor(
     @Inject(CreateApplicationDocumentUseCase)

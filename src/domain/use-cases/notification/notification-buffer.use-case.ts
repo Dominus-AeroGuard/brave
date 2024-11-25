@@ -47,7 +47,7 @@ export class NotificationBufferUseCase {
     const details = analysis.details as Array<AnalisysBufferDetail>;
 
     const applicationGEOJSON =
-    await this.applicationAreaRepository.getAsGeoJson(Number(application_id));
+      await this.applicationAreaRepository.getAsGeoJson(Number(application_id));
 
     const applicationPathGEOJSON =
       await this.applicationPathRepository.getAsGeoJson(Number(application_id));

@@ -106,7 +106,7 @@ export class CreateApplicationDocumentUseCase {
           featsPolygon.push(feat);
         } else if (feature?.geometry?.type == 'LineString') {
           const feat = JSON.stringify(feature?.geometry);
-          featsLine.push(feat); 
+          featsLine.push(feat);
         } else if (feature?.geometry?.type == 'GeometryCollection') {
           feature?.geometry?.geometries.forEach((geom) => {
             if (geom?.type == 'Polygon') {
@@ -114,20 +114,19 @@ export class CreateApplicationDocumentUseCase {
               featsPolygon.push(feat);
             } else if (geom?.type == 'LineString') {
               const feat = JSON.stringify(geom);
-              featsLine.push(feat); 
+              featsLine.push(feat);
             }
           });
         }
       });
 
-      if (featsPolygon.length > 0){
+      if (featsPolygon.length > 0) {
         await this.areaRepository.createMany(featsPolygon, '', applicationId);
       }
 
-      if (featsLine.length > 0){
+      if (featsLine.length > 0) {
         await this.pathRepository.createMany(featsLine, '', applicationId);
       }
-
     } catch (error) {
       console.error(error);
     }
