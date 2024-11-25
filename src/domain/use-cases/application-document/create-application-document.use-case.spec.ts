@@ -20,7 +20,7 @@ describe('CreateApplicationDocumentUseCase', () => {
   let applicationDocumentService: ApplicationDocumentService;
   let repository: IApplicationDocumentRepository;
   let arearepository: IApplicationAreaRepository;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let pathrepository: IApplicationPathRepository;
   let ocrService: OcrService;
   let awsService: AwsService;

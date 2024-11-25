@@ -12,7 +12,7 @@ export class AnalysisBuffer {
 
   @ApiProperty({ description: 'GeoJSON do trajeto da aplicação' })
   applicationPathGeoJSON: string;
-  
+
   @ApiProperty({ description: 'GeoJSON das áreas de proteção' })
   protectedAreaGeoJSON: string;
 

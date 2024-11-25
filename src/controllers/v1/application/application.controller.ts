@@ -6,14 +6,12 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   Request,
   Inject,
   Query,
 } from '@nestjs/common';
 import { CreateApplicationRequest } from './models/create-application.model';
 import { UpdateApplicationRequest } from './models/update-application.model';
-import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import { CreateApplicationUseCase } from '../../../domain/use-cases/application/create-application.use-case';
 import { UpdateApplicationUseCase } from '../../../domain/use-cases/application/update-application.use-case';
@@ -36,10 +34,10 @@ import { ValidationRequestDto } from '../../dtos/validation-request.dto';
 import { ErrorRequestDto } from '../../dtos/error-request.dto';
 import { FinishApplicationUseCase } from '../../../domain/use-cases/application/finish-application.use-case';
 import { FindByDistanceProtectedAreaUseCase } from '../../../domain/use-cases/protected-area/find-by-distance-protected-area.use-case';
+import { Permissions } from '../../auth/auth.decorators';
 
 @ApiTags('applications')
 @Controller('v1/applications')
-@UseGuards(JwtAuthGuard)
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class ApplicationController {
@@ -61,6 +59,7 @@ export class ApplicationController {
   @Post()
   @ApiCreatedResponse({ type: Application })
   @ApiUnprocessableEntityResponse({ type: ErrorRequestDto })
+  @Permissions('application:write')
   create(
     @Request() req,
     @Body(new SchemaValidationPipe()) application: CreateApplicationRequest,
@@ -75,6 +74,7 @@ export class ApplicationController {
   @Get()
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'size', required: false, type: Number, example: 10 })
+  @Permissions('application:read')
   @ApiOkResponse({
     schema: {
       type: 'object',
@@ -102,6 +102,7 @@ export class ApplicationController {
   @Get(':id')
   @ApiParam({ name: 'id', type: BigInt, example: 1 })
   @ApiOkResponse({ type: Application })
+  @Permissions('application.read')
   findOne(@Request() { user }, @Param('id') id: string) {
     return this.applicationRepository.findOne(user.organizationId, id);
   }

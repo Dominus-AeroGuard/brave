@@ -25,10 +25,11 @@ export class CreateUserOrganizationUseCase {
         data.organization.id,
         data.user_id,
       );
+
     if (userOrganization) {
       return userOrganization;
-    } else {
-      return this.userOrganizationRepository.create(data);
     }
+
+    return this.userOrganizationRepository.create(data);
   }
 }
