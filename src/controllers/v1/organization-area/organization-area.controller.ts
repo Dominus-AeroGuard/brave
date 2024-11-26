@@ -57,7 +57,6 @@ export class OrganizationAreaController {
     )
     files: Array<Express.Multer.File>,
     @Request() req,
-    @Body(new SchemaValidationPipe()) body: CreateOrganizationAreaRequest,
   ) {
     return this.createOrganizationArea.execute({
       file: files[0],
