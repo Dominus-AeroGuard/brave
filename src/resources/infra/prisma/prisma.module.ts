@@ -4,6 +4,7 @@ import { ApplicationRepository } from './repositories/application.repository';
 import { ApplicationDocumentRepository } from './repositories/application-document.repository';
 import { ApplicationAreaRepository } from './repositories/application-area.repository';
 import { UserOrganizationRepository } from './repositories/user-organization.repository';
+import { PermissionRepository } from './repositories/permission.repository';
 import { ProtectedAreaRepository } from './repositories/protected-area.repository';
 import { ApplicationNotificationRepository } from './repositories/application-notification.repository';
 import { ApplicationAnalisysRepository } from './repositories/application-analisys.repository';
@@ -34,6 +35,10 @@ import { ApplicationPathRepository } from './repositories/application-path.repos
     {
       provide: 'IUserOrganizationRepository',
       useClass: UserOrganizationRepository,
+    },
+    {
+      provide: 'IPermissionRepository',
+      useClass: PermissionRepository,
     },
     {
       provide: 'IProtectedAreaRepository',
@@ -77,6 +82,10 @@ import { ApplicationPathRepository } from './repositories/application-path.repos
     {
       provide: 'IUserOrganizationRepository',
       useClass: UserOrganizationRepository,
+    },
+    {
+      provide: 'IPermissionRepository',
+      useClass: PermissionRepository,
     },
     {
       provide: 'IProtectedAreaRepository',
