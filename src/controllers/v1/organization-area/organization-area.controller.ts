@@ -7,7 +7,6 @@ import {
   Delete,
   Request,
   Inject,
-  Query,
   UseInterceptors,
   UploadedFiles,
   ParseFilePipeBuilder,
@@ -21,7 +20,6 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiParam,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { ValidationRequestDto } from '../../dtos/validation-request.dto';
