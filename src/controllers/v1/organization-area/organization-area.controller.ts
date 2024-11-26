@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  UseGuards,
   Request,
   Inject,
   Query,
@@ -13,7 +12,6 @@ import {
   UploadedFiles,
   ParseFilePipeBuilder,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import {
   ApiBadRequestResponse,
@@ -36,7 +34,6 @@ import { OrganizationAreaRepository } from '../../../resources/infra/prisma/repo
 
 @ApiTags('organization-areas')
 @Controller('v1/organization-areas')
-@UseGuards(JwtAuthGuard)
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class OrganizationAreaController {
