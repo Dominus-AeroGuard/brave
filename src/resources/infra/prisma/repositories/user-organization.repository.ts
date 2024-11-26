@@ -77,10 +77,6 @@ export class UserOrganizationRepository implements IUserOrganizationRepository {
       },
     });
 
-    if (!userOrganization) {
-      return null;
-    }
-
     return new UserOrganization(userOrganization, userOrganization.user);
   }
 

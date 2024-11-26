@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   Delete,
+  UseGuards,
   Request,
   Inject,
   Query,
@@ -12,6 +13,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { CreateUserOrganizationRequest } from './models/create-user-organization.model';
+import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import { CreateUserOrganizationUseCase } from '../../../domain/use-cases/organization/create-user-organization.use-case';
 import { UserOrganizationRepository } from '../../../resources/infra/prisma/repositories/user-organization.repository';
@@ -34,6 +36,7 @@ import { ErrorRequestDto } from '../../dtos/error-request.dto';
 
 @ApiTags('organizations')
 @Controller('v1/organizations')
+@UseGuards(JwtAuthGuard)
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class OrganizationController {

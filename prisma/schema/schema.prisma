@@ -11,15 +11,13 @@ generator client {
 }
 
 model Organization {
-  organization_id             Int                         @default(autoincrement()) @map("ID_ORGANIZACAO")
-  name                        String                      @map("NM_ORGANIZACAO") @db.VarChar(100)
-  created_at                  DateTime                    @default(now()) @map("DH_CRIACAO")
-  pilots                      Pilot[]
-  applications                Application[]
-  users                       UserOrganization[]
-  protected_areas             ProtectedArea[]
-  userOrganizationRoles       UserOrganizationRole[]
-  userOrganizationPermissions UserOrganiationPermission[]
+  organization_id Int                @default(autoincrement()) @map("ID_ORGANIZACAO")
+  name            String             @map("NM_ORGANIZACAO") @db.VarChar(100)
+  created_at      DateTime           @default(now()) @map("DH_CRIACAO")
+  pilots          Pilot[]
+  applications    Application[]
+  users           UserOrganization[]
+  protected_areas ProtectedArea[]
 
   @@id([organization_id], map: "PK_ORGANIZACAO")
   @@map("S_ORGANIZACAO")

@@ -18,10 +18,8 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('SIGA API')
+    .setTitle('AeroGuard API')
     .setDescription('')
-    .addBearerAuth()
-    .addSecurityRequirements('bearer')
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {

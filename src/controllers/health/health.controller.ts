@@ -6,11 +6,9 @@ import {
 } from '@nestjs/terminus';
 import { PrismaClient } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
-import { Public } from '../auth/auth.decorators';
 
 @Controller('health')
 @ApiTags('health')
-@Public()
 export class HealthController {
   constructor(
     private health: HealthCheckService,
