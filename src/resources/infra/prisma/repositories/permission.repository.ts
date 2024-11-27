@@ -60,7 +60,6 @@ export class PermissionRepository implements IPermissionRepository {
 
   async findAll(
     params: Partial<{
-      permissionId: number;
       page?: number;
       pageSize?: number;
     }>,

@@ -3,14 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Param,
-  UseGuards,
   Request,
   Inject,
   Query,
 } from '@nestjs/common';
 import { CreatePermissionRequest } from './models/create-permission.model';
-import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import { CreatePermissionUseCase } from '../../../domain/use-cases/permission/create-permission.use-case';
 //import { UpdatePermissionUseCase } from '../../../domain/use-cases/permission/update-permission.use-case';
@@ -33,7 +30,6 @@ import { ErrorRequestDto } from '../../dtos/error-request.dto';
 
 @ApiTags('permissions')
 @Controller('v1/permissions')
-@UseGuards(JwtAuthGuard)
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class PermissionController {
@@ -75,14 +71,13 @@ export class PermissionController {
     },
   })
   findAll(
-    @Request() { permission },
+    @Request() {},
     @Query() query: any,
   ): Promise<PaginableEntity<Permission>> {
     return this.listPermission.execute({
       ...query,
       page: query.page ? parseInt(query.page) : undefined,
       pageSize: query.pageSize ? parseInt(query.pageSize) : undefined,
-      permissionId: permission.permissionId,
     });
   }
 
