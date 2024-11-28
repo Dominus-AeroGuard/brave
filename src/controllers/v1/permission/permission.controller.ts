@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Body,
+  Param,
   Request,
   Inject,
   Query,
@@ -84,7 +85,7 @@ export class PermissionController {
   @Get('/:id')
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiOkResponse({ type: Permission })
-  findOne(@Request() { permission }) {
-    return this.permissionRepository.findOne(permission.permissionId);
+  findOne(@Request() {}, @Param('id') id: number) {
+    return this.permissionRepository.findOne(+id);
   }
 }
