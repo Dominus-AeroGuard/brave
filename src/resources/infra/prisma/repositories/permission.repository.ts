@@ -5,11 +5,11 @@ import { PrismaService } from '../prisma.service';
 export interface IPermissionRepository {
   create(
     data: Partial<{
-      permission_id: number;
+      permissionId: number;
       resource: string;
       action: string;
       description: string;
-      user: Partial<{ id: number }>;
+      //user: Partial<{ id: number }>;
     }>,
   ): Promise<Permission>;
   findOne(permissionId: number): Promise<Permission>;
@@ -27,22 +27,22 @@ export class PermissionRepository implements IPermissionRepository {
 
   async create(
     data: Partial<{
-      permission_id: number;
+      permissionId: number;
       resource: string;
       action: string;
       description: string;
-      user: Partial<{
+      /*user: Partial<{
         id: number;
-      }>;
+      }>;*/
     }>,
   ): Promise<Permission> {
     const permission = await this.prisma.permission.create({
       data: {
-        permission_id: data.permission_id,
+        permission_id: data.permissionId,
         resource: data.resource,
         action: data.action,
         description: data.description,
-        created_by: data.user.id,
+        created_by: 1, //data.user.id,
       },
     });
     return this.findOne(permission.permission_id);
