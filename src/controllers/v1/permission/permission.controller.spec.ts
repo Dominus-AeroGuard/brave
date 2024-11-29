@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PermissionController } from './permission.controller';
 import { CreatePermissionUseCase } from '../../../domain/use-cases/permission/create-permission.use-case';
+import { UpdatePermissionUseCase } from '../../../domain/use-cases/permission/update-permission.use-case';
 import { ListPermissionUseCase } from '../../../domain/use-cases/permission/list-permission.use-case';
 import { PermissionRepository } from '../../../resources/infra/prisma/repositories/permission.repository';
 
@@ -13,6 +14,12 @@ describe('PermissionController', () => {
       providers: [
         {
           provide: CreatePermissionUseCase,
+          useValue: {
+            execute: jest.fn(),
+          },
+        },
+        {
+          provide: UpdatePermissionUseCase,
           useValue: {
             execute: jest.fn(),
           },

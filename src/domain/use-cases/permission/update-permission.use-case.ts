@@ -2,7 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Permission } from '../../entities';
 import { IPermissionRepository } from '../../../resources/infra/prisma/repositories/permission.repository';
 
-export interface CreatePermissionRequest {
+export interface UpdatePermissionRequest {
+  permissionId: number;
   resource: string;
   action: string;
   description: string;
@@ -10,13 +11,13 @@ export interface CreatePermissionRequest {
 }
 
 @Injectable()
-export class CreatePermissionUseCase {
+export class UpdatePermissionUseCase {
   constructor(
     @Inject('IPermissionRepository')
     private permissionRepository: IPermissionRepository,
   ) {}
 
-  execute(data: CreatePermissionRequest): Promise<Permission> {
-    return this.permissionRepository.create(data);
+  execute(data: UpdatePermissionRequest): Promise<Permission> {
+    return this.permissionRepository.update(data);
   }
 }

@@ -2,7 +2,15 @@ import { IsIn, IsInt, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { PermitionActionEnum } from 'src/domain/enums/permission-action.enum';
 
-export class CreatePermissionRequest {
+export class UpdatePermissionRequest {
+  @ApiProperty({
+    example: 1,
+    description: 'Id da permissão',
+  })
+  @IsNotEmpty()
+  @IsInt()
+  permissionId: number;
+
   @ApiProperty({
     example: 'application',
     description: 'Resource controlado pela permissão',

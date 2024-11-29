@@ -18,10 +18,14 @@ export class Permission {
   @ApiProperty({ description: 'Descrição da permissão' })
   description: string;
 
+  @ApiProperty({ description: 'Usuário que editou/alterou a permissão' })
+  user_id: number;
+
   constructor(permission: Prisma.Permission) {
     this.id = permission.permission_id;
     this.resource = permission.resource;
     this.action = permission.action;
     this.description = permission.description;
+    this.user_id = permission.created_by;
   }
 }

@@ -7,12 +7,14 @@ import {
   Request,
   Inject,
   Query,
+  Put,
 } from '@nestjs/common';
 import { CreatePermissionRequest } from './models/create-permission.model';
 import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
-import { CreatePermissionUseCase } from '../../../domain/use-cases/permission/create-permission.use-case';
-//import { UpdatePermissionUseCase } from '../../../domain/use-cases/permission/update-permission.use-case';
+import { UpdatePermissionRequest } from './models/update-permission.model';
 import { PermissionRepository } from '../../../resources/infra/prisma/repositories/permission.repository';
+import { CreatePermissionUseCase } from '../../../domain/use-cases/permission/create-permission.use-case';
+import { UpdatePermissionUseCase } from '../../../domain/use-cases/permission/update-permission.use-case';
 import { ListPermissionUseCase } from '../../../domain/use-cases/permission/list-permission.use-case';
 import {
   ApiBadRequestResponse,
@@ -37,8 +39,8 @@ export class PermissionController {
   constructor(
     @Inject(CreatePermissionUseCase)
     private readonly createPermission: CreatePermissionUseCase,
-    //@Inject(UpdatePermissionUseCase)
-    //private readonly updatePermission: UpdatePermissionUseCase,
+    @Inject(UpdatePermissionUseCase)
+    private readonly updatePermission: UpdatePermissionUseCase,
     @Inject(ListPermissionUseCase)
     private readonly listPermission: ListPermissionUseCase,
     @Inject(PermissionRepository)
@@ -54,6 +56,17 @@ export class PermissionController {
     Permission: CreatePermissionRequest,
   ) {
     return this.createPermission.execute(Permission);
+  }
+
+  @Put('/:id')
+  @ApiCreatedResponse({ type: Permission })
+  @ApiUnprocessableEntityResponse({ type: ErrorRequestDto })
+  update(
+    @Request() req,
+    @Body(new SchemaValidationPipe())
+    Permission: UpdatePermissionRequest,
+  ) {
+    return this.updatePermission.execute(Permission);
   }
 
   @Get()

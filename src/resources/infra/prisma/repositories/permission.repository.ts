@@ -5,11 +5,19 @@ import { PrismaService } from '../prisma.service';
 export interface IPermissionRepository {
   create(
     data: Partial<{
+      resource: string;
+      action: string;
+      description: string;
+      user_id: number;
+    }>,
+  ): Promise<Permission>;
+  update(
+    data: Partial<{
       permissionId: number;
       resource: string;
       action: string;
       description: string;
-      //user: Partial<{ id: number }>;
+      user_id: number;
     }>,
   ): Promise<Permission>;
   findOne(permissionId: number): Promise<Permission>;
@@ -27,22 +35,45 @@ export class PermissionRepository implements IPermissionRepository {
 
   async create(
     data: Partial<{
+      resource: string;
+      action: string;
+      description: string;
+      user_id: number;
+    }>,
+  ): Promise<Permission> {
+    const permission = await this.prisma.permission.create({
+      data: {
+        resource: data.resource,
+        action: data.action,
+        description: data.description,
+        created_by: data.user_id,
+      },
+    });
+    return this.findOne(permission.permission_id);
+  }
+
+  async update(
+    data: Partial<{
       permissionId: number;
       resource: string;
       action: string;
       description: string;
-      /*user: Partial<{
-        id: number;
-      }>;*/
+      user_id: number;
     }>,
   ): Promise<Permission> {
+    const findPermission = await this.prisma.permission.findFirst({
+      where: {
+        permission_id: data.permissionId,
+      },
+    });
+
     const permission = await this.prisma.permission.create({
       data: {
         permission_id: data.permissionId,
         resource: data.resource,
         action: data.action,
         description: data.description,
-        created_by: 1, //data.user.id,
+        created_by: data.user_id,
       },
     });
     return this.findOne(permission.permission_id);
