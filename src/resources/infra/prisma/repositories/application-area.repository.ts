@@ -34,7 +34,7 @@ export class ApplicationAreaRepository implements IApplicationAreaRepository {
     }>,
   ): Promise<number> {
     const result = await this.prisma.$executeRaw`
-      INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id")
+      INSERT INTO "SIGA"."S_AREA_APLICACAO" ("PG_GEOMETRIA", "PG_GEOMETRIA_JSON", "DS_DESCRICAO", "ID_APLICACAO")
       VALUES (ST_Force3D(ST_GeomFromGeoJSON(${data.geom})), ${data.geom}::text, ${data.description}::text, ${data.applicationId})`;
 
     return result;
@@ -50,7 +50,7 @@ export class ApplicationAreaRepository implements IApplicationAreaRepository {
         let count = 0;
         for (const d of data) {
           count += await tx.$executeRaw`
-            INSERT INTO "application_area" ("geom", "geomjson", "description", "application_id")
+            INSERT INTO "SIGA"."S_AREA_APLICACAO" ("PG_GEOMETRIA", "PG_GEOMETRIA_JSON", "DS_DESCRICAO", "ID_APLICACAO")
             VALUES (ST_Force3D(ST_GeomFromGeoJSON(${d})), ${d}::text, ${description}::text, ${applicationId})`;
         }
         return count;
@@ -83,7 +83,7 @@ export class ApplicationAreaRepository implements IApplicationAreaRepository {
 
   async getAsGeoJson(applicationId: number): Promise<string> {
     const result = await this.prisma
-      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select id, geom from "application_area" as a where a.application_id = ${applicationId}) as t`;
+      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select "ID_AREA_APLICACAO", "PG_GEOMETRIA" from "SIGA"."S_AREA_APLICACAO" as a where a."ID_APLICACAO" = ${applicationId}) as t`;
 
     return result[0]['json_build_object'];
   }

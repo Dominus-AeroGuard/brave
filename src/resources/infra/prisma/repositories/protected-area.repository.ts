@@ -49,7 +49,7 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
     }>,
   ): Promise<number> {
     const result = await this.prisma.$executeRaw`
-      INSERT INTO "protected_area" ("geom", "geomjson", "description", "protected_area_type_id", "organization_id", "created_by")
+      INSERT INTO "SIGA"."S_AREA_PROTEGIDA" ("PG_GEOMETRIA", "PG_GEOMETRIA_JSON", "DS_DESCRICAO", "ID_TIPO_AREA_PROTEGIDA", "ID_ORGANIZACAO", "NM_CRIADO_POR")
       VALUES (ST_Force3D(ST_GeomFromGeoJSON(${data.geom})), ${data.geom}::text, ${data.description}::text, ${data.type.id}, ${data.organization.id}, ${data.user.id.toString()}::text)`;
 
     return result;
@@ -67,7 +67,7 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
         let count = 0;
         for (const geom of geoms) {
           count += await tx.$executeRaw`
-            INSERT INTO "protected_area" ("geom", "geomjson", "description", "protected_area_type_id", "organization_id", "created_by")
+            INSERT INTO "SIGA"."S_AREA_PROTEGIDA" ("PG_GEOMETRIA", "PG_GEOMETRIA_JSON", "DS_DESCRICAO", "ID_TIPO_AREA_PROTEGIDA", "ID_ORGANIZACAO", "NM_CRIADO_POR")
             VALUES (ST_Force3D(ST_GeomFromGeoJSON(${geom})), ${geom}::text, ${description}::text, ${typeId}, ${organizationId}, ${userId.toString()}::text)`;
         }
         return count;
@@ -138,7 +138,7 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
   ): Promise<ProtectedArea[]> {
     const ids = await this.prisma.$queryRaw<
       ProtectedArea[]
-    >`SELECT distinct p.id FROM "protected_area" as p, "application_area" as a where ST_Intersects(p.geom , ST_Buffer(a.geom::geography , ${distance})) and p.protected_area_type_id = ${typeId} and a.application_id = ${applicationId}`;
+    >`SELECT distinct p."ID_AREA_PROTEGIDA" FROM "SIGA"."S_AREA_PROTEGIDA" as p, "SIGA"."S_AREA_APLICACAO" as a where ST_Intersects(p."PG_GEOMETRIA" , ST_Buffer(a."PG_GEOMETRIA"::geography , ${distance})) and p."ID_TIPO_AREA_PROTEGIDA" = ${typeId} and a."ID_APLICACAO" = ${applicationId}`;
 
     const protected_areas = await this.prisma.protectedArea.findMany({
       where: {
@@ -167,13 +167,13 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
 
   async getDistanceTo(id: number, applicationId: number): Promise<number> {
     return await this.prisma
-      .$queryRaw<number>`select min(ST_Distance(p.geom::geography, a.geom::geography)) from "protected_area" as p, "application_area" as a where p.id = ${id} and a.application_id = ${applicationId}`;
+      .$queryRaw<number>`select min(ST_Distance(p."PG_GEOMETRIA"::geography, a."PG_GEOMETRIA"::geography)) from "SIGA"."S_AREA_PROTEGIDA" as p, "SIGA"."S_AREA_APLICACAO" as a where p."ID_AREA_PROTEGIDA" = ${id} and a."ID_APLICACAO" = ${applicationId}`;
   }
 
   async getAsGeoJson(ids: number[]): Promise<string> {
     // const where = ids.map(item => item).join(',');
     const result = await this.prisma
-      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select p.id, p.geom from "protected_area" as p where p.id in (${Prisma.join(ids)})) as t`;
+      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select p."ID_AREA_PROTEGIDA", p."PG_GEOMETRIA" from "SIGA"."S_AREA_PROTEGIDA" as p where p."ID_AREA_PROTEGIDA" in (${Prisma.join(ids)})) as t`;
 
     return result[0]['json_build_object'];
   }
@@ -181,7 +181,7 @@ export class ProtectedAreaRepository implements IProtectedAreaRepository {
   async getWithBufferAsGeoJson(ids: number[]): Promise<string> {
     // const where = ids.map(item => item).join(',');
     const result = await this.prisma
-      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select p.id, ST_Buffer(p.geom::geography, pt.distance) from "protected_area" as p inner join "protected_area_type" as pt on p.protected_area_type_id = pt.protected_area_type_id where p.id in (${Prisma.join(ids)})) as t`;
+      .$queryRaw<string>`SELECT json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(t.*)::json)) FROM (select p."ID_AREA_PROTEGIDA", ST_Buffer(p."PG_GEOMETRIA"::geography, pt."NR_DISTANCIA") from "SIGA"."S_AREA_PROTEGIDA" as p inner join "SIGA"."S_TIPO_AREA_PROTEGIDA" as pt on p."ID_TIPO_AREA_PROTEGIDA" = pt."ID_TIPO_AREA_PROTEGIDA" where p."ID_AREA_PROTEGIDA" in (${Prisma.join(ids)})) as t`;
 
     return result[0]['json_build_object'];
   }

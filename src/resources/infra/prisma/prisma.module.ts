@@ -10,6 +10,7 @@ import { ApplicationAnalisysRepository } from './repositories/application-analis
 import { ProtectedAreaTypeRepository } from './repositories/protected-area-type.repository';
 import { ApplicationDocumentDataRepository } from './repositories/application-document-data.repository';
 import { ApplicationPathRepository } from './repositories/application-path.repository';
+import { OrganizationAreaRepository } from './repositories/organization-area.repository';
 
 @Global()
 @Module({
@@ -55,6 +56,10 @@ import { ApplicationPathRepository } from './repositories/application-path.repos
       provide: 'IApplicationDocumentDataRepository',
       useClass: ApplicationDocumentDataRepository,
     },
+    {
+      provide: 'IOrganizationAreaRepository',
+      useClass: OrganizationAreaRepository,
+    },
   ],
   exports: [
     PrismaService,
@@ -97,6 +102,10 @@ import { ApplicationPathRepository } from './repositories/application-path.repos
     {
       provide: 'IApplicationDocumentDataRepository',
       useClass: ApplicationDocumentDataRepository,
+    },
+    {
+      provide: 'IOrganizationAreaRepository',
+      useClass: OrganizationAreaRepository,
     },
   ],
 })

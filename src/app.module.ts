@@ -15,6 +15,7 @@ import { ProtectedAreaModule } from './controllers/v1/protected-area/protected-a
 import { NotificationModule } from './controllers/v1/notification/notification.module';
 import { RestModule } from './resources/infra/http/rest.module';
 import { ConfigModule } from '@nestjs/config';
+import { OrganizationAreaModule } from './controllers/v1/organization-area/organization-area.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ConfigModule } from '@nestjs/config';
     ProtectedAreaModule,
     DomainModule,
     NotificationModule,
+    OrganizationAreaModule
   ],
   providers: [
     {
