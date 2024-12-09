@@ -1,0 +1,36 @@
+POST {{host}}/role
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "role": "superadmin",
+  "description": "Gerencia o sistema"
+}
+
+###
+
+GET {{host}}/role?
+  &q=admin
+  &page=1
+  &size=10
+Authorization: Bearer {{token}}
+
+###
+
+GET {{host}}/role/1
+Authorization: Bearer {{token}}
+
+###
+
+PATCH  {{host}}/role/4
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "role": "admin_novo",
+  "description": "Atualização rol1123123e"
+}
+
+### 
+DELETE {{host}}/role/4
+Authorization: Bearer {{token}}

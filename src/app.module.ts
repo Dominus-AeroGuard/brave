@@ -33,7 +33,7 @@ import { OrganizationAreaModule } from './controllers/v1/organization-area/organ
     ProtectedAreaModule,
     DomainModule,
     NotificationModule,
-    OrganizationAreaModule
+    OrganizationAreaModule,
   ],
   providers: [
     {

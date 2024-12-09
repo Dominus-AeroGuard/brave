@@ -83,6 +83,8 @@ describe('ListApplicationUseCase', () => {
         meta: {
           page: 1,
           size: 10,
+          count: 1,
+          countRecords: 1,
         },
         data: applications,
       });

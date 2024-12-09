@@ -13,7 +13,7 @@
   ],
   "rest-client.environmentVariables": {
     "$shared": {
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm9yZ0lkIjoxLCJlbWFpbCI6ImpvbmhAZXhhbXBsZS5jb20iLCJvcmdhbml6YXRpb25zIjpbXSwicm9sZXMiOlsiYWRtaW4iLCJwcmVzdGFkb3IiXSwicGVybWlzc2lvbnMiOlsidXNlcjpyZWFkIiwibm90aWZpY2F0aW9uOnJlYWQiXSwiaWF0IjoxNzMyMjI1MDk4LCJleHAiOjE3MzIzMTE0OTh9.Sb9FUXKe8l1xVolEgr9tLVRTVl4Ddy1Ebj-TZg9v6Q0"
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9uaEBleGFtcGxlLmNvbSIsIm9yZ2FuaXphdGlvbnMiOltdLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJ1c2VyOnJlYWQiXSwiaWF0IjoxNzMzNzY2OTMwLCJleHAiOjE3MzM4NTMzMzB9.t6J1IlqcawtWEs9V0CJCrMrC61YVcr3qrDRzzJ0360k"
     },
     "local": {
       "host": "http://localhost:3000",
@@ -23,5 +23,7 @@
       "host": "https://brave.aeroguard.app.br",
       "token": "{{$shared token}}"
     }
-  }
+  },
+  "prettier.endOfLine": "auto",
+  "vssolution.lineEndings": "lf"
 }
