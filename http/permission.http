@@ -3,9 +3,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 
 {
-   "resource": "permission",
+   "resource": "application",
    "action": "write",
-   "description": "Criar Permissão"
+   "description": "Criar aplicação"
 }
 
 ###
@@ -15,9 +15,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMiwib3JnSWQiOjF9.MuCoHPVQg_NwV28qMe2wZyvyn7PZ7Aoi7bqqBpohZxE
 
 {
-   "resource": "permission",
+   "resource": "application",
    "action": "write",
-   "description": "Atualizar Permissão"
+   "description": "Criar aplicação"
 }
 
 ###

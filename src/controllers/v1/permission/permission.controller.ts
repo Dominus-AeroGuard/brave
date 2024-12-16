@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreatePermissionRequest } from './models/create-permission.model';
+import { JwtAuthGuard } from '../../../resources/auth/auth.guard';
 import { SchemaValidationPipe } from '../../../resources/pipes/schema-validation.pipe';
 import { CreatePermissionUseCase } from '../../../domain/use-cases/permission/create-permission.use-case';
 //import { UpdatePermissionUseCase } from '../../../domain/use-cases/permission/update-permission.use-case';
@@ -32,6 +33,7 @@ import { ErrorRequestDto } from '../../dtos/error-request.dto';
 
 @ApiTags('permissions')
 @Controller('v1/permissions')
+@UseGuards(JwtAuthGuard)
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class PermissionController {
@@ -88,6 +90,6 @@ export class PermissionController {
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiOkResponse({ type: Permission })
   findOne(@Request() { permission }) {
-    return this.permissionRepository.findOne(permission.permission_id);
+    return this.permissionRepository.findOne(permission.permissionId);
   }
 }

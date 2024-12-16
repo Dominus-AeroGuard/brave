@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-import { PrismaClient } from '@prisma/client';
-
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function protectedAreaTypeSeed() {
@@ -282,52 +281,6 @@ async function userSeed() {
     },
     update: {
       name: 'Jonh Doe',
-      userRoles: {
-        connectOrCreate: {
-          where: {
-            user_role_id: 1,
-          },
-          create: {
-            role_id: 1, // admin
-            created_by: 1,
-          },
-        },
-      },
-      userPermissions: {
-        connectOrCreate: {
-          where: {
-            user_permission_id: 1,
-          },
-          create: {
-            permission_id: 1, // user:read
-            created_by: 1,
-          },
-        },
-      },
-      userOrganizationRoles: {
-        connectOrCreate: {
-          where: {
-            id: 1,
-          },
-          create: {
-            role_id: 3, // prestador
-            organization_id: 1,
-            created_by: 1,
-          },
-        },
-      },
-      userOrganizationPermissions: {
-        connectOrCreate: {
-          where: {
-            id: 1,
-          },
-          create: {
-            permission_id: 5, // notification:read
-            organization_id: 1,
-            created_by: 1,
-          },
-        },
-      },
     },
     create: {
       name: 'Jonh Doe',
@@ -359,160 +312,11 @@ async function pilotSeed() {
   console.log('\n\t✔  pilot has been seeded');
 }
 
-async function rolesSeed() {
-  const roles = [
-    {
-      id: 1,
-      role: 'admin',
-      organization_role: false,
-      description: 'Papel de gerenciamento de perfis e usuários no SIGA',
-      created_by: 1,
-    },
-    {
-      id: 2,
-      role: 'organization_admin',
-      organization_role: true,
-      description: 'Papel de gerenciamento de uma organização',
-      created_by: 1,
-    },
-    {
-      id: 3,
-      role: 'prestador',
-      organization_role: true,
-      description: 'Papel responsável por gerenciar uma aplicação',
-      created_by: 1,
-    },
-  ];
-
-  const promises = await roles.map(
-    ({ id: role_id, role, organization_role, description, created_by }) =>
-      prisma.role.upsert({
-        where: {
-          role_id,
-        },
-        update: {
-          role,
-          organization_role,
-          description,
-          created_by,
-        },
-        create: {
-          role,
-          organization_role,
-          description,
-          created_by,
-        },
-      }),
-  );
-
-  await Promise.all(promises);
-
-  console.log('\n\t✔  roles has been seeded');
-}
-
-async function rolePermissionsSeed() {
-  const rolePermissions = [
-    {
-      role_permission_id: 1,
-      permission_id: 3, // application:read
-      role_id: 3, //  prestador
-    },
-  ];
-
-  const promises = rolePermissions.map(
-    ({ role_permission_id, permission_id, role_id }) =>
-      prisma.rolePermission.upsert({
-        where: {
-          role_permission_id,
-        },
-        update: {
-          permission_id,
-          role_id,
-        },
-        create: {
-          permission_id,
-          role_id,
-          created_by: 1,
-        },
-      }),
-  );
-
-  await Promise.all(promises);
-}
-
-async function permissionsSeed() {
-  const permissions = [
-    {
-      id: 1,
-      resource: 'user',
-      action: 'read',
-      description: 'Permiter ler todos usuários',
-      created_by: 1,
-    },
-    {
-      id: 2,
-      resource: 'user',
-      action: 'write',
-      description: 'Permite criar e gerenciar usuários',
-      created_by: 1,
-    },
-    {
-      id: 3,
-      resource: 'application',
-      action: 'read',
-      description: 'Permite consultar aplicações',
-      created_by: 1,
-    },
-    {
-      id: 4,
-      resource: 'application',
-      action: 'write',
-      description: 'Permite criar e gerenciar aplicacoes',
-      created_by: 1,
-    },
-    {
-      id: 5,
-      resource: 'notification',
-      action: 'read',
-      description: 'Permite consultar notificações',
-      created_by: 1,
-    },
-  ];
-
-  const promises = await permissions.map(
-    ({ id, resource, action, description, created_by }) =>
-      prisma.permission.upsert({
-        where: {
-          permission_id: id,
-        },
-        update: {
-          resource,
-          action,
-          description,
-          created_by,
-        },
-        create: {
-          resource,
-          action,
-          description,
-          created_by,
-        },
-      }),
-  );
-
-  await Promise.all(promises);
-
-  console.log('\n\t✔  permissions has been seeded');
-}
-
 async function main() {
   if (process.env.NODE_ENV === 'development') {
-    await permissionsSeed();
-    await rolesSeed();
-    await rolePermissionsSeed();
     await organizationSeed();
-    await pilotSeed();
     await userSeed();
+    await pilotSeed();
   }
 
   await applicationStatusSeed();

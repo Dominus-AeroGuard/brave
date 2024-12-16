@@ -11,7 +11,6 @@ import { ProtectedAreaTypeRepository } from './repositories/protected-area-type.
 import { ApplicationDocumentDataRepository } from './repositories/application-document-data.repository';
 import { ApplicationPathRepository } from './repositories/application-path.repository';
 import { OrganizationAreaRepository } from './repositories/organization-area.repository';
-import { PermissionRepository } from './repositories/permission.repository';
 
 @Global()
 @Module({
@@ -61,10 +60,6 @@ import { PermissionRepository } from './repositories/permission.repository';
       provide: 'IOrganizationAreaRepository',
       useClass: OrganizationAreaRepository,
     },
-    {
-      provide: 'IPermissionRepository',
-      useClass: PermissionRepository,
-    },
   ],
   exports: [
     PrismaService,
@@ -111,10 +106,6 @@ import { PermissionRepository } from './repositories/permission.repository';
     {
       provide: 'IOrganizationAreaRepository',
       useClass: OrganizationAreaRepository,
-    },
-    {
-      provide: 'IPermissionRepository',
-      useClass: PermissionRepository,
     },
   ],
 })

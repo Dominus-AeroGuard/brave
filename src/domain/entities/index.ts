@@ -1,10 +1,10 @@
 export { ApplicationArea } from './application-area.entity';
 export { Application } from './application.entity';
 export { Organization } from './organization.entity';
+export { Permission } from './permission.entity';
 export { Pilot } from './pilot.entity';
 export { ProtectedArea } from './protected-area.entity';
 export { User } from './user.entity';
 export { UserOrganization } from './user-organization.entity';
 export { ApplicationPath } from './application-path.entity';
 export { OrganizationArea } from './organization-area.entity';
-export { Permission } from './permission.entity';

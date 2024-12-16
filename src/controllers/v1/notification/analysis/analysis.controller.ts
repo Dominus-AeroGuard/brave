@@ -1,4 +1,11 @@
-import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
@@ -7,6 +14,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../../../resources/auth/auth.guard';
 import { ErrorRequestDto } from '../../../../controllers/dtos/error-request.dto';
 import { ValidationRequestDto } from '../../../../controllers/dtos/validation-request.dto';
 import { AnalysisBuffer } from '../../../../domain/entities/analysis-buffer.entity';
@@ -18,6 +26,7 @@ import { ApplicationAnalisys } from '../../../../domain/entities/application-ana
 
 @ApiTags('notifications')
 @Controller('v1/notifications/:notificationId/analysis')
+@UseGuards(JwtAuthGuard)
 @ApiBadRequestResponse({ type: ValidationRequestDto })
 @ApiInternalServerErrorResponse({ type: ErrorRequestDto })
 export class AnalysisController {

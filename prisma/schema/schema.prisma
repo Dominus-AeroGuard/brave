@@ -11,6 +11,7 @@ generator client {
 }
 
 model Organization {
+<<<<<<< HEAD
   organization_id             Int                         @default(autoincrement()) @map("ID_ORGANIZACAO")
   name                        String                      @map("NM_ORGANIZACAO") @db.VarChar(100)
   created_at                  DateTime                    @default(now()) @map("DH_CRIACAO")
@@ -21,6 +22,15 @@ model Organization {
   organization_areas          OrganizationArea[]
   userOrganizationRoles       UserOrganizationRole[]
   userOrganizationPermissions UserOrganiationPermission[]
+=======
+  organization_id Int                @default(autoincrement()) @map("ID_ORGANIZACAO")
+  name            String             @map("NM_ORGANIZACAO") @db.VarChar(100)
+  created_at      DateTime           @default(now()) @map("DH_CRIACAO")
+  pilots          Pilot[]
+  applications    Application[]
+  users           UserOrganization[]
+  protected_areas ProtectedArea[]
+>>>>>>> 32c61ee (Rebase com /main cancelado)
 
   @@id([organization_id], map: "PK_ORGANIZACAO")
   @@map("S_ORGANIZACAO")
