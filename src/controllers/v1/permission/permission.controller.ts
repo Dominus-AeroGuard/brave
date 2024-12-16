@@ -73,21 +73,21 @@ export class PermissionController {
     },
   })
   findAll(
-    @Request() { permission },
+    @Request() { user },
     @Query() query: any,
   ): Promise<PaginableEntity<Permission>> {
     return this.listPermission.execute({
       ...query,
       page: query.page ? parseInt(query.page) : undefined,
       pageSize: query.pageSize ? parseInt(query.pageSize) : undefined,
-      permissionId: permission.permissionId,
+      userId: user.id,
     });
   }
 
   @Get('/:id')
   @ApiParam({ name: 'id', type: Number, example: 1 })
   @ApiOkResponse({ type: Permission })
-  findOne(@Request() { permission }) {
-    return this.permissionRepository.findOne(permission.permission_id);
+  findOne(@Request() req, @Param('id') id: number) {
+    return this.permissionRepository.findOne(+id);
   }
 }

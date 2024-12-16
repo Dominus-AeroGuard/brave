@@ -35,6 +35,7 @@ describe('CreatePermissionUseCase', () => {
         resource: 'application',
         action: 'write',
         description: 'Criar aplicação',
+        userId: 1,
       };
 
       const repositorySpy = {

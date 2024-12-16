@@ -3,13 +3,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PermitionActionEnum } from 'src/domain/enums/permission-action.enum';
 
 export class CreatePermissionRequest {
-  @ApiProperty({
-    example: 1,
-    description: 'Id da permissão',
-  })
-  @IsNotEmpty()
-  @IsInt()
-  permissionId: number;
+  // @ApiProperty({
+  //   example: 1,
+  //   description: 'Id da permissão',
+  // })
+  // @IsNotEmpty()
+  // @IsInt()
+  // permissionId: number;
 
   @ApiProperty({
     example: 'application',
@@ -28,9 +28,17 @@ export class CreatePermissionRequest {
   action: string;
 
   @ApiProperty({
-    example: 'application',
+    example: 'Criar aplicação',
     description: 'Descrição da permissão',
   })
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({
+    example: '1',
+    description: 'Id do usuario que criou a permissão',
+  })
+  @IsNotEmpty()
+  @IsInt()
+  userId: number;
 }

@@ -3,10 +3,10 @@ import { Permission } from '../../entities';
 import { IPermissionRepository } from '../../../resources/infra/prisma/repositories/permission.repository';
 
 export interface CreatPermissionRequest {
-  permissionId: number;
   resource: string;
   action: string;
   description: string;
+  userId: number;
 }
 
 @Injectable()
