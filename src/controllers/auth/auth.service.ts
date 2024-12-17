@@ -19,6 +19,11 @@ export class AuthService {
       where: { email },
       select: {
         userPermissions: {
+          where: {
+            permission: {
+              active: true,
+            },
+          },
           include: {
             permission: {
               select: { action: true, resource: true },
@@ -26,6 +31,11 @@ export class AuthService {
           },
         },
         userRoles: {
+          where: {
+            role: {
+              active: true,
+            },
+          },
           include: {
             role: {
               include: {
@@ -91,6 +101,11 @@ export class AuthService {
       where: { user_id: userId },
       select: {
         userPermissions: {
+          where: {
+            permission: {
+              active: true,
+            },
+          },
           include: {
             permission: {
               select: { action: true, resource: true },
@@ -98,6 +113,11 @@ export class AuthService {
           },
         },
         userRoles: {
+          where: {
+            role: {
+              active: true,
+            },
+          },
           include: {
             role: {
               include: {
@@ -113,7 +133,10 @@ export class AuthService {
           },
         },
         userOrganizationPermissions: {
-          where: { organization_id: organizationId },
+          where: {
+            organization_id: organizationId,
+            permission: { active: true },
+          },
           include: {
             permission: {
               select: { resource: true, action: true },
@@ -121,7 +144,7 @@ export class AuthService {
           },
         },
         userOrganizationRoles: {
-          where: { organization_id: organizationId },
+          where: { organization_id: organizationId, role: { active: true } },
           include: {
             role: {
               include: {

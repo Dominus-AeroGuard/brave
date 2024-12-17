@@ -32,7 +32,9 @@ model Role {
   role_id              Int                    @default(autoincrement()) @map("ID_ROLE")
   role                 String                 @map("NM_ROLE") @db.VarChar(30)
   description          String                 @map("DS_ROLE") @db.VarChar(100)
+  active               Boolean                @default(true) @map("ST_ATIVO")
   organization_role    Boolean                @default(false) @map("ST_ORGANIZACAO_ROLE")
+  updated_at           DateTime               @default(now()) @map("DH_ATUALIZACAO")
   created_at           DateTime               @default(now()) @map("DH_CRIACAO")
   created_by           Int                    @map("ID_CRIADO_POR")
   rolePermissions      RolePermission[]
@@ -49,7 +51,9 @@ model Permission {
   resource                   String                      @map("DS_RECURSO") @db.VarChar(30)
   action                     String                      @map("DS_ACAO") @db.VarChar(30)
   description                String                      @map("DS_PERMISSAO") @db.VarChar(100)
+  active                     Boolean                     @default(true) @map("ST_ATIVO")
   organization_permission    Boolean                     @default(false) @map("ST_ORGANIZACAO_PERMISSAO")
+  updated_at                 DateTime                    @default(now()) @map("DH_ATUALIZACAO")
   created_at                 DateTime                    @default(now()) @map("DH_CRIACAO")
   created_by                 Int                         @map("ID_CRIADO_POR")
   rolePermissions            RolePermission[]

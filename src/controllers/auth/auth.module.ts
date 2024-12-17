@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './roles.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth.guard';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { JwtAuthGuard } from './auth.guard';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
+    RoleModule,
   ],
   providers: [
     AuthService,
