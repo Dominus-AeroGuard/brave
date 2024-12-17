@@ -40,7 +40,7 @@ export class PermissionRepository implements IPermissionRepository {
         resource: data.resource,
         action: data.action,
         description: data.description,
-        created_by: data.user_id,
+        created_by: 1, // data.user_id,
       },
     });
     return this.findOne(permission.permission_id);
