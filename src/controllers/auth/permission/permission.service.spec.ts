@@ -97,8 +97,8 @@ describe('PermissionService', () => {
       jest.spyOn(prisma.permission, 'findMany').mockResolvedValue([
         {
           permission_id: 1,
-          resource: 'aplication',
-          action: 'read',
+          resource: 'test',
+          action: 'test',
           description: 'Test permission',
           active: true,
           organization_permission: false,
@@ -115,8 +115,8 @@ describe('PermissionService', () => {
         where: {
           OR: [
             { description: { contains: 'test' } },
-            { resource: { contains: 'aplication' } },
-            { action: { contains: 'read' } },
+            { resource: { contains: 'test' } },
+            { action: { contains: 'test' } },
           ],
         },
         take: 10,
