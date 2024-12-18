@@ -1,0 +1,37 @@
+POST {{host}}/permission
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "resource": "permission",
+   "action": "write",
+   "description": "Criar Permissão"
+}
+
+###
+
+PATCH {{host}}/permission/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+   "resource": "permission",
+   "action": "write",
+   "description": "Atualizar Permissão"
+}
+
+###
+
+GET {{host}}/permission
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+GET {{host}}/permission/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### 
+DELETE {{host}}/permission/4
+Authorization: Bearer {{token}}
