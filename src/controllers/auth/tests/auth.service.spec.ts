@@ -123,23 +123,6 @@ describe('AuthService', () => {
             permission: { resource: 'user', action: 'create' },
           },
         ],
-        userOrganizationPermissions: [
-          {
-            permission: { resource: 'org', action: 'update' },
-          },
-        ],
-        userOrganizationRoles: [
-          {
-            role: {
-              role: 'manager',
-              rolePermissions: [
-                {
-                  permission: { resource: 'org', action: 'delete' },
-                },
-              ],
-            },
-          },
-        ],
       };
 
       jest
@@ -158,8 +141,8 @@ describe('AuthService', () => {
         orgId: 1,
         email: mockUser.email,
         organizations: [{ id: 1, name: 'Org 1' }],
-        roles: ['admin', 'manager'],
-        permissions: ['user:create', 'org:update', 'user:read', 'org:delete'],
+        roles: ['admin'],
+        permissions: ['user:create', 'user:read'],
       });
     });
 
@@ -190,23 +173,6 @@ describe('AuthService', () => {
         userPermissions: [
           {
             permission: { resource: 'user', action: 'create' },
-          },
-        ],
-        userOrganizationPermissions: [
-          {
-            permission: { resource: 'org', action: 'update' },
-          },
-        ],
-        userOrganizationRoles: [
-          {
-            role: {
-              role: 'manager',
-              rolePermissions: [
-                {
-                  permission: { resource: 'org', action: 'delete' },
-                },
-              ],
-            },
           },
         ],
       };

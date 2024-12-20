@@ -6,5 +6,5 @@ export class CreateOrganizationAreaRequest {
     format: 'binary',
     description: 'The file to be uploaded',
   })
-  file: Express.Multer.File; 
+  file: Express.Multer.File;
 }

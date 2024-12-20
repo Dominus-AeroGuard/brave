@@ -25,7 +25,9 @@ describe('OrganizationAreaController', () => {
       ],
     }).compile();
 
-    controller = module.get<OrganizationAreaController>(OrganizationAreaController);
+    controller = module.get<OrganizationAreaController>(
+      OrganizationAreaController,
+    );
   });
 
   it('should be defined', () => {

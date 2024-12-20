@@ -120,7 +120,7 @@ export class RoleService {
       role,
       description,
       active,
-      organization_role,
+      organization_id,
       created_at,
       updated_at,
     } = roleModel;
@@ -130,7 +130,7 @@ export class RoleService {
       role,
       description,
       active,
-      organization_role,
+      organization_id,
       created_at,
       updated_at,
     );
