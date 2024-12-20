@@ -129,7 +129,7 @@ export class PermissionService {
       action,
       description,
       active,
-      organization_permission,
+      organization_id,
       created_at,
       updated_at,
     } = permissionModel;
@@ -140,7 +140,7 @@ export class PermissionService {
       action,
       description,
       active,
-      organization_permission,
+      organization_id,
       created_at,
       updated_at,
     );

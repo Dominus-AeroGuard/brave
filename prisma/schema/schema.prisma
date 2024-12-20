@@ -11,16 +11,16 @@ generator client {
 }
 
 model Organization {
-  organization_id             Int                         @default(autoincrement()) @map("ID_ORGANIZACAO")
-  name                        String                      @map("NM_ORGANIZACAO") @db.VarChar(100)
-  created_at                  DateTime                    @default(now()) @map("DH_CRIACAO")
-  pilots                      Pilot[]
-  applications                Application[]
-  users                       UserOrganization[]
-  protected_areas             ProtectedArea[]
-  organization_areas          OrganizationArea[]
-  userOrganizationRoles       UserOrganizationRole[]
-  userOrganizationPermissions UserOrganiationPermission[]
+  organization_id    Int                @default(autoincrement()) @map("ID_ORGANIZACAO")
+  name               String             @map("NM_ORGANIZACAO") @db.VarChar(100)
+  created_at         DateTime           @default(now()) @map("DH_CRIACAO")
+  pilots             Pilot[]
+  applications       Application[]
+  users              UserOrganization[]
+  protected_areas    ProtectedArea[]
+  organization_areas OrganizationArea[]
+  roles              Role[]
+  permissions        Permission[]
 
   @@id([organization_id], map: "PK_ORGANIZACAO")
   @@map("S_ORGANIZACAO")
@@ -309,13 +309,13 @@ model ApplicationPath {
 }
 
 model OrganizationArea {
-  id                     Int                                            @default(autoincrement()) @map("ID_AREA_ORGANIZACAO")
-  geom                   Unsupported("public.geometry(polygonz, 4326)") @map("PG_GEOMETRIA")
-  geomjson               String                                         @map("PG_GEOMETRIA_JSON")
-  organization_id        Int                                            @map("ID_ORGANIZACAO")
-  organization           Organization                                   @relation(fields: [organization_id], references: [organization_id], map: "FK_AREA_ORGAN_ID_ORG")
-  created_by             String                                         @map("NM_CRIADO_POR") @db.VarChar(30)
-  created_at             DateTime                                       @default(now()) @map("DH_CRIACAO")
+  id              Int                                            @default(autoincrement()) @map("ID_AREA_ORGANIZACAO")
+  geom            Unsupported("public.geometry(polygonz, 4326)") @map("PG_GEOMETRIA")
+  geomjson        String                                         @map("PG_GEOMETRIA_JSON")
+  organization_id Int                                            @map("ID_ORGANIZACAO")
+  organization    Organization                                   @relation(fields: [organization_id], references: [organization_id], map: "FK_AREA_ORGAN_ID_ORG")
+  created_by      String                                         @map("NM_CRIADO_POR") @db.VarChar(30)
+  created_at      DateTime                                       @default(now()) @map("DH_CRIACAO")
 
   @@id([id], map: "PK_AREA_ORGANIZACAO")
   @@index([geom], name: "I_AREA_ORGANIZACAO_PG_GEOM", type: Gist)

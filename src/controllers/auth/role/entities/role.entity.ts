@@ -25,11 +25,11 @@ export class Role {
   active: boolean;
 
   @ApiProperty({
-    description: 'Indica se a rola é de uma organização',
-    type: String,
+    description: 'Organização que a role é vinculada',
+    type: Number,
     required: true,
   })
-  organizationRole: boolean;
+  organizationId: number;
 
   @ApiProperty({
     description: 'Data de criação',
@@ -50,7 +50,7 @@ export class Role {
     role: string,
     description: string,
     active: boolean,
-    organizationRole: boolean,
+    organizationId: number,
     createdAt: Date,
     updatedAt: Date,
   ) {
@@ -58,7 +58,7 @@ export class Role {
     this.role = role;
     this.description = description;
     this.active = active;
-    this.organizationRole = organizationRole;
+    this.organizationId = organizationId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

@@ -37,7 +37,7 @@ export class Permission {
     type: String,
     required: true,
   })
-  organizationPermission: boolean;
+  organizationId: number;
 
   @ApiProperty({
     description: 'Data de criação',
@@ -59,7 +59,7 @@ export class Permission {
     action: string,
     description: string,
     active: boolean,
-    organizationPermission: boolean,
+    organizationId: number,
     createdAt: Date,
     updatedAt: Date,
   ) {
@@ -68,7 +68,7 @@ export class Permission {
     this.action = action;
     this.description = description;
     this.active = active;
-    this.organizationPermission = organizationPermission;
+    this.organizationId = organizationId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

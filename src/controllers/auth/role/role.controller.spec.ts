@@ -46,7 +46,7 @@ describe('RoleController', () => {
         'admin',
         'descrição',
         true,
-        false,
+        null,
         DateTime.now().toJSDate(),
         DateTime.now().toJSDate(),
       );
@@ -86,7 +86,7 @@ describe('RoleController', () => {
         'admin',
         'descrição',
         true,
-        false,
+        null,
         DateTime.now().toJSDate(),
         DateTime.now().toJSDate(),
       );
@@ -111,7 +111,7 @@ describe('RoleController', () => {
         'admin',
         'descrição',
         true,
-        false,
+        null,
         DateTime.now().toJSDate(),
         DateTime.now().toJSDate(),
       );

@@ -74,7 +74,7 @@ export class OrganizationAreaRepository implements IOrganizationAreaRepository {
 
     return new OrganizationArea(
       organizationArea,
-      organizationArea.organization
+      organizationArea.organization,
     );
   }
 
@@ -91,7 +91,7 @@ export class OrganizationAreaRepository implements IOrganizationAreaRepository {
     return areas.map((organization_area) => {
       return new OrganizationArea(
         organization_area,
-        organization_area.organization
+        organization_area.organization,
       );
     });
   }
