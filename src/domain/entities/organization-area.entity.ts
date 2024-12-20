@@ -13,8 +13,8 @@ export class OrganizationArea {
   organization: Organization;
 
   constructor(
-      organizationArea: Prisma.OrganizationArea,
-      organization: Prisma.Organization
+    organizationArea: Prisma.OrganizationArea,
+    organization: Prisma.Organization,
   ) {
     this.id = organizationArea.id;
     this.geomjson = organizationArea.geomjson;

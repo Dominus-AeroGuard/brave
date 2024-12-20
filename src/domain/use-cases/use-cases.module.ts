@@ -21,7 +21,7 @@ import { CreateOrganizationAreaUseCase } from './organization-area/create-organi
     ListNotificationUseCase,
     NotificationBufferUseCase,
     UpdateDocumentDataUseCase,
-    CreateOrganizationAreaUseCase
+    CreateOrganizationAreaUseCase,
   ],
 })
 export class UseCasesModule {}
