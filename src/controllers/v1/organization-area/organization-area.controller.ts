@@ -67,16 +67,12 @@ export class OrganizationAreaController {
   @Get()
   @ApiOkResponse({ type: [OrganizationArea] })
   findAll(@Request() { user }) {
-    return this.organizationAreaRepository.findAll(
-      user.organizationId,
-    );
+    return this.organizationAreaRepository.findAll(user.organizationId);
   }
 
   @Get('/geojson')
   findAllGeojson(@Request() { user }) {
-    return this.organizationAreaRepository.getAsGeoJson(
-      user.organizationId,
-    );
+    return this.organizationAreaRepository.getAsGeoJson(user.organizationId);
   }
 
   @Delete(':id')

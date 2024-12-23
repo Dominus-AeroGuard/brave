@@ -13,7 +13,7 @@
   ],
   "rest-client.environmentVariables": {
     "$shared": {
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9uaEBleGFtcGxlLmNvbSIsIm9yZ2FuaXphdGlvbnMiOltdLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJ1c2VyOnJlYWQiXSwiaWF0IjoxNzMzNzY2OTMwLCJleHAiOjE3MzM4NTMzMzB9.t6J1IlqcawtWEs9V0CJCrMrC61YVcr3qrDRzzJ0360k"
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiam9uaEBleGFtcGxlLmNvbSIsIm9yZ2FuaXphdGlvbnMiOltdLCJyb2xlcyI6WyJhZG1pbiJdLCJwZXJtaXNzaW9ucyI6WyJ1c2VyOnJlYWQiXSwiaWF0IjoxNzM0NjM0NzQ0LCJleHAiOjE3MzQ3MjExNDR9.xk7LIoslRVJnIeAPZpB4NiKMWl79mawc8A7LGTdSvZs"
     },
     "local": {
       "host": "http://localhost:3000",

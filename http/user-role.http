@@ -1,0 +1,23 @@
+POST {{host}}/user/1/role
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "data": [
+    1
+  ]
+}
+
+###
+
+GET {{host}}/user/1/role
+Authorization: Bearer {{token}}
+
+###
+
+GET {{host}}/user/1/role/1
+Authorization: Bearer {{token}}
+
+### 
+DELETE {{host}}/user/1/role/1
+Authorization: Bearer {{token}}

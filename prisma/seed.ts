@@ -304,30 +304,6 @@ async function userSeed() {
           },
         },
       },
-      userOrganizationRoles: {
-        connectOrCreate: {
-          where: {
-            id: 1,
-          },
-          create: {
-            role_id: 3, // prestador
-            organization_id: 1,
-            created_by: 1,
-          },
-        },
-      },
-      userOrganizationPermissions: {
-        connectOrCreate: {
-          where: {
-            id: 1,
-          },
-          create: {
-            permission_id: 5, // notification:read
-            organization_id: 1,
-            created_by: 1,
-          },
-        },
-      },
     },
     create: {
       name: 'Jonh Doe',
@@ -364,41 +340,40 @@ async function rolesSeed() {
     {
       id: 1,
       role: 'admin',
-      organization_role: false,
       description: 'Papel de gerenciamento de perfis e usuários no SIGA',
       created_by: 1,
     },
     {
       id: 2,
       role: 'organization_admin',
-      organization_role: true,
+      organization_id: 1,
       description: 'Papel de gerenciamento de uma organização',
       created_by: 1,
     },
     {
       id: 3,
       role: 'prestador',
-      organization_role: true,
+      organization_id: 1,
       description: 'Papel responsável por gerenciar uma aplicação',
       created_by: 1,
     },
   ];
 
   const promises = await roles.map(
-    ({ id: role_id, role, organization_role, description, created_by }) =>
+    ({ id: role_id, role, organization_id, description, created_by }) =>
       prisma.role.upsert({
         where: {
           role_id,
         },
         update: {
           role,
-          organization_role,
+          organization_id,
           description,
           created_by,
         },
         create: {
           role,
-          organization_role,
+          organization_id,
           description,
           created_by,
         },
@@ -460,6 +435,7 @@ async function permissionsSeed() {
       id: 3,
       resource: 'application',
       action: 'read',
+      organization_id: 1,
       description: 'Permite consultar aplicações',
       created_by: 1,
     },
@@ -467,6 +443,7 @@ async function permissionsSeed() {
       id: 4,
       resource: 'application',
       action: 'write',
+      organization_id: 1,
       description: 'Permite criar e gerenciar aplicacoes',
       created_by: 1,
     },
@@ -474,13 +451,14 @@ async function permissionsSeed() {
       id: 5,
       resource: 'notification',
       action: 'read',
+      organization_id: 1,
       description: 'Permite consultar notificações',
       created_by: 1,
     },
   ];
 
   const promises = await permissions.map(
-    ({ id, resource, action, description, created_by }) =>
+    ({ id, resource, action, description, organization_id, created_by }) =>
       prisma.permission.upsert({
         where: {
           permission_id: id,
@@ -489,12 +467,14 @@ async function permissionsSeed() {
           resource,
           action,
           description,
+          organization_id,
           created_by,
         },
         create: {
           resource,
           action,
           description,
+          organization_id,
           created_by,
         },
       }),
@@ -507,10 +487,10 @@ async function permissionsSeed() {
 
 async function main() {
   if (process.env.NODE_ENV === 'development') {
+    await organizationSeed();
     await permissionsSeed();
     await rolesSeed();
     await rolePermissionsSeed();
-    await organizationSeed();
     await pilotSeed();
     await userSeed();
   }

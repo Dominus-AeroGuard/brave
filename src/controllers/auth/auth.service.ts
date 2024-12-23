@@ -132,33 +132,6 @@ export class AuthService {
             },
           },
         },
-        userOrganizationPermissions: {
-          where: {
-            organization_id: organizationId,
-            permission: { active: true },
-          },
-          include: {
-            permission: {
-              select: { resource: true, action: true },
-            },
-          },
-        },
-        userOrganizationRoles: {
-          where: { organization_id: organizationId, role: { active: true } },
-          include: {
-            role: {
-              include: {
-                rolePermissions: {
-                  include: {
-                    permission: {
-                      select: { action: true, resource: true },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
         organizations: {
           select: {
             organization_id: true,
@@ -196,30 +169,15 @@ export class AuthService {
         `${userPermission.permission.resource}:${userPermission.permission.action}`,
     );
 
-    const organizationRoles = user.userOrganizationRoles.map(
-      (userRole) => userRole.role.role,
-    );
     const rolePermissions = this.buildRolePermissions(user.userRoles);
-    const organizationRolePermissions = this.buildRolePermissions(
-      user.userOrganizationRoles,
-    );
-    const organizationPermissions = user.userOrganizationPermissions.map(
-      (userPermission) =>
-        `${userPermission.permission.resource}:${userPermission.permission.action}`,
-    );
 
     const payload = {
       sub: user.user_id,
       orgId: organizationId,
       email: user.email,
       organizations,
-      roles: [...roles, ...organizationRoles],
-      permissions: [
-        ...permissions,
-        ...organizationPermissions,
-        ...rolePermissions,
-        ...organizationRolePermissions,
-      ],
+      roles: [...roles],
+      permissions: [...permissions, ...rolePermissions],
     };
 
     return {

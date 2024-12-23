@@ -48,7 +48,7 @@ describe('PermissionController', () => {
         'action',
         'descrição',
         true,
-        false,
+        null,
         DateTime.now().toJSDate(),
         DateTime.now().toJSDate(),
       );
@@ -92,7 +92,7 @@ describe('PermissionController', () => {
         'action',
         'descrição',
         true,
-        false,
+        null,
         DateTime.now().toJSDate(),
         DateTime.now().toJSDate(),
       );
@@ -119,7 +119,7 @@ describe('PermissionController', () => {
         'action',
         'descrição',
         true,
-        false,
+        null,
         DateTime.now().toJSDate(),
         DateTime.now().toJSDate(),
       );

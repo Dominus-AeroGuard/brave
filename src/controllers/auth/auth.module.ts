@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth.guard';
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
+import { UserRoleModule } from './user-role/user-role.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PermissionModule } from './permission/permission.module';
     }),
     RoleModule,
     PermissionModule,
+    UserRoleModule,
   ],
   providers: [
     AuthService,
